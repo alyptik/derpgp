@@ -62,8 +62,17 @@
 /* `malloc()` size ceiling */
 #define ARRAY_MAX	(SIZE_MAX / 2 - 1)
 
-/* enumerations */
+/* typedefs */
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
+/* enumerations */
 /* packet formats */
 enum {
 	F_OLD = 0x00 << 6,
@@ -123,25 +132,25 @@ enum {
 
 /* structures */
 /* struct definition for pgp packet data */
-struct pgp_packet {
-	uint8_t pheader;
+typedef struct _pgp_packet {
+	u8 pheader;
 	union {
-		uint8_t plen_one;
-		uint16_t plen_two;
-		uint32_t plen_four;
+		u8 plen_one;
+		u16 plen_two;
+		u32 plen_four;
 	};
-	uint8_t *pdata;
-};
+	u8 *pdata;
+} pgp_packet;
 /* struct definition for NULL-terminated dynamic array of pgp structs */
-struct pgp_list {
+typedef struct _pgp_list {
 	size_t cnt, max;
-	struct pgp_packet *list;
-};
+	pgp_packet *list;
+} pgp_list;
 /* struct definition for NULL-terminated string dynamic array */
-struct str_list {
+typedef struct _str_list {
 	size_t cnt, max;
 	char **list;
-};
+} str_list;
 
 /* recursive free */
 static inline ptrdiff_t free_argv(char ***restrict argv)
@@ -174,7 +183,7 @@ static inline void strmv(ptrdiff_t off, char *restrict dest, char const *restric
 	memcpy(dest_ptr, src, (size_t)src_sz + 1);
 }
 
-static inline ptrdiff_t free_str_list(struct str_list *restrict plist)
+static inline ptrdiff_t free_str_list(str_list *restrict plist)
 {
 	size_t null_cnt = 0;
 	/* return -1 if passed NULL pointers */
@@ -196,7 +205,7 @@ static inline ptrdiff_t free_str_list(struct str_list *restrict plist)
 	return null_cnt;
 }
 
-static inline void init_str_list(struct str_list *restrict list_struct, char *restrict init_str)
+static inline void init_str_list(str_list *restrict list_struct, char *restrict init_str)
 {
 	list_struct->cnt = 0;
 	list_struct->max = 1;
@@ -211,7 +220,7 @@ static inline void init_str_list(struct str_list *restrict list_struct, char *re
 	memcpy(list_struct->list[list_struct->cnt - 1], init_str, strlen(init_str) + 1);
 }
 
-static inline void append_str(struct str_list *restrict list_struct, char const *restrict string, size_t padding)
+static inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t padding)
 {
 	void *tmp;
 	list_struct->cnt++;

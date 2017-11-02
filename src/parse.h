@@ -42,10 +42,10 @@
 #include <wchar.h>
 
 /* prototypes */
-size_t read_pgp_bin(char const *restrict filename, struct pgp_list *restrict list);
-size_t read_pgp_aa(char const *restrict filename, struct pgp_list *restrict list);
+size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list);
+size_t read_pgp_aa(char const *restrict filename, pgp_list *restrict list);
 
-static inline void free_pgp_list(struct pgp_list *restrict list_struct)
+static inline void free_pgp_list(pgp_list *restrict list_struct)
 {
 	/* return if passed NULL pointers */
 	if (!list_struct || !list_struct->list)
@@ -56,7 +56,7 @@ static inline void free_pgp_list(struct pgp_list *restrict list_struct)
 	list_struct->max = 1;
 }
 
-static inline void init_pgp_list(struct pgp_list *restrict list_struct)
+static inline void init_pgp_list(pgp_list *restrict list_struct)
 {
 	list_struct->cnt = 0;
 	list_struct->max = 1;
@@ -64,7 +64,7 @@ static inline void init_pgp_list(struct pgp_list *restrict list_struct)
 		ERR("error during initial list_ptr calloc()");
 }
 
-static inline void append_packet(struct pgp_list *restrict list_struct, struct pgp_packet const *restrict packet)
+static inline void append_packet(pgp_list *restrict list_struct, pgp_packet const *restrict packet)
 {
 	void *tmp;
 	list_struct->cnt++;
