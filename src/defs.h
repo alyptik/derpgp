@@ -77,50 +77,15 @@
 #define ARRAY_MAX	(SIZE_MAX / 2 - 1)
 
 /* enumerations */
-enum src_flag {
-	NOT_IN_MAIN, IN_MAIN, EMPTY,
-};
-/* asm dialect */
-enum asm_type {
-	NONE, ATT, INTEL,
-};
-/* possible types of tracked variable */
-enum var_type {
-	T_ERR, T_CHR, T_STR,
-	T_INT, T_UINT, T_DBL,
-	T_PTR, T_OTHER,
+enum {
+	PKT_OLD = 0,
+	PKT_NEW = 1 << 6,
 };
 
 /* struct definition for NULL-terminated string dynamic array */
 struct str_list {
 	size_t cnt, max;
 	char **list;
-};
-/* struct definition for flag dynamic array */
-struct flag_list {
-	size_t cnt, max;
-	enum src_flag *list;
-};
-/* struct definition for type dynamic array */
-struct type_list {
-	size_t cnt, max;
-	enum var_type *list;
-};
-/* struct definition for var-tracking array */
-struct var_list {
-	size_t cnt, max;
-	struct {
-		char *key;
-		enum var_type type;
-	} *list;
-};
-/* struct definition for generated program sources */
-struct prog_src {
-	size_t b_sz, f_sz, t_sz;
-	size_t b_max, f_max, t_max;
-	char *b, *f, *total;
-	struct str_list hist, lines;
-	struct flag_list flags;
 };
 
 /* recursive free */
@@ -213,62 +178,6 @@ static inline void append_str(struct str_list *restrict list_struct, char const 
 	if (!(list_struct->list[list_struct->cnt - 1] = calloc(1, strlen(string) + padding + 1)))
 		ERRARR("list_ptr", list_struct->cnt - 1);
 	memcpy(list_struct->list[list_struct->cnt - 1] + padding, string, strlen(string) + 1);
-}
-
-static inline void init_tlist(struct type_list *restrict list_struct)
-{
-	list_struct->cnt = 0;
-	list_struct->max = 1;
-	if (!(list_struct->list = calloc(1, sizeof *list_struct->list)))
-		ERR("error during initial type_list calloc()");
-}
-
-static inline void append_type(struct type_list *restrict list_struct, enum var_type type)
-{
-	if (type == T_ERR)
-		return;
-	void *tmp;
-	list_struct->cnt++;
-	/* realloc if cnt reaches current size */
-	if (list_struct->cnt >= list_struct->max) {
-		/* check if size too large */
-		if (list_struct->cnt > ARRAY_MAX)
-			ERRX("list_struct->cnt > (SIZE_MAX / 2 - 1)");
-		/* double until size is reached */
-		while ((list_struct->max *= 2) < list_struct->cnt);
-		if (!(tmp = realloc(list_struct->list, sizeof *list_struct->list * list_struct->max)))
-			ERRARR("type_list", list_struct->cnt);
-		list_struct->list = tmp;
-	}
-	list_struct->list[list_struct->cnt - 1] = type;
-}
-
-static inline void init_flag_list(struct flag_list *restrict list_struct)
-{
-	list_struct->cnt = 0;
-	list_struct->max = 1;
-	if (!(list_struct->list = calloc(1, sizeof *list_struct->list)))
-		ERR("error during initial flag_list calloc()");
-	list_struct->cnt++;
-	list_struct->list[list_struct->cnt - 1] = EMPTY;
-}
-
-static inline void append_flag(struct flag_list *restrict list_struct, enum src_flag flag)
-{
-	void *tmp;
-	list_struct->cnt++;
-	/* realloc if cnt reaches current size */
-	if (list_struct->cnt >= list_struct->max) {
-		/* check if size too large */
-		if (list_struct->cnt > ARRAY_MAX)
-			ERRX("list_struct->cnt > (SIZE_MAX / 2 - 1)");
-		/* double until size is reached */
-		while ((list_struct->max *= 2) < list_struct->cnt);
-		if (!(tmp = realloc(list_struct->list, sizeof *list_struct->list * list_struct->max)))
-			ERRARR("flag_list", list_struct->cnt);
-		list_struct->list = tmp;
-	}
-	list_struct->list[list_struct->cnt - 1] = flag;
 }
 
 #endif
