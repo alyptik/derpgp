@@ -83,6 +83,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 			}
 			break;
 
+		/* TODO XXX: add handling for indeterminate packet length */
 		case L_OTHER: /* fallthrough */
 		default:;
 		}
