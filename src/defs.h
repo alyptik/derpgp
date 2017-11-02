@@ -66,52 +66,52 @@
 
 /* packet formats */
 enum {
-	F_OLD = 0x00,
-	F_NEW = 0x01,
+	F_OLD = 0x00 << 6,
+	F_NEW = 0x01 << 6,
 };
 /* packet tags */
 enum {
 	/* Reserved - a packet tag MUST NOT have this value */
-	T_RSRVD = 0x00,
+	T_RSRVD = 0x00 << 2,
 	/* Public-Key Encrypted Session Key Packet */
-	T_PKESESS = 0x01,
+	T_PKESESS = 0x01 << 2,
 	/* Signature Packet */
-	T_SIG = 0x02,
+	T_SIG = 0x02 << 2,
 	/* Symmetric-Key Encrypted Session Key Packet */
-	T_SKESESS = 0x03,
+	T_SKESESS = 0x03 << 2,
 	/* One-Pass Signature Packet */
-	T_OPSIG = 0x04,
+	T_OPSIG = 0x04 << 2,
 	/* Secret-Key Packet */
-	T_SECKEY = 0x05,
+	T_SECKEY = 0x05 << 2,
 	/* Public-Key Packet */
-	T_PUBKEY = 0x06,
+	T_PUBKEY = 0x06 << 2,
 	/* Secret-Subkey Packet */
-	T_SECSUBKEY = 0x07,
+	T_SECSUBKEY = 0x07 << 2,
 	/* Compressed Data Packet */
-	T_CDATA = 0x08,
+	T_CDATA = 0x08 << 2,
 	/* Symmetrically Encrypted Data Packet */
-	T_SEDATA= 0x09,
+	T_SEDATA= 0x09 << 2,
 	/* Marker Packet */
-	T_MARKER = 0x0a,
+	T_MARKER = 0x0a << 2,
 	/* Literal Data Packet */
-	T_LITDATA = 0x0b,
+	T_LITDATA = 0x0b << 2,
 	/* Trust Packet */
-	T_TRUST = 0x0c,
+	T_TRUST = 0x0c << 2,
 	/* User ID Packet */
-	T_UID= 0x0d,
+	T_UID= 0x0d << 2,
 	/* Public-Subkey Packet */
-	T_PUBSUBKEY = 0x0e,
+	T_PUBSUBKEY = 0x0e << 2,
 	/* User Attribute Packet */
-	T_UATTR = 0x11,
+	T_UATTR = 0x11 << 2,
 	/* Sym. Encrypted and Integrity Protected Data Packet */
-	T_SEIPDATA = 0x12,
+	T_SEIPDATA = 0x12 << 2,
 	/* Modification Detection Code Packet */
-	T_MDCODE = 0x13,
+	T_MDCODE = 0x13 << 2,
 	/* Private or Experimental Values */
-	T_PRVT0 = 0x3c,
-	T_PRVT1 = 0x3d,
-	T_PRVT2 = 0x3e,
-	T_PRVT3 = 0x3f,
+	T_PRVT0 = 0x3c << 2,
+	T_PRVT1 = 0x3d << 2,
+	T_PRVT2 = 0x3e << 2,
+	T_PRVT3 = 0x3f << 2,
 };
 /* old format packet lengths */
 enum {
@@ -124,10 +124,7 @@ enum {
 /* structures */
 /* struct definition for pgp packet data */
 struct pgp_packet {
-	unsigned pbit : 1;
-	unsigned pfmt : 1;
-	unsigned ptag : 4;
-	unsigned plentype : 2;
+	uint8_t pheader;
 	union {
 		uint8_t plen_one;
 		uint16_t plen_two;
