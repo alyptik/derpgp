@@ -18,12 +18,12 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 
 	if (!list)
 		ERR("read_pgp_bin() NULL pgp_list");
-
 	free_pgp_list(list);
 	init_pgp_list(list);
+
+	/* read the header */
 	if (!(file = fopen(filename, "rb")))
 		ERR("read_pgp_bin() fopen()");
-
 	if ((cnt += fread(&cur.pheader, 1, sizeof cur.pheader, file)) == 0) {
 		fclose(file);
 		return cnt;
