@@ -220,7 +220,7 @@ static inline void init_str_list(str_list *restrict list_struct, char *restrict 
 	memcpy(list_struct->list[list_struct->cnt - 1], init_str, strlen(init_str) + 1);
 }
 
-static inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t padding)
+static inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t pad)
 {
 	void *tmp;
 	list_struct->cnt++;
@@ -238,9 +238,9 @@ static inline void append_str(str_list *restrict list_struct, char const *restri
 		list_struct->list[list_struct->cnt - 1] = NULL;
 		return;
 	}
-	if (!(list_struct->list[list_struct->cnt - 1] = calloc(1, strlen(string) + padding + 1)))
+	if (!(list_struct->list[list_struct->cnt - 1] = calloc(1, strlen(string) + pad + 1)))
 		ERRARR("list_ptr", list_struct->cnt - 1);
-	memcpy(list_struct->list[list_struct->cnt - 1] + padding, string, strlen(string) + 1);
+	memcpy(list_struct->list[list_struct->cnt - 1] + pad, string, strlen(string) + 1);
 }
 
 #endif
