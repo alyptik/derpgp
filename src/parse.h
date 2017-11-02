@@ -41,17 +41,19 @@
 #include <unistd.h>
 #include <wchar.h>
 
-static inline ptrdiff_t free_pgp_list(struct pgp_list *restrict list_struct)
+/* prototypes */
+size_t read_pgp_bin(char const *restrict filename, struct pgp_list *restrict list);
+size_t read_pgp_aa(char const *restrict filename, struct pgp_list *restrict list);
+
+static inline void free_pgp_list(struct pgp_list *restrict list_struct)
 {
-	size_t null_cnt = 0;
-	/* return -1 if passed NULL pointers */
+	/* return if passed NULL pointers */
 	if (!list_struct || !list_struct->list)
-		return -1;
+		return;
 	free(list_struct->list);
 	list_struct->list = NULL;
 	list_struct->cnt = 0;
 	list_struct->max = 1;
-	return null_cnt;
 }
 
 static inline void init_pgp_list(struct pgp_list *restrict list_struct)
