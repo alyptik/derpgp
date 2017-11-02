@@ -78,8 +78,57 @@
 
 /* enumerations */
 enum {
-	PKT_OLD = 0,
-	PKT_NEW = 1 << 6,
+	PKT_OLD = 0x00,
+	PKT_NEW = 0x40,
+};
+/* old format packet lengths */
+enum {
+	L_ONE, L_TWO,
+	L_FOUR, L_OTHER,
+};
+/* packet tags */
+enum {
+	/* Reserved - a packet tag MUST NOT have this value */
+	T_RSRVD = 0x00,
+	/* Public-Key Encrypted Session Key Packet */
+	T_PKESESS = 0x01,
+	/* Signature Packet */
+	T_SIG = 0x02,
+	/* Symmetric-Key Encrypted Session Key Packet */
+	T_SKESESS = 0x03,
+	/* One-Pass Signature Packet */
+	T_OPSIG = 0x04,
+	/* Secret-Key Packet */
+	T_SECKEY = 0x05,
+	/* Public-Key Packet */
+	T_PUBKEY = 0x06,
+	/* Secret-Subkey Packet */
+	T_SECSUBKEY = 0x07,
+	/* Compressed Data Packet */
+	T_CDATA = 0x08,
+	/* Symmetrically Encrypted Data Packet */
+	T_SEDATA= 0x09,
+	/* Marker Packet */
+	T_MARKER = 0x0a,
+	/* Literal Data Packet */
+	T_LITDATA = 0x0b,
+	/* Trust Packet */
+	T_TRUST = 0x0c,
+	/* User ID Packet */
+	T_UID= 0x0d,
+	/* Public-Subkey Packet */
+	T_PUBSUBKEY = 0x0e,
+	/* User Attribute Packet */
+	T_UATTR = 0x11,
+	/* Sym. Encrypted and Integrity Protected Data Packet */
+	T_SEIPDATA = 0x12,
+	/* Modification Detection Code Packet */
+	T_MDCODE = 0x13,
+	/* Private or Experimental Values */
+	T_PRVT0 = 0x3c,
+	T_PRVT1 = 0x3d,
+	T_PRVT2 = 0x3e,
+	T_PRVT3 = 0x3f,
 };
 
 /* struct definition for NULL-terminated string dynamic array */
