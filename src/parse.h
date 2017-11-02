@@ -63,7 +63,7 @@ static inline void init_pgp_list(pgp_list *restrict list_struct)
 	xcalloc(&list_struct->list, 1, sizeof *list_struct->list, "error during initial list_ptr calloc()");
 }
 
-static inline void append_packet(pgp_list *restrict list_struct, pgp_packet const *restrict packet)
+static inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const *restrict packet)
 {
 	list_struct->cnt++;
 	/* realloc if cnt reaches current size */

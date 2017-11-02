@@ -190,10 +190,8 @@ static inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
 static inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream)
 {
 	size_t cnt;
-	if ((cnt = fread(ptr, sz, nmemb, stream)) == 0) {
-		fclose(stream);
-		ERR("unrecognized file format");
-	}
+	if ((cnt = fread(ptr, sz, nmemb, stream)) < nmemb)
+		return 0;
 	return cnt;
 }
 

@@ -29,7 +29,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 
 	if (!xfread(&cur.pheader, 1, sizeof cur.pheader, file)) {
 		fclose(file);
-		return 0;
+		return list->cnt;
 	}
 
 	/* header type */
@@ -42,12 +42,12 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 		case L_ONE:
 			if (!xfread(&cur.plen_one, 1, sizeof cur.plen_one, file)) {
 				fclose(file);
-				return 0;
+				return list->cnt;
 			}
 			xcalloc(&cur.pdata, cur.plen_one, sizeof *cur.pdata, "read_pgp() cur.plen_one calloc()");
 			if (!xfread(&cur.pdata, 1, cur.plen_one, file)) {
 				fclose(file);
-				return 0;
+				return list->cnt;
 			}
 			break;
 
@@ -55,12 +55,12 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 		case L_TWO:
 			if (!xfread(&cur.plen_two, 1, sizeof cur.plen_two, file)) {
 				fclose(file);
-				return 0;
+				return list->cnt;
 			}
 			xcalloc(&cur.pdata, cur.plen_two, sizeof *cur.pdata, "read_pgp() cur.plen_two calloc()");
 			if (!xfread(&cur.pdata, 1, cur.plen_two, file)) {
 				fclose(file);
-				return 0;
+				return list->cnt;
 			}
 			break;
 
@@ -68,12 +68,12 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 		case L_FOUR:
 			if (!xfread(&cur.plen_four, 1, sizeof cur.plen_four, file)) {
 				fclose(file);
-				return 0;
+				return list->cnt;
 			}
 			xcalloc(&cur.pdata, cur.plen_four, sizeof *cur.pdata, "read_pgp() cur.plen_four calloc()");
 			if (!xfread(&cur.pdata, 1, cur.plen_four, file)) {
 				fclose(file);
-				return 0;
+				return list->cnt;
 			}
 			break;
 
@@ -82,7 +82,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 		case L_OTHER: /* fallthrough */
 		default:
 			fclose(file);
-			return 0;
+			return list->cnt;
 		}
 		break;
 
@@ -90,15 +90,16 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 	/* TODO XXX: implement new format header handling */
 	case F_NEW:
 		fclose(file);
-		return 0;
+		return list->cnt;
 		break;
 
 	/* unrecognized header */
 	default:
 		fclose(file);
-		return 0;
+		return list->cnt;
 	}
 
+	add_pgp_list(list, &cur);
 	return read_pgp_bin(file, filename, list);
 }
 
