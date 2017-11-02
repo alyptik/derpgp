@@ -87,13 +87,14 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		case L_OTHER: /* fallthrough */
 		default:;
 		}
-	break;
+		break;
 
 	/* new format header */
 	case F_NEW:
 		/* TODO XXX: implement new format header handling */
 		break;
 
+	/* unrecognized header */
 	default:
 		fclose(file);
 		ERR("unrecognized file format");
