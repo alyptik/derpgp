@@ -73,6 +73,7 @@ typedef uint32_t u32;
 typedef uint64_t u64;
 
 /* enumerations */
+/* packet header is defined as `[2 bit format][4 bit type][2 bit length size]` */
 /* packet formats */
 enum {
 	F_OLD = 0x00 << 6,
