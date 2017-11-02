@@ -154,6 +154,49 @@ typedef struct _str_list {
 	char **list;
 } str_list;
 
+/* `malloc()` wrapper */
+static inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
+{
+	/* sanity check */
+	if (!ptr)
+		return;
+	if (!(*(void **)ptr = malloc(sz)))
+		ERR(msg ? msg : "(nil)");
+}
+
+/* `calloc()` wrapper */
+static inline void xcalloc(void *restrict ptr, size_t nmemb, size_t sz, char const *msg)
+{
+	/* sanity check */
+	if (!ptr)
+		return;
+	if (!(*(void **)ptr = calloc(nmemb, sz)))
+		ERR(msg ? msg : "(nil)");
+}
+
+/* `realloc()` wrapper */
+static inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
+{
+	void *tmp;
+	/* sanity check */
+	if (!ptr)
+		return;
+	if (!(tmp = realloc(*(void **)ptr, sz)))
+		ERR(msg ? msg : "(nil)");
+	*(void **)ptr = tmp;
+}
+
+/* `fread()` wrapper */
+static inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream)
+{
+	size_t cnt;
+	if ((cnt = fread(ptr, sz, nmemb, stream)) == 0) {
+		fclose(stream);
+		ERR("unrecognized file format");
+	}
+	return cnt;
+}
+
 /* recursive free */
 static inline ptrdiff_t free_argv(char ***restrict argv)
 {

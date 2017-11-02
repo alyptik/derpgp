@@ -45,25 +45,6 @@
 size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list);
 size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list);
 
-static inline void xcalloc(void *restrict ptr, size_t nmemb, size_t sz, char const *msg)
-{
-	/* sanity check */
-	if (!ptr)
-		return;
-	if (!(*(void **)ptr = calloc(nmemb, sz)))
-		ERR(msg ? msg : "(nil)");
-}
-
-static inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream)
-{
-	size_t cnt;
-	if ((cnt = fread(ptr, sz, nmemb, stream)) == 0) {
-		fclose(stream);
-		ERR("unrecognized file format");
-	}
-	return cnt;
-}
-
 static inline void free_pgp_list(pgp_list *restrict list_struct)
 {
 	/* return if passed NULL pointers */
@@ -79,13 +60,11 @@ static inline void init_pgp_list(pgp_list *restrict list_struct)
 {
 	list_struct->cnt = 0;
 	list_struct->max = 1;
-	if (!(list_struct->list = calloc(1, sizeof *list_struct->list)))
-		ERR("error during initial list_ptr calloc()");
+	xcalloc(&list_struct->list, 1, sizeof *list_struct->list, "error during initial list_ptr calloc()");
 }
 
 static inline void append_packet(pgp_list *restrict list_struct, pgp_packet const *restrict packet)
 {
-	void *tmp;
 	list_struct->cnt++;
 	/* realloc if cnt reaches current size */
 	if (list_struct->cnt >= list_struct->max) {
@@ -93,9 +72,7 @@ static inline void append_packet(pgp_list *restrict list_struct, pgp_packet cons
 		if (list_struct->cnt > ARRAY_MAX)
 			ERRX("list_struct->cnt > (SIZE_MAX / 2 - 1)");
 		list_struct->max *= 2;
-		if (!(tmp = realloc(list_struct->list, sizeof *list_struct->list * list_struct->max)))
-			ERRARR("list_ptr", list_struct->cnt - 1);
-		list_struct->list = tmp;
+		xrealloc(&list_struct->list, sizeof *list_struct->list * list_struct->max, "append_packet()");
 	}
 	list_struct->list[list_struct->cnt - 1] = *packet;
 }
