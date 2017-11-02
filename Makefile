@@ -33,11 +33,7 @@ $(TEST): %: %.o $(TAP).o $(OBJ)
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
 test check: $(TOBJ) $(TEST)
-	./t/testcompile
-	./t/testhist
-	./t/testparseopts
-	echo "test string" | ./t/testreadline
-	./t/testvars
+	./t/testparse
 clean:
 	@echo "cleaning"
 	@rm -fv $(DEP) $(TARGET) $(TEST) $(OBJ) $(TOBJ) $(TARGET).tar.gz debug.mk
