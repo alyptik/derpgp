@@ -21,14 +21,6 @@
  * limitations under the License.
  */
 
-#define _BSD_SOURCE
-#define _DEFAULT_SOURCE
-#define _GNU_SOURCE
-#define _POSIX_C_SOURCE 200809L
-#define _SVID_SOURCE
-#define _XOPEN_SOURCE 700
-
-
 #include <assert.h>
 #include <ctype.h>
 #include <err.h>
@@ -59,13 +51,9 @@
 #include <unistd.h>
 #include <wchar.h>
 
-#define _Atomic
-#define _Static_assert(a, b)
-#define UNUSED __attribute__ ((unused))
-
 extern char **environ;
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
 	printf("%s\n", "derpgp");
 
