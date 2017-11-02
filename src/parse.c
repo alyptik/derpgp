@@ -32,8 +32,10 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		return cnt;
 	}
 
+	/* old format header */
 	if ((cur.pheader & (0x03 << 6)) & F_OLD) {
 		switch (cur.pheader & 0x03) {
+		/* one byte length */
 		case L_ONE:
 			if ((cnt += fread(&cur.plen_one, 1, sizeof cur.plen_one, file)) == 0) {
 				fclose(file);
@@ -49,6 +51,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 			}
 			break;
 
+		/* two byte length */
 		case L_TWO:
 			if ((cnt += fread(&cur.plen_one, 1, sizeof cur.plen_one, file)) == 0) {
 				fclose(file);
@@ -64,6 +67,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 			}
 			break;
 
+		/* four byte length */
 		case L_FOUR:
 			if ((cnt += fread(&cur.plen_one, 1, sizeof cur.plen_one, file)) == 0) {
 				fclose(file);
