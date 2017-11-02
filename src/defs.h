@@ -220,8 +220,7 @@ static inline void append_str(struct str_list *restrict list_struct, char const 
 		/* check if size too large */
 		if (list_struct->cnt > ARRAY_MAX)
 			ERRX("list_struct->cnt > (SIZE_MAX / 2 - 1)");
-		/* double until size is reached */
-		while ((list_struct->max *= 2) < list_struct->cnt);
+		list_struct->max *= 2;
 		if (!(tmp = realloc(list_struct->list, sizeof *list_struct->list * list_struct->max)))
 			ERRARR("list_ptr", list_struct->cnt - 1);
 		list_struct->list = tmp;
