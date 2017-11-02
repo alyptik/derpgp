@@ -63,17 +63,11 @@
 #define ARRAY_MAX	(SIZE_MAX / 2 - 1)
 
 /* enumerations */
+
 /* packet formats */
 enum {
 	F_OLD = 0x00,
-	F_NEW = 0x40,
-};
-/* old format packet lengths */
-enum {
-	L_ONE = 0x00,
-	L_TWO = 0x01,
-	L_FOUR = 0x02,
-	L_OTHER = 0x03,
+	F_NEW = 0x01,
 };
 /* packet tags */
 enum {
@@ -119,7 +113,33 @@ enum {
 	T_PRVT2 = 0x3e,
 	T_PRVT3 = 0x3f,
 };
+/* old format packet lengths */
+enum {
+	L_ONE = 0x00,
+	L_TWO = 0x01,
+	L_FOUR = 0x02,
+	L_OTHER = 0x03,
+};
 
+/* structures */
+/* struct definition for pgp packet data */
+struct pgp_packet {
+	uint8_t pbit:1;
+	uint8_t pfmt:1;
+	uint8_t ptag:4;
+	uint8_t plentype:2;
+	union {
+		uint8_t plen_one;
+		uint8_t plen_two[2];
+		uint8_t plen_four[4];
+	};
+	uint8_t *pdata;
+};
+/* struct definition for NULL-terminated dynamic array of pgp structs */
+struct pgp_list {
+	size_t cnt, max;
+	struct pgp_packet *list;
+};
 /* struct definition for NULL-terminated string dynamic array */
 struct str_list {
 	size_t cnt, max;
@@ -179,7 +199,7 @@ static inline ptrdiff_t free_str_list(struct str_list *restrict plist)
 	return null_cnt;
 }
 
-static inline void init_list(struct str_list *restrict list_struct, char *restrict init_str)
+static inline void init_str_list(struct str_list *restrict list_struct, char *restrict init_str)
 {
 	list_struct->cnt = 0;
 	list_struct->max = 1;
