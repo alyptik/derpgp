@@ -130,6 +130,7 @@ enum {
 	L_FOUR = 0x02,
 	L_OTHER = 0x03,
 };
+/* TODO XXX: add support for new format packet headers */
 
 /* structures */
 /* struct definition for pgp packet data */
