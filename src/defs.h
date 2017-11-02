@@ -33,7 +33,7 @@
 #define FALLBACK(ARG, DEF) ((ARG) ? (ARG) : (DEF))
 
 /* global version and usage strings */
-#define VERSION_STRING	"CEPL v4.8.3"
+#define VERSION_STRING	"DerpGP v0.0.1"
 #define USAGE_STRING	"[-hptvw] [(-a|-i)“<asm.s>”] [-c“<compiler>”] [-e“<code>”] " \
 	"[-l“<libs>”] [-I“<includes>”] [-o“<out.c>”]\n\t" \
 	"-a,--att:\t\tName of the file to output AT&T-dialect assembler code to\n\t" \
@@ -66,7 +66,7 @@
 #define	YELLOW		"\\033[33m"
 #define	RST		"\\033[00m"
 /* page size for buffer count */
-#define PAGE_SZ		sysconf(_SC_PAGESIZE)
+#define PAGE_SIZE	sysconf(_SC_PAGESIZE)
 /* max possible types */
 #define TNUM		7
 /* max eval string length */
@@ -75,56 +75,6 @@
 #define CONCAT		(-1)
 /* `malloc()` size ceiling */
 #define ARRAY_MAX	(SIZE_MAX / 2 - 1)
-
-/* source file includes template */
-static char const prelude[] = "#define _BSD_SOURCE\n"
-	"#define _DEFAULT_SOURCE\n"
-	"#define _GNU_SOURCE\n"
-	"#define _POSIX_C_SOURCE 200809L\n"
-	"#define _SVID_SOURCE\n"
-	"#define _XOPEN_SOURCE 700\n\n"
-	"#ifdef __INTEL_COMPILER\n"
-	"#  define _Float128 float_t\n"
-	"#else\n"
-	"#  include <complex.h>\n"
-	"#endif\n\n"
-	"#include <assert.h>\n"
-	"#include <ctype.h>\n"
-	"#include <error.h>\n"
-	"#include <errno.h>\n"
-	"#include <fcntl.h>\n"
-	"#include <limits.h>\n"
-	"#include <linux/memfd.h>\n"
-	"#include <math.h>\n"
-	"#include <regex.h>\n"
-	"#include <signal.h>\n"
-	"#include <stdalign.h>\n"
-	"#include <stdarg.h>\n"
-	"#include <stdbool.h>\n"
-	"#include <stddef.h>\n"
-	"#include <stdint.h>\n"
-	"#include <stdio.h>\n"
-	"#include <stdlib.h>\n"
-	"#include <stdnoreturn.h>\n"
-	"#include <string.h>\n"
-	"#include <strings.h>\n"
-	"#include <sys/mman.h>\n"
-	"#include <sys/types.h>\n"
-	"#include <sys/syscall.h>\n"
-	"#include <sys/wait.h>\n"
-	"#include <time.h>\n"
-	"#include <uchar.h>\n"
-	"#include <wchar.h>\n"
-	"#include <unistd.h>\n\n"
-	"extern char **environ;\n\n"
-	"#line 1\n";
-/* compiler pre-program */
-static char const prog_start[] = "\nint main(int argc, char *argv[]) "
-	"{\n\t(void)argc, (void)argv;\n";
-/* pre-program shown to user */
-static char const prog_start_user[] = "\nint main(int argc, char *argv[])\n"
-	"{\n";
-static char const prog_end[] = "\n\treturn 0;\n}\n";
 
 /* enumerations */
 enum src_flag {
