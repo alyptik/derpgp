@@ -45,7 +45,16 @@
 size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list);
 size_t read_pgp_aa(char const *restrict filename, pgp_list *restrict list);
 
-static inline size_t xfread(void *ptr, size_t sz, size_t nmemb, FILE *stream)
+static inline void xcalloc(void *restrict ptr, size_t nmemb, size_t sz, char const *msg)
+{
+	/* sanity check */
+	if (!ptr)
+		return;
+	if (!(*(void **)ptr = calloc(nmemb, sz)))
+		ERR(msg ? msg : "(nil)");
+}
+
+static inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream)
 {
 	size_t cnt;
 	if ((cnt = fread(ptr, sz, nmemb, stream)) == 0) {
