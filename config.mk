@@ -29,12 +29,12 @@ TSRC := $(wildcard t/*.c)
 HDR := $(wildcard src/*.h) $(wildcard t/*.h)
 DEBUG := -pg -Og -ggdb3 -no-pie -Werror -Wfloat-equal -Wrestrict -Wshadow
 CPPFLAGS := -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -MMD -MP
-LIBS := -lelf -lhistory -lreadline
+LIBS :=
 TARGET := derpgp
-MANPAGE := derpgp.7
+MANPAGE := derpgp.1
 TAP := t/tap
 BINDIR := bin
-MANDIR := share/man/man7
+MANDIR := share/man/man1
 MKALL += Makefile debug.mk
 DEBUG += -fno-builtin -fno-common -fprofile-generate=./p -fsanitize=address,alignment,leak,undefined -fverbose-asm
 CFLAGS += -fno-align-functions -fno-align-jumps -fno-align-labels -fno-align-loops -fno-strict-aliasing
