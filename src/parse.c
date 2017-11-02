@@ -9,10 +9,7 @@
 
 #include "parse.h"
 
-/* silence linter */
-void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
-int munmap(void *addr, size_t length);
-
+/* read binary pgp format */
 size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 {
 	FILE *file;
@@ -93,6 +90,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 	return cnt;
 }
 
+/* read ascii armor pgp format */
 size_t read_pgp_aa(char const *restrict filename, pgp_list *restrict list)
 {
 	(void)filename;
