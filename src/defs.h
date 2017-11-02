@@ -141,7 +141,7 @@ typedef struct _pgp_packet {
 	};
 	u8 *pdata;
 } pgp_packet;
-/* struct definition for NULL-terminated dynamic array of pgp structs */
+/* struct definition for dynamic array of pgp structs */
 typedef struct _pgp_list {
 	size_t cnt, max;
 	pgp_packet *list;
