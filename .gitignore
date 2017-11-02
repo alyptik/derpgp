@@ -4,7 +4,7 @@ TAGS
 vgcore*
 
 # Binaries
-cepl
+derpgp
 t/*
 !t/*.c
 !t/*.h
@@ -43,6 +43,6 @@ t/*
 # Debug files
 *.dSYM/
 *.su
-.cepl_history
+.derpgp_history
 *.tar.gz
 debug.mk
