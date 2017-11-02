@@ -77,14 +77,17 @@
 #define ARRAY_MAX	(SIZE_MAX / 2 - 1)
 
 /* enumerations */
+/* packet formats */
 enum {
-	PKT_OLD = 0x00,
-	PKT_NEW = 0x40,
+	F_OLD = 0x00,
+	F_NEW = 0x40,
 };
 /* old format packet lengths */
 enum {
-	L_ONE, L_TWO,
-	L_FOUR, L_OTHER,
+	L_ONE = 0x00,
+	L_TWO = 0x01,
+	L_FOUR = 0x02,
+	L_OTHER = 0x03,
 };
 /* packet tags */
 enum {
