@@ -17,7 +17,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 
 	if (!list)
 		ERR("read_pgp_bin() NULL pgp_list");
-	if (list->cnt == 0) {
+	if (!file_ctx) {
 		free_pgp_list(list);
 		init_pgp_list(list);
 		/* read the header */
@@ -33,7 +33,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 	}
 
 	/* header type */
-	switch (cur.pheader & (0x03 << 6)) {
+	switch (cur.pheader & (0x01 << 6)) {
 	/* old format header */
 	case F_OLD:
 		/* header length */
@@ -106,7 +106,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 /* read ascii armor pgp format */
 size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list)
 {
-	(void)filename;
+	(void)filename, (void)file_ctx;
 	free_pgp_list(list);
 	init_pgp_list(list);
 
