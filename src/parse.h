@@ -10,6 +10,7 @@
 #ifndef _PARSE_H
 #define _PARSE_H 1
 
+#include "defs.h"
 #include <assert.h>
 #include <ctype.h>
 #include <err.h>
@@ -40,6 +41,43 @@
 #include <unistd.h>
 #include <wchar.h>
 
-extern char **environ;
+static inline ptrdiff_t free_pgp_list(struct pgp_list *restrict list_struct)
+{
+	size_t null_cnt = 0;
+	/* return -1 if passed NULL pointers */
+	if (!list_struct || !list_struct->list)
+		return -1;
+	free(list_struct->list);
+	list_struct->list = NULL;
+	list_struct->cnt = 0;
+	list_struct->max = 1;
+	return null_cnt;
+}
+
+static inline void init_pgp_list(struct pgp_list *restrict list_struct)
+{
+	list_struct->cnt = 0;
+	list_struct->max = 1;
+	if (!(list_struct->list = calloc(1, sizeof *list_struct->list)))
+		ERR("error during initial list_ptr calloc()");
+}
+
+static inline void append_packet(struct pgp_list *restrict list_struct, struct pgp_packet const *restrict packet)
+{
+	void *tmp;
+	list_struct->cnt++;
+	/* realloc if cnt reaches current size */
+	if (list_struct->cnt >= list_struct->max) {
+		/* check if size too large */
+		if (list_struct->cnt > ARRAY_MAX)
+			ERRX("list_struct->cnt > (SIZE_MAX / 2 - 1)");
+		/* double until size is reached */
+		while ((list_struct->max *= 2) < list_struct->cnt);
+		if (!(tmp = realloc(list_struct->list, sizeof *list_struct->list * list_struct->max)))
+			ERRARR("list_ptr", list_struct->cnt - 1);
+		list_struct->list = tmp;
+	}
+	list_struct->list[list_struct->cnt - 1] = *packet;
+}
 
 #endif
