@@ -41,7 +41,9 @@ extern char **environ;
 
 int main(int argc, char **argv)
 {
-	printf("%s\n", "derpgp");
+	(void)argc, (void)argv;
+
+	puts("derp derp derp");
 
 	return 0;
 }
