@@ -36,7 +36,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		case L_ONE:
 			if ((cnt += fread(&cur.plen_one, 1, sizeof cur.plen_one, file)) == 0) {
 				fclose(file);
-				ERR("unknown file format");
+				ERR("unrecognized file format");
 			}
 			if (!(cur.pdata = calloc(cur.plen_one, sizeof *cur.pdata))) {
 				fclose(file);
@@ -44,7 +44,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 			}
 			if ((cnt += fread(&cur.pdata, 1, cur.plen_one, file)) == 0) {
 				fclose(file);
-				ERR("unknown file format");
+				ERR("unrecognized file format");
 			}
 			break;
 
@@ -52,7 +52,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		case L_TWO:
 			if ((cnt += fread(&cur.plen_two, 1, sizeof cur.plen_two, file)) == 0) {
 				fclose(file);
-				ERR("unknown file format");
+				ERR("unrecognized file format");
 			}
 			if (!(cur.pdata = calloc(cur.plen_two, sizeof *cur.pdata))) {
 				fclose(file);
@@ -60,7 +60,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 			}
 			if ((cnt += fread(&cur.pdata, 1, cur.plen_two, file)) == 0) {
 				fclose(file);
-				ERR("unknown file format");
+				ERR("unrecognized file format");
 			}
 			break;
 
@@ -68,7 +68,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		case L_FOUR:
 			if ((cnt += fread(&cur.plen_four, 1, sizeof cur.plen_four, file)) == 0) {
 				fclose(file);
-				ERR("unknown file format");
+				ERR("unrecognized file format");
 			}
 			if (!(cur.pdata = calloc(cur.plen_four, sizeof *cur.pdata))) {
 				fclose(file);
@@ -76,7 +76,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 			}
 			if ((cnt += fread(&cur.pdata, 1, cur.plen_four, file)) == 0) {
 				fclose(file);
-				ERR("unknown file format");
+				ERR("unrecognized file format");
 			}
 			break;
 
@@ -89,10 +89,10 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 	} else if ((cur.pheader & (0x03 << 6)) == F_NEW) {
 		/* TODO XXX: implement new format header handling */
 
-	/* unknown header */
+	/* unrecognized header */
 	} else {
 		fclose(file);
-		ERR("unknown file format");
+		ERR("unrecognized file format");
 	}
 
 	fclose(file);
