@@ -130,8 +130,8 @@ struct pgp_packet {
 	uint8_t plentype:2;
 	union {
 		uint8_t plen_one;
-		uint8_t plen_two[2];
-		uint8_t plen_four[4];
+		uint16_t plen_two;
+		uint32_t plen_four;
 	};
 	uint8_t *pdata;
 };
