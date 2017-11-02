@@ -124,10 +124,10 @@ enum {
 /* structures */
 /* struct definition for pgp packet data */
 struct pgp_packet {
-	uint8_t pbit:1;
-	uint8_t pfmt:1;
-	uint8_t ptag:4;
-	uint8_t plentype:2;
+	unsigned pbit : 1;
+	unsigned pfmt : 1;
+	unsigned ptag : 4;
+	unsigned plentype : 2;
 	union {
 		uint8_t plen_one;
 		uint16_t plen_two;
