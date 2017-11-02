@@ -29,8 +29,11 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		return cnt;
 	}
 
+	/* header type */
+	switch (cur.pheader & (0x03 << 6)) {
 	/* old format header */
-	if ((cur.pheader & (0x03 << 6)) == F_OLD) {
+	case F_OLD:
+		/* header length */
 		switch (cur.pheader & 0x03) {
 		/* one byte length */
 		case L_ONE:
@@ -84,13 +87,14 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		case L_OTHER: /* fallthrough */
 		default:;
 		}
+	break;
 
 	/* new format header */
-	} else if ((cur.pheader & (0x03 << 6)) == F_NEW) {
+	case F_NEW:
 		/* TODO XXX: implement new format header handling */
+		break;
 
-	/* unrecognized header */
-	} else {
+	default:
 		fclose(file);
 		ERR("unrecognized file format");
 	}
