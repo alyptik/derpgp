@@ -12,9 +12,9 @@
 /* read binary pgp format */
 size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 {
-	FILE *file;
-	pgp_packet cur;
+	FILE *file = NULL;
 	size_t cnt = 0;
+	pgp_packet cur = {0};
 
 	if (!list)
 		ERR("read_pgp_bin() NULL pgp_list");
