@@ -30,7 +30,7 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 	}
 
 	/* old format header */
-	if ((cur.pheader & (0x03 << 6)) & F_OLD) {
+	if ((cur.pheader & (0x03 << 6)) == F_OLD) {
 		switch (cur.pheader & 0x03) {
 		/* one byte length */
 		case L_ONE:
@@ -84,6 +84,15 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		case L_OTHER: /* fallthrough */
 		default:;
 		}
+
+	/* new format header */
+	} else if ((cur.pheader & (0x03 << 6)) == F_NEW) {
+		/* TODO XXX: implement new format header handling */
+
+	/* unknown header */
+	} else {
+		fclose(file);
+		ERR("unknown file format");
 	}
 
 	fclose(file);
