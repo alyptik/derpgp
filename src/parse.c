@@ -38,30 +38,21 @@ size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list)
 		/* one byte length */
 		case L_ONE:
 			cnt += xfread(&cur.plen_one, 1, sizeof cur.plen_one, file);
-			if (!(cur.pdata = calloc(cur.plen_one, sizeof *cur.pdata))) {
-				fclose(file);
-				ERR("read_pgp() cur.plen_one calloc()");
-			}
+			xcalloc(&cur.pdata, cur.plen_one, sizeof *cur.pdata, "read_pgp() cur.plen_one calloc()");
 			cnt += fread(&cur.pdata, 1, cur.plen_one, file);
 			break;
 
 		/* two byte length */
 		case L_TWO:
 			cnt += xfread(&cur.plen_two, 1, sizeof cur.plen_two, file);
-			if (!(cur.pdata = calloc(cur.plen_two, sizeof *cur.pdata))) {
-				fclose(file);
-				ERR("read_pgp() cur.plen_two calloc()");
-			}
+			xcalloc(&cur.pdata, cur.plen_two, sizeof *cur.pdata, "read_pgp() cur.plen_two calloc()");
 			cnt += fread(&cur.pdata, 1, cur.plen_two, file);
 			break;
 
 		/* four byte length */
 		case L_FOUR:
 			cnt += xfread(&cur.plen_four, 1, sizeof cur.plen_four, file);
-			if (!(cur.pdata = calloc(cur.plen_four, sizeof *cur.pdata))) {
-				fclose(file);
-				ERR("read_pgp() cur.plen_four calloc()");
-			}
+			xcalloc(&cur.pdata, cur.plen_four, sizeof *cur.pdata, "read_pgp() cur.plen_four calloc()");
 			cnt += fread(&cur.pdata, 1, cur.plen_four, file);
 			break;
 
