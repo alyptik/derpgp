@@ -13,16 +13,20 @@
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset);
 int munmap(void *addr, size_t length);
 
-struct pgp_packet *read_pgp_bin(char const *filename)
+size_t read_pgp_bin(char const *restrict filename, struct pgp_list *restrict list)
 {
 	(void)filename;
+	free_pgp_list(list);
+	init_pgp_list(list);
 
-	return NULL;
+	return 0;
 }
 
-struct pgp_packet *read_pgp_aa(char const *filename)
+size_t read_pgp_aa(char const *restrict filename, struct pgp_list *restrict list)
 {
 	(void)filename;
+	free_pgp_list(list);
+	init_pgp_list(list);
 
-	return NULL;
+	return 0;
 }
