@@ -45,6 +45,16 @@
 size_t read_pgp_bin(char const *restrict filename, pgp_list *restrict list);
 size_t read_pgp_aa(char const *restrict filename, pgp_list *restrict list);
 
+static inline size_t xfread(void *ptr, size_t sz, size_t nmemb, FILE *stream)
+{
+	size_t cnt;
+	if ((cnt = fread(ptr, sz, nmemb, stream)) == 0) {
+		fclose(stream);
+		ERR("unrecognized file format");
+	}
+	return cnt;
+}
+
 static inline void free_pgp_list(pgp_list *restrict list_struct)
 {
 	/* return if passed NULL pointers */
