@@ -1,8 +1,8 @@
 /*
- * t/testderpgp.c - unit-test for derpgp.c
+ * t/testderpgp.c:	unit-test for derpgp.c
  *
- * AUTHOR: Joey Pabalinas <alyptik@protonmail.com>
- * See LICENSE.md file for copyright and license details.
+ * AUTHORS:		Joey Pabalinas <alyptik@protonmail.com>
+ *			Santiago Torres <sangy@riseup.net>
  *
  * __OR__
  *
