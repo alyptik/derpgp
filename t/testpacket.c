@@ -25,7 +25,7 @@ int main(void)
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
 
 	ok(packets.cnt == 5, "binary parsed the 5 available packets");
-	ok((packets.list[0].pheader & (T_SECKEY <<2)) != 0, "The first header is a secret key header");
+	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "The first header is a secret key header");
 
 	ok(parse_pubkey_packet(&packets.list[0]) != 0);
 
