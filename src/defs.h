@@ -16,12 +16,14 @@
 #include <unistd.h>
 
 /* macros */
+
 #define FALLBACK(ARG, DEF)	((ARG) ? (ARG) : (DEF))
 #define HTOLE16(DATA)		(((DATA)[1]) | ((DATA)[0] << 0x08))
 #define HTOLE32(DATA)		(((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
 #define HEX(X)			printf("[%#x] ", (X))
 
 /* global version and usage strings */
+
 #define VERSION_STRING	"DerpGP v0.0.1"
 #define USAGE_STRING	"[-hptvw] [(-a|-i)“<asm.s>”] [-c“<compiler>”] [-e“<code>”] " \
 	"[-l“<libs>”] [-I“<includes>”] [-o“<out.c>”]\n\t" \
@@ -66,6 +68,7 @@
 #define ARRAY_MAX	(SIZE_MAX / 2 - 1)
 
 /* typedefs */
+
 typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;
@@ -76,12 +79,14 @@ typedef uint32_t u32;
 typedef uint64_t u64;
 
 /* enumerations */
+
 /* packet header is defined as `[2 bit format][4 bit type][2 bit length size]` */
-/* packet formats */
 enum {
+	/* packet formats */
 	F_OLD = 0x00,
 	F_NEW = 0x01,
 };
+
 /* packet tags */
 enum {
 	/* Reserved - a packet tag MUST NOT have this value */
@@ -126,6 +131,7 @@ enum {
 	T_PRVT2 = 0x3e,
 	T_PRVT3 = 0x3f,
 };
+
 /* old format packet lengths */
 enum {
 	L_ONE = 0x00,
@@ -141,7 +147,7 @@ enum {
 typedef struct _mpi {
 	u16 length;
 	u8 *data;
-} MPI;
+} mpi;
 
 /* struct definition for pgp packet data */
 typedef struct _pgp_packet {
@@ -168,21 +174,24 @@ typedef struct _pgp_packet {
 			u8 string_to_key;
 			u8 sym_encryption_algo;
 			u8 *IV;
-			MPI exponent_d;
-			MPI prime_p;
-			MPI prime_q;
-			MPI mult_inverse;
+			mpi exponent_d;
+			mpi prime_p;
+			mpi prime_q;
+			mpi mult_inverse;
 			u16 checksum;
 		} seckey;
-		/* Public-Key Packet 
+		/* Public-Key Packet
 		 * FIXME: we only support V4 :>
 		 */
-		struct { 
-			u8 version; // NOTE: must be always 4 (or 3 in the future)
-			u32 timestamp; // posix timestamp
-			u8 algorithm; // 1 for RSA, 2 for DSA
-			MPI modulus_n;
-			MPI exponent;
+		struct {
+			/* NOTE: must be always 4 (or 3 in the future) */
+			u8 version;
+			/* posix timestamp */
+			u32 timestamp;
+			/* 1 for RSA, 2 for DSA */
+			u8 algorithm;
+			mpi modulus_n;
+			mpi exponent;
 		} pubkey;
 		/* Secret-Subkey Packet */
 		struct { void *decoded; } secsubkey;
@@ -213,11 +222,13 @@ typedef struct _pgp_packet {
 		struct { void *decoded; } prvt3;
 	};
 } pgp_packet;
+
 /* struct definition for dynamic array of pgp structs */
 typedef struct _pgp_list {
 	size_t cnt, max;
 	pgp_packet *list;
 } pgp_list;
+
 /* struct definition for NULL-terminated string dynamic array */
 typedef struct _str_list {
 	size_t cnt, max;
