@@ -17,8 +17,8 @@
 
 /* macros */
 #define FALLBACK(ARG, DEF) ((ARG) ? (ARG) : (DEF))
-#define HTOLE16(DATA) (((DATA)[1]<<0) | ((DATA)[0]<<8))
-#define HTOLE32(DATA) (((DATA)[3]<<0) | ((DATA)[2]<<8) | ((DATA)[1]<<16) | ((DATA)[0]<<24))
+#define HTOLE16(DATA) (((DATA)[1]) | ((DATA)[0] << 0x08))
+#define HTOLE32(DATA) (((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
 
 /* global version and usage strings */
 #define VERSION_STRING	"DerpGP v0.0.1"
@@ -78,52 +78,52 @@ typedef uint64_t u64;
 /* packet header is defined as `[2 bit format][4 bit type][2 bit length size]` */
 /* packet formats */
 enum {
-	F_OLD = 0x00 << 6,
-	F_NEW = 0x01 << 6,
+	F_OLD = 0x00,
+	F_NEW = 0x01,
 };
-/* packet tags (for indices and masking) */
+/* packet tags */
 enum {
 	/* Reserved - a packet tag MUST NOT have this value */
-	F_RSRVD = 0x00, T_RSRVD = 0x00 << 2,
+	T_RSRVD = 0x00,
 	/* Public-Key Encrypted Session Key Packet */
-	F_PKESESS = 0x01, T_PKESESS = 0x01 << 2,
+	T_PKESESS = 0x01,
 	/* Signature Packet */
-	F_SIG = 0x02, T_SIG = 0x02 << 2,
+	T_SIG = 0x02,
 	/* Symmetric-Key Encrypted Session Key Packet */
-	F_SKESESS = 0x03, T_SKESESS = 0x03 << 2,
+	T_SKESESS = 0x03,
 	/* One-Pass Signature Packet */
-	F_OPSIG = 0x04, T_OPSIG = 0x04 << 2,
+	T_OPSIG = 0x04,
 	/* Secret-Key Packet */
-	F_SECKEY = 0x05, T_SECKEY = 0x05 << 2,
+	T_SECKEY = 0x05,
 	/* Public-Key Packet */
-	F_PUBKEY = 0x06, T_PUBKEY = 0x06 << 2,
+	T_PUBKEY = 0x06,
 	/* Secret-Subkey Packet */
-	F_SECSUBKEY = 0x07, T_SECSUBKEY = 0x07 << 2,
+	T_SECSUBKEY = 0x07,
 	/* Compressed Data Packet */
-	F_CDATA = 0x08, T_CDATA = 0x08 << 2,
+	T_CDATA = 0x08,
 	/* Symmetrically Encrypted Data Packet */
-	F_SEDATA= 0x09, T_SEDATA= 0x09 << 2,
+	T_SEDATA= 0x09,
 	/* Marker Packet */
-	F_MARKER = 0x0a, T_MARKER = 0x0a << 2,
+	T_MARKER = 0x0a,
 	/* Literal Data Packet */
-	F_LITDATA = 0x0b, T_LITDATA = 0x0b << 2,
+	T_LITDATA = 0x0b,
 	/* Trust Packet */
-	F_TRUST = 0x0c, T_TRUST = 0x0c << 2,
+	T_TRUST = 0x0c,
 	/* User ID Packet */
-	F_UID= 0x0d, T_UID= 0x0d << 2,
+	T_UID= 0x0d,
 	/* Public-Subkey Packet */
-	F_PUBSUBKEY = 0x0e, T_PUBSUBKEY = 0x0e << 2,
+	T_PUBSUBKEY = 0x0e,
 	/* User Attribute Packet */
-	F_UATTR = 0x11, T_UATTR = 0x11 << 2,
+	T_UATTR = 0x11,
 	/* Sym. Encrypted and Integrity Protected Data Packet */
-	F_SEIPDATA = 0x12, T_SEIPDATA = 0x12 << 2,
+	T_SEIPDATA = 0x12,
 	/* Modification Detection Code Packet */
-	F_MDCODE = 0x13, T_MDCODE = 0x13 << 2,
+	T_MDCODE = 0x13,
 	/* Private or Experimental Values */
-	F_PRVT0 = 0x3c, T_PRVT0 = 0x3c << 2,
-	F_PRVT1 = 0x3d, T_PRVT1 = 0x3d << 2,
-	F_PRVT2 = 0x3e, T_PRVT2 = 0x3e << 2,
-	F_PRVT3 = 0x3f, T_PRVT3 = 0x3f << 2,
+	T_PRVT0 = 0x3c,
+	T_PRVT1 = 0x3d,
+	T_PRVT2 = 0x3e,
+	T_PRVT3 = 0x3f,
 };
 /* old format packet lengths */
 enum {
