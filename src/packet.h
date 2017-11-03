@@ -1,5 +1,5 @@
 /*
- * packet.h: packet data parsing and handling functions
+ * packet.h: packet mpi_data parsing and handling functions
  *
  * AUTHORS:	Joey Pabalinas <alyptik@protonmail.com>
  *		Santiago Torres <sangy@riseup.net>
@@ -20,18 +20,16 @@
 size_t parse_pubkey_packet(pgp_packet *packet);
 size_t parse_seckey_packet(pgp_packet *packet);
 
-static inline size_t read_mpi(u8 *buffer, MPI *mpi) {
-	
-	mpi->length = HTOLE16(buffer);
+static inline size_t read_mpi(u8 *mpi_buf, mpi *mpi_ptr) {
 
-	size_t byte_length = (mpi->length + 1)/ 8;
+	mpi_ptr->length = HTOLE16(mpi_buf);
 
-	u8 *data = (u8 *)malloc(sizeof(*data) * byte_length);
-	memcpy(data, buffer + 2, byte_length);
+	size_t byte_length = (mpi_ptr->length + 1) / 8;
 
-	mpi->data = data;
+	xmalloc(&mpi_ptr->mdata, sizeof *mpi_ptr->mdata * byte_length, "read_mpi()");
+	memcpy(mpi_ptr->mdata, mpi_buf + 2, byte_length);
 
 	return 2 + byte_length;
 }
 
-#endif // muh include ward
+#endif

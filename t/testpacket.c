@@ -1,5 +1,5 @@
 /*
- * t/testparse.c:	unit-test for parse.c
+ * t/testpacket.c:	unit-test for packet.c
  *
  * AUTHORS:		Joey Pabalinas <alyptik@protonmail.com>
  *			Santiago Torres <sangy@riseup.net>
@@ -8,8 +8,8 @@
  */
 
 #include "tap.h"
-#include "../src/parse.h"
 #include "../src/packet.h"
+#include "../src/parse.h"
 
 int main(void)
 {
@@ -18,7 +18,7 @@ int main(void)
 
 	/* by manually inspecting the key, we infer this is the actual data */
 	/* start test block */
-	plan(4);
+	plan(5);
 
 	/* tests */
 	ok(1 == 1, "test ayy lmao");

@@ -10,32 +10,36 @@
 #include "packet.h"
 
 size_t parse_pubkey_packet(pgp_packet *packet) {
-	u8 *data = packet->pdata;
+	u8 *pub_data = packet->pdata;
 
 	// FIXME: we only support version 4, so bail if the version identifier is
 	// any different.
-	assert(data[0] == 4);
+	assert(pub_data[0] == 4);
 
 	packet->pubkey.version = 4;
-	packet->pubkey.timestamp = HTOLE32(data + 1);
-	packet->pubkey.algorithm = data[5];
+	packet->pubkey.timestamp = HTOLE32(pub_data + 1);
+	packet->pubkey.algorithm = pub_data[5];
 
 	assert(packet->pubkey.algorithm == 1);
 
-	unsigned int mpi_offset = 6;
-	MPI this_mpi;
-	this_mpi.length = HTOLE16(data + mpi_offset);
-	mpi_offset += read_mpi(data + mpi_offset, &this_mpi);
+	ptrdiff_t mpi_offset = 6;
+	mpi tmp;
+	tmp.length = HTOLE16(pub_data + mpi_offset);
+	mpi_offset += read_mpi(pub_data + mpi_offset, &tmp);
 
-	packet->pubkey.modulus_n = this_mpi;
-	mpi_offset += read_mpi(data + mpi_offset, &this_mpi);
+	packet->pubkey.modulus_n = tmp;
+	mpi_offset += read_mpi(pub_data + mpi_offset, &tmp);
 
-	packet->pubkey.exponent = this_mpi;
+	(void)mpi_offset;
 
-	return 0;
+	packet->pubkey.exponent = tmp;
+
+	return 1;
 }
 
 
 size_t parse_seckey_packet(pgp_packet *packet) {
+	(void) packet;
 	puts("Ayylmao");
+	return 0;
 }

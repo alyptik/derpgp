@@ -77,7 +77,7 @@ typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
-typedef int (*packet_handler)();
+typedef int (*const packet_handler)();
 
 /* enumerations */
 
@@ -147,7 +147,7 @@ enum {
 /* Multi precision integers */
 typedef struct _mpi {
 	u16 length;
-	u8 *data;
+	u8 *mdata;
 } mpi;
 
 /* struct definition for pgp packet data */
