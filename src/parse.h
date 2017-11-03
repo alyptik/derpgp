@@ -50,15 +50,19 @@ static inline void free_pgp_list(pgp_list *restrict list_struct)
 	if (!list_struct || !list_struct->list)
 		return;
 	for (size_t i = 0; i < list_struct->cnt; i++) {
-		if (((list_struct->list[i].pheader & 0x3c) >> 2) == T_PUBKEY) {
+		/* TODO XXX: use better `free()` strategy */
+		switch ((list_struct->list[i].pheader & 0x3c) >> 2) {
+		case T_PUBKEY:
 			free(list_struct->list[i].pubkey.modulus_n.mdata);
 			free(list_struct->list[i].pubkey.exponent.mdata);
-		}
-		if (((list_struct->list[i].pheader & 0x3c) >> 2) == T_SECKEY) {
+			break;
+		case T_SECKEY:
 			free(list_struct->list[i].seckey.exponent_d.mdata);
 			free(list_struct->list[i].seckey.mult_inverse.mdata);
 			free(list_struct->list[i].seckey.prime_p.mdata);
 			free(list_struct->list[i].seckey.prime_q.mdata);
+			break;
+		default:;
 		}
 		free(list_struct->list[i].pdata);
 	}

@@ -32,23 +32,19 @@ static packet_handler dispatch_table[] = {
 /* read binary pgp format */
 size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list)
 {
-	/* silence linter */
-	(void)dispatch_table;
-
 	FILE *file;
 	pgp_packet cur = {0};
 
 	/* sanity checks */
 	if (!list)
 		ERR("read_pgp_bin() NULL pgp_list");
-	if (!file_ctx) {
+	file = file_ctx;
+	if (!file) {
 		free_pgp_list(list);
 		init_pgp_list(list);
 		/* read the header */
 		if (!(file = fopen(filename, "rb")))
 			ERR("read_pgp_bin() fopen()");
-	} else {
-		file = file_ctx;
 	}
 	if (!xfread(&cur.pheader, 1, sizeof cur.pheader, file)) {
 		fclose(file);
@@ -63,13 +59,13 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 		switch (cur.pheader & 0x03) {
 		/* one byte length */
 		case L_ONE:
-			if (!xfread(&cur.plen_raw, sizeof cur.plen_one, 1, file)) {
+			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_one, file)) {
 				fclose(file);
 				return list->cnt;
 			}
 			cur.plen_one = cur.plen_raw[0];
 			xcalloc(&cur.pdata, cur.plen_one, sizeof *cur.pdata, "read_pgp() cur.plen_one calloc()");
-			if (!xfread(cur.pdata, cur.plen_one, 1, file)) {
+			if (!xfread(cur.pdata, 1, cur.plen_one, file)) {
 				fclose(file);
 				return list->cnt;
 			}
@@ -77,13 +73,13 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 
 		/* two byte length */
 		case L_TWO:
-			if (!xfread(&cur.plen_raw, sizeof cur.plen_two, 1, file)) {
+			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_two, file)) {
 				fclose(file);
 				return list->cnt;
 			}
 			cur.plen_two = BETOH16(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_two, sizeof *cur.pdata, "read_pgp() cur.plen_two calloc()");
-			if (!xfread(cur.pdata, cur.plen_two, 1, file)) {
+			if (!xfread(cur.pdata, 1, cur.plen_two, file)) {
 				fclose(file);
 				return list->cnt;
 			}
@@ -91,13 +87,13 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 
 		/* four byte length */
 		case L_FOUR:
-			if (!xfread(&cur.plen_raw, sizeof cur.plen_four, 1, file)) {
+			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_four, file)) {
 				fclose(file);
 				return list->cnt;
 			}
 			cur.plen_four = BETOH32(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_four, sizeof *cur.pdata, "read_pgp() cur.plen_four calloc()");
-			if (!xfread(cur.pdata, cur.plen_four, 1, file)) {
+			if (!xfread(cur.pdata, 1, cur.plen_four, file)) {
 				fclose(file);
 				return list->cnt;
 			}
@@ -114,11 +110,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 
 	/* new format header */
 	/* TODO XXX: implement new format header handling */
-	case F_NEW:
-		fclose(file);
-		return list->cnt;
-		break;
-
+	case F_NEW: /* fallthrough */
 	/* unrecognized header */
 	default:
 		fclose(file);
@@ -132,7 +124,9 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 /* read ascii armor pgp format */
 size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list)
 {
-	(void)filename, (void)file_ctx;
+	/* silence linter */
+	(void)dispatch_table, (void)filename, (void)file_ctx;
+
 	free_pgp_list(list);
 	init_pgp_list(list);
 
