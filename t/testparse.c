@@ -33,9 +33,9 @@ int main(void)
 
 	ok(packets.cnt == 5, "binary parsed the 5 available packets");
 	for (size_t i = 0; i < packets.cnt; i++) {
-		ok((packets.list[i].pheader & expected_pheaders[i]) != 0,
-				"header %u is the correct tag", i);
 		HEX(packets.list[i].pheader);
+		ok((packets.list[i].pheader & (expected_pheaders[i] << 2)) != 0,
+				"header %u is the correct tag", i);
 	}
 
 	/* cleanup */

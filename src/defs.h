@@ -136,6 +136,13 @@ enum {
 /* TODO XXX: add support for new format packet headers */
 
 /* structures */
+
+/* Multi precision integers */
+typedef struct _mpi {
+	u16 length;
+	u8 *data;
+} MPI;
+
 /* struct definition for pgp packet data */
 typedef struct _pgp_packet {
 	u8 pheader;
@@ -157,9 +164,26 @@ typedef struct _pgp_packet {
 		/* One-Pass Signature Packet */
 		struct { void *decoded; } opsig;
 		/* Secret-Key Packet */
-		struct { void *decoded; } seckey;
-		/* Public-Key Packet */
-		struct { void *decoded; } pubkey;
+		struct {
+			u8 string_to_key;
+			u8 sym_encryption_algo;
+			u8 *IV;
+			MPI exponent_d;
+			MPI prime_p;
+			MPI prime_q;
+			MPI mult_inverse;
+			u16 checksum;
+		} seckey;
+		/* Public-Key Packet 
+		 * FIXME: we only support V4 :>
+		 */
+		struct { 
+			u8 version; // NOTE: must be always 4 (or 3 in the future)
+			u32 timestamp; // posix timestamp
+			u8 algorithm; // 1 for RSA, 2 for DSA
+			MPI modulus_n;
+			MPI exponent;
+		} pubkey;
 		/* Secret-Subkey Packet */
 		struct { void *decoded; } secsubkey;
 		/* Compressed Data Packet */
