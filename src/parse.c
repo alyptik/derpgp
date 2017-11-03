@@ -76,7 +76,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 				fclose(file);
 				return list->cnt;
 			}
-			cur.plen_two = HTOLE16(cur.plen_raw);
+			cur.plen_two = BETOH16(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_two, sizeof *cur.pdata, "read_pgp() cur.plen_two calloc()");
 			if (!xfread(cur.pdata, cur.plen_two, 1, file)) {
 				fclose(file);
@@ -90,7 +90,7 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 				fclose(file);
 				return list->cnt;
 			}
-			cur.plen_four = HTOLE32(cur.plen_raw);
+			cur.plen_four = BETOH32(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_four, sizeof *cur.pdata, "read_pgp() cur.plen_four calloc()");
 			if (!xfread(cur.pdata, cur.plen_four, 1, file)) {
 				fclose(file);

@@ -17,14 +17,14 @@ size_t parse_pubkey_packet(pgp_packet *packet) {
 	assert(pub_data[0] == 4);
 
 	packet->pubkey.version = 4;
-	packet->pubkey.timestamp = HTOLE32(pub_data + 1);
+	packet->pubkey.timestamp = BETOH32(pub_data + 1);
 	packet->pubkey.algorithm = pub_data[5];
 
 	assert(packet->pubkey.algorithm == 1);
 
 	ptrdiff_t mpi_offset = 6;
 	mpi tmp;
-	tmp.length = HTOLE16(pub_data + mpi_offset);
+	tmp.length = BETOH16(pub_data + mpi_offset);
 	mpi_offset += read_mpi(pub_data + mpi_offset, &tmp);
 
 	packet->pubkey.modulus_n = tmp;

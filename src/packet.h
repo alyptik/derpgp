@@ -22,7 +22,7 @@ size_t parse_seckey_packet(pgp_packet *packet);
 
 static inline size_t read_mpi(u8 *mpi_buf, mpi *mpi_ptr) {
 
-	mpi_ptr->length = HTOLE16(mpi_buf);
+	mpi_ptr->length = BETOH16(mpi_buf);
 
 	size_t byte_length = (mpi_ptr->length + 1) / 8;
 
