@@ -21,7 +21,7 @@ int main(void)
 		T_UID,
 		T_SIG,
 		T_SECSUBKEY,
-		T_SIG	
+		T_SIG
 	};
 
 	/* start test block */
@@ -32,9 +32,11 @@ int main(void)
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
 
 	ok(packets.cnt == 5, "binary parsed the 5 available packets");
-	for (size_t i = 0; i < packets.cnt; i++) 
+	for (size_t i = 0; i < packets.cnt; i++) {
 		ok((packets.list[i].pheader & expected_pheaders[i]) != 0,
 				"header %u is the correct tag", i);
+		HEX(packets.list[i].pheader);
+	}
 
 	/* cleanup */
 	free_pgp_list(&packets);
