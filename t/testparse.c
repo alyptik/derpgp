@@ -23,8 +23,6 @@ int main(void)
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
 
 	/* cleanup */
-	for (size_t i = 0; i < packets.cnt; i++)
-		free(packets.list[i].pdata);
 	free_pgp_list(&packets);
 
 	/* return handled */

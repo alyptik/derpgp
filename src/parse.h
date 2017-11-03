@@ -50,6 +50,8 @@ static inline void free_pgp_list(pgp_list *restrict list_struct)
 	/* return if passed NULL pointers */
 	if (!list_struct || !list_struct->list)
 		return;
+	for (size_t i = 0; i < list_struct->cnt; i++)
+		free(list_struct->list[i].pdata);
 	free(list_struct->list);
 	list_struct->list = NULL;
 	list_struct->cnt = 0;
