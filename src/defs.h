@@ -145,6 +145,48 @@ typedef struct _pgp_packet {
 	};
 	u8 plen_raw[4];
 	u8 *pdata;
+	/* parsed packet data */
+	union {
+		/* Reserved - a packet tag MUST NOT have this value */
+		struct { void *decoded; } rsrvd;
+		/* Public-Key Encrypted Session Key Packet */
+		struct { void *decoded; } pkesess;
+		/* Symmetric-Key Encrypted Session Key Packet */
+		struct { void *decoded; } skesess;
+		/* One-Pass Signature Packet */
+		struct { void *decoded; } opsig;
+		/* Secret-Key Packet */
+		struct { void *decoded; } seckey;
+		/* Public-Key Packet */
+		struct { void *decoded; } pubkey;
+		/* Secret-Subkey Packet */
+		struct { void *decoded; } secsubkey;
+		/* Compressed Data Packet */
+		struct { void *decoded; } cdata;
+		/* Symmetrically Encrypted Data Packet */
+		struct { void *decoded; } sedat;
+		/* Marker Packet */
+		struct { void *decoded; } marker;
+		/* Literal Data Packet */
+		struct { void *decoded; } litdata;
+		/* Trust Packet */
+		struct { void *decoded; } trust;
+		/* User ID Packet */
+		struct { void *decoded; } ui;
+		/* Public-Subkey Packet */
+		struct { void *decoded; } pubsubkey;
+		/* User Attribute Packet */
+		struct { void *decoded; } uattr;
+		/* Sym. Encrypted and Integrity Protected Data Packet */
+		struct { void *decoded; } seipdata;
+		/* Modification Detection Code Packet */
+		struct { void *decoded; } mdcode;
+		/* Private or Experimental Values */
+		struct { void *decoded; } prvt0;
+		struct { void *decoded; } prvt1;
+		struct { void *decoded; } prvt2;
+		struct { void *decoded; } prvt3;
+	};
 } pgp_packet;
 /* struct definition for dynamic array of pgp structs */
 typedef struct _pgp_list {
