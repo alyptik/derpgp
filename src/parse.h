@@ -62,7 +62,6 @@ static inline void free_pgp_list(pgp_list *restrict list_struct)
 			free(list_struct->list[i].seckey.prime_p.mdata);
 			free(list_struct->list[i].seckey.prime_q.mdata);
 			break;
-		default:;
 		}
 		free(list_struct->list[i].pdata);
 	}
