@@ -41,7 +41,6 @@
 #include <unistd.h>
 #include <wchar.h>
 
-/* prototypes */
 size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list);
 size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list);
 

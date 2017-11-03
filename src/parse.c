@@ -9,9 +9,14 @@
 
 #include "parse.h"
 
+static packet_handler dispatch_table[64] = {0};
+
 /* read binary pgp format */
 size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list)
 {
+	/* silence linter */
+	(void)dispatch_table;
+
 	FILE *file;
 	pgp_packet cur = {0};
 
