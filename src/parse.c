@@ -33,17 +33,18 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 	}
 
 	/* header type */
-	switch (cur.pheader & (0x01 << 6)) {
+	switch ((cur.pheader & (0x01 << 6)) >> 6) {
 	/* old format header */
 	case F_OLD:
 		/* header length */
 		switch (cur.pheader & 0x03) {
 		/* one byte length */
 		case L_ONE:
-			if (!xfread(&cur.plen_one, sizeof cur.plen_one, 1, file)) {
+			if (!xfread(&cur.plen_raw, sizeof cur.plen_one, 1, file)) {
 				fclose(file);
 				return list->cnt;
 			}
+			cur.plen_one = cur.plen_raw[0];
 			xcalloc(&cur.pdata, cur.plen_one, sizeof *cur.pdata, "read_pgp() cur.plen_one calloc()");
 			if (!xfread(cur.pdata, cur.plen_one, 1, file)) {
 				fclose(file);
