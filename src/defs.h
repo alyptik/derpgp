@@ -17,6 +17,8 @@
 
 /* macros */
 #define FALLBACK(ARG, DEF) ((ARG) ? (ARG) : (DEF))
+#define HTOLE16(DATA) (((DATA)[1]<<0) | ((DATA)[0]<<8))
+#define HTOLE32(DATA) (((DATA)[3]<<0) | ((DATA)[2]<<8) | ((DATA)[1]<<16) | ((DATA)[0]<<24))
 
 /* global version and usage strings */
 #define VERSION_STRING	"DerpGP v0.0.1"
@@ -141,6 +143,7 @@ typedef struct _pgp_packet {
 		u16 plen_two;
 		u32 plen_four;
 	};
+	u8 plen_raw[4];
 	u8 *pdata;
 } pgp_packet;
 /* struct definition for dynamic array of pgp structs */
@@ -170,7 +173,7 @@ static inline void xcalloc(void *restrict ptr, size_t nmemb, size_t sz, char con
 	/* sanity check */
 	if (!ptr)
 		return;
-	if (!(*(void **)ptr = calloc(nmemb, sz)))
+	if (!(*(u8 **)ptr = calloc(nmemb, sz)))
 		ERR(msg ? msg : "(nil)");
 }
 

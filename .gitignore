@@ -1,6 +1,7 @@
 tags
 TAGS
 *.swp
+*.gcda
 vgcore*
 
 # Binaries

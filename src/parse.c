@@ -40,12 +40,12 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 		switch (cur.pheader & 0x03) {
 		/* one byte length */
 		case L_ONE:
-			if (!xfread(&cur.plen_one, 1, sizeof cur.plen_one, file)) {
+			if (!xfread(&cur.plen_one, sizeof cur.plen_one, 1, file)) {
 				fclose(file);
 				return list->cnt;
 			}
 			xcalloc(&cur.pdata, cur.plen_one, sizeof *cur.pdata, "read_pgp() cur.plen_one calloc()");
-			if (!xfread(&cur.pdata, 1, cur.plen_one, file)) {
+			if (!xfread(cur.pdata, cur.plen_one, 1, file)) {
 				fclose(file);
 				return list->cnt;
 			}
@@ -53,12 +53,13 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 
 		/* two byte length */
 		case L_TWO:
-			if (!xfread(&cur.plen_two, 1, sizeof cur.plen_two, file)) {
+			if (!xfread(&cur.plen_raw, sizeof cur.plen_two, 1, file)) {
 				fclose(file);
 				return list->cnt;
 			}
+			cur.plen_two = HTOLE16(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_two, sizeof *cur.pdata, "read_pgp() cur.plen_two calloc()");
-			if (!xfread(&cur.pdata, 1, cur.plen_two, file)) {
+			if (!xfread(cur.pdata, cur.plen_two, 1, file)) {
 				fclose(file);
 				return list->cnt;
 			}
@@ -66,12 +67,13 @@ size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_
 
 		/* four byte length */
 		case L_FOUR:
-			if (!xfread(&cur.plen_four, 1, sizeof cur.plen_four, file)) {
+			if (!xfread(&cur.plen_raw, sizeof cur.plen_four, 1, file)) {
 				fclose(file);
 				return list->cnt;
 			}
+			cur.plen_four = HTOLE32(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_four, sizeof *cur.pdata, "read_pgp() cur.plen_four calloc()");
-			if (!xfread(&cur.pdata, 1, cur.plen_four, file)) {
+			if (!xfread(cur.pdata, cur.plen_four, 1, file)) {
 				fclose(file);
 				return list->cnt;
 			}

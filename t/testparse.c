@@ -16,10 +16,10 @@ int main(void)
 	pgp_list packets = {0};
 
 	/* start test block */
-	plan(2);
+	plan(1);
 
 	/* tests */
-	ok(1 == 1, "ayy lmao");
+	/* ok(1 == 1, "ayy lmao"); */
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
 
 	/* cleanup */
