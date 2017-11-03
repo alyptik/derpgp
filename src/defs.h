@@ -16,10 +16,10 @@
 #include <unistd.h>
 
 /* macros */
-#define FALLBACK(ARG, DEF) ((ARG) ? (ARG) : (DEF))
-#define HTOLE16(DATA) (((DATA)[1]) | ((DATA)[0] << 0x08))
-#define HTOLE32(DATA) (((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
-#define HEX(X) printf("[%#x] ", (X))
+#define FALLBACK(ARG, DEF)	((ARG) ? (ARG) : (DEF))
+#define HTOLE16(DATA)		(((DATA)[1]) | ((DATA)[0] << 0x08))
+#define HTOLE32(DATA)		(((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
+#define HEX(X)			printf("[%#x] ", (X))
 
 /* global version and usage strings */
 #define VERSION_STRING	"DerpGP v0.0.1"
