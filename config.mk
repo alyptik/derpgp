@@ -36,7 +36,7 @@ TAP := t/tap
 BINDIR := bin
 MANDIR := share/man/man1
 MKALL += Makefile debug.mk
-DEBUG += -fno-builtin -fno-common -fprofile-generate=./p -fsanitize=address,alignment,leak,undefined -fverbose-asm
+DEBUG += -fno-builtin -fno-common -fprofile-generate=p -fsanitize=address,alignment,leak,undefined -fverbose-asm
 CFLAGS += -fno-align-functions -fno-align-jumps -fno-align-labels -fno-align-loops -fno-strict-aliasing
 CFLAGS += -flto -fPIC -fuse-linker-plugin -fuse-ld=gold -pedantic-errors -std=c11
 CFLAGS += -Wall -Wextra -Wno-missing-field-initializers -Wstrict-overflow
