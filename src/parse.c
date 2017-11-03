@@ -10,7 +10,7 @@
 #include "parse.h"
 
 /* static function pointer array */
-static packet_handler dispatch_table[] = {
+static int (*const dispatch_table[]) = {
 	 /* parse_rsrvd, parse_pkesess, parse_skesess, */
 	 0, 0, 0,
 	 /* parse_opsig, parse_seckey, parse_pubkey, */
