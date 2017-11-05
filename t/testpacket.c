@@ -14,7 +14,7 @@
 int main(void)
 {
 	char vec_bin[] = "./t/4yyylmao.gpg";
-	pgp_list packets = {0};
+	pgp_list packets = {0, 0, NULL};
 
 	/* by manually inspecting the key, we infer this is the actual data */
 	/* start test block */
