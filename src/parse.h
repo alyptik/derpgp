@@ -41,10 +41,9 @@
 #include <unistd.h>
 #include <wchar.h>
 
-size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
 size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
 
-static inline void free_pgp_list(pgp_list *restrict list_struct)
+inline void free_pgp_list(pgp_list *restrict list_struct)
 {
 	/* return if passed NULL pointers */
 	if (!list_struct || !list_struct->list)
@@ -71,14 +70,14 @@ static inline void free_pgp_list(pgp_list *restrict list_struct)
 	list_struct->max = 1;
 }
 
-static inline void init_pgp_list(pgp_list *restrict list_struct)
+inline void init_pgp_list(pgp_list *restrict list_struct)
 {
 	list_struct->cnt = 0;
 	list_struct->max = 1;
 	xcalloc(&list_struct->list, 1, sizeof *list_struct->list, "error during initial list_ptr calloc()");
 }
 
-static inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const *restrict packet)
+inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const *restrict packet)
 {
 	list_struct->cnt++;
 	/* realloc if cnt reaches current size */
@@ -90,6 +89,93 @@ static inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const
 		xrealloc(&list_struct->list, sizeof *list_struct->list * list_struct->max, "append_packet()");
 	}
 	list_struct->list[list_struct->cnt - 1] = *packet;
+}
+
+/* read binary pgp format */
+inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list)
+{
+	FILE *file = file_ctx;
+	pgp_packet cur = {0};
+
+	/* sanity checks */
+	if (!file) {
+		free_pgp_list(list);
+		init_pgp_list(list);
+		/* read the header */
+		if (!(file = fopen(filename, "rb")))
+			ERR("read_pgp_bin() fopen()");
+	}
+
+	/* read header byte */
+	if (!xfread(&cur.pheader, 1, sizeof cur.pheader, file))
+		goto BASE_CASE;
+
+	/* header type */
+	switch ((cur.pheader & (0x01 << 6)) >> 6) {
+	/* old format header */
+	case F_OLD:
+		/* header length */
+		switch (cur.pheader & 0x03) {
+		/* one byte length */
+		case L_ONE:
+			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_one, file))
+				goto BASE_CASE;
+			cur.plen_one = cur.plen_raw[0];
+			xcalloc(&cur.pdata, cur.plen_one, sizeof *cur.pdata, "read_pgp() cur.plen_one calloc()");
+			if (!xfread(cur.pdata, 1, cur.plen_one, file))
+				goto BASE_CASE;
+			break;
+
+		/* two byte length */
+		case L_TWO:
+			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_two, file))
+				goto BASE_CASE;
+			cur.plen_two = BETOH16(cur.plen_raw);
+			xcalloc(&cur.pdata, cur.plen_two, sizeof *cur.pdata, "read_pgp() cur.plen_two calloc()");
+			if (!xfread(cur.pdata, 1, cur.plen_two, file))
+				goto BASE_CASE;
+			break;
+
+		/* four byte length */
+		case L_FOUR:
+			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_four, file))
+				goto BASE_CASE;
+			cur.plen_four = BETOH32(cur.plen_raw);
+			xcalloc(&cur.pdata, cur.plen_four, sizeof *cur.pdata, "read_pgp() cur.plen_four calloc()");
+			if (!xfread(cur.pdata, 1, cur.plen_four, file))
+				goto BASE_CASE;
+			break;
+
+		/*
+		 * indeterminate length
+		 *
+		 * TODO XXX: add handling for indeterminate packet length
+		 */
+		case L_OTHER: /* fallthrough */
+		default:
+			goto BASE_CASE;
+		}
+		break;
+
+	/*
+	 * new format header
+	 *
+	 * TODO XXX: implement new format header handling
+	 */
+	case F_NEW: /* fallthrough */
+	/* unrecognized header */
+	default:
+		goto BASE_CASE;
+	}
+
+	/* recurse */
+	add_pgp_list(list, &cur);
+	return read_pgp_bin(file, filename, list);
+
+/* base case common exit point */
+BASE_CASE:
+	fclose(file);
+	return list->cnt;
 }
 
 #endif

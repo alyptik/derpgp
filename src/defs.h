@@ -214,7 +214,7 @@ typedef struct _str_list {
 } str_list;
 
 /* `malloc()` wrapper */
-static inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
+inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
 {
 	/* sanity check */
 	if (!ptr)
@@ -224,7 +224,7 @@ static inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
 }
 
 /* `calloc()` wrapper */
-static inline void xcalloc(void *restrict ptr, size_t nmemb, size_t sz, char const *msg)
+inline void xcalloc(void *restrict ptr, size_t nmemb, size_t sz, char const *msg)
 {
 	/* sanity check */
 	if (!ptr)
@@ -234,7 +234,7 @@ static inline void xcalloc(void *restrict ptr, size_t nmemb, size_t sz, char con
 }
 
 /* `realloc()` wrapper */
-static inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
+inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
 {
 	void *tmp;
 	/* sanity check */
@@ -246,7 +246,7 @@ static inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
 }
 
 /* `fread()` wrapper */
-static inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream)
+inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream)
 {
 	size_t cnt;
 	if ((cnt = fread(ptr, sz, nmemb, stream)) < nmemb)
@@ -255,7 +255,7 @@ static inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *r
 }
 
 /* recursive free */
-static inline ptrdiff_t free_argv(char ***restrict argv)
+inline ptrdiff_t free_argv(char ***restrict argv)
 {
 	size_t cnt;
 	if (!argv || !*argv)
@@ -268,7 +268,8 @@ static inline ptrdiff_t free_argv(char ***restrict argv)
 }
 
 /* emulate `strcat()` if `off < 0`, else copy `src` to `dest` at offset `off` */
-static inline void strmv(ptrdiff_t off, char *restrict dest, char const *restrict src) {
+inline void strmv(ptrdiff_t off, char *restrict dest, char const *restrict src)
+{
 	/* sanity checks */
 	if (!dest || !src)
 		ERRX("NULL pointer passed to strmv()");
@@ -285,7 +286,7 @@ static inline void strmv(ptrdiff_t off, char *restrict dest, char const *restric
 	memcpy(dest_ptr, src, (size_t)src_sz + 1);
 }
 
-static inline ptrdiff_t free_str_list(str_list *restrict plist)
+inline ptrdiff_t free_str_list(str_list *restrict plist)
 {
 	size_t null_cnt = 0;
 	/* return -1 if passed NULL pointers */
@@ -307,7 +308,7 @@ static inline ptrdiff_t free_str_list(str_list *restrict plist)
 	return null_cnt;
 }
 
-static inline void init_str_list(str_list *restrict list_struct, char *restrict init_str)
+inline void init_str_list(str_list *restrict list_struct, char *restrict init_str)
 {
 	list_struct->cnt = 0;
 	list_struct->max = 1;
@@ -322,7 +323,7 @@ static inline void init_str_list(str_list *restrict list_struct, char *restrict 
 	memcpy(list_struct->list[list_struct->cnt - 1], init_str, strlen(init_str) + 1);
 }
 
-static inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t pad)
+inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t pad)
 {
 	void *tmp;
 	list_struct->cnt++;

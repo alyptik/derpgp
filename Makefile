@@ -27,8 +27,8 @@ debug:
 
 $(TARGET): %: $(OBJ)
 	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $^ -o $@
-$(TEST): %: %.o $(TAP).o $(PARSE).o $(OBJ)
-	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(PARSE).o $(filter-out $(PARSE).o,$(<:t/test%=src/%)) $< -o $@
+$(TEST): %: %.o $(TAP).o $(OBJ)
+	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(<:t/test%=src/%) $< -o $@
 %.d %.o: %.c
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 

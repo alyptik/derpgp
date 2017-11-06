@@ -7,6 +7,7 @@
  * See LICENSE.md file for copyright and license details.
  */
 
+#include "packet.h"
 #include "parse.h"
 #include <assert.h>
 #include <ctype.h>

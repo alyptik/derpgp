@@ -6,7 +6,7 @@ derpgp
 
 * derpgp
 > **Optional:**
-> * derpgp
+> * libderpgp
 
 ## Usage
 ```bash

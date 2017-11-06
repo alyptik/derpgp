@@ -12,9 +12,6 @@
 
 int main(void)
 {
-	char const *vec_bin = "./t/4yyylmao.gpg";
-	pgp_list packets = {0, 0, NULL};
-
 	/* by manually inspecting the key, we infer this is the actual data */
 	int expected_pheaders[] = {
 		T_SECKEY,
@@ -23,6 +20,8 @@ int main(void)
 		T_SECSUBKEY,
 		T_SIG
 	};
+	char const *vec_bin = "./t/4yyylmao.gpg";
+	pgp_list packets = {0};
 
 	/* start test block */
 	plan(8);
@@ -35,7 +34,7 @@ int main(void)
 	for (size_t i = 0; i < packets.cnt; i++) {
 		HEX(packets.list[i].pheader);
 		ok((packets.list[i].pheader & (expected_pheaders[i] << 2)) != 0,
-				"header %u is the correct tag", i);
+				"test header %zu is the correct tag", i);
 	}
 
 	/* cleanup */

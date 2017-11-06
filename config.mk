@@ -18,6 +18,7 @@ LDFLAGS ?= -pipe -fstack-protector-strong
 LD = $(CC)
 DEBUG_CFLAGS = $(DEBUG)
 DEBUG_LDFLAGS = $(DEBUG)
+MANPAGE = $(TARGET).1
 MKALL = $(MKCFG) $(DEP)
 OBJ = $(SRC:.c=.o)
 TOBJ = $(TSRC:.c=.o)
@@ -27,13 +28,11 @@ UTEST = $(filter-out src/$(TARGET).o,$(SRC:.c=.o))
 SRC := $(wildcard src/*.c)
 TSRC := $(wildcard t/*.c)
 HDR := $(wildcard src/*.h) $(wildcard t/*.h)
-DEBUG := -pg -Og -ggdb3 -no-pie -Werror -Wfloat-equal -Wrestrict -Wshadow
+DEBUG := -pg -Og -ggdb3 -no-pie -Wfloat-equal -Wrestrict -Wshadow
 CPPFLAGS := -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -MMD -MP
 LIBS :=
 TARGET := derpgp
-MANPAGE := derpgp.1
 TAP := t/tap
-PARSE := src/parse
 BINDIR := bin
 MANDIR := share/man/man1
 MKALL += Makefile debug.mk

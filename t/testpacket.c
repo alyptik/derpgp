@@ -11,10 +11,14 @@
 #include "../src/packet.h"
 #include "../src/parse.h"
 
+/* extern inline prototypes to prevent linker errors */
+extern inline void free_pgp_list(pgp_list *restrict list_struct);
+extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
+
 int main(void)
 {
 	char vec_bin[] = "./t/4yyylmao.gpg";
-	pgp_list packets = {0, 0, NULL};
+	pgp_list packets = {0};
 
 	/* by manually inspecting the key, we infer this is the actual data */
 	/* start test block */

@@ -9,6 +9,9 @@
 
 #include "packet.h"
 
+/* extern inline prototypes to prevent linker errors */
+extern inline size_t read_mpi(u8 *restrict mpi_buf, mpi *restrict mpi_ptr);
+
 size_t parse_pubkey_packet(pgp_packet *restrict packet)
 {
 	/*
