@@ -17,7 +17,7 @@
  *
  * TODO XXX: implement handlers
  */
-static int (*const dispatch_table[]) = {
+static int (*const dispatch_table[])() = {
 	/* parse_rsrvd, parse_pkesess, parse_skesess, */
 	0, 0, 0,
 	/* parse_opsig, parse_seckey, parse_pubkey, */
@@ -40,6 +40,7 @@ static int (*const dispatch_table[]) = {
 	0, 0, 0, 0,
 };
 
+size_t parse_pgp_packets(pgp_list *restrict pkts);
 size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
 
 inline void free_pgp_pubkey(pgp_packet *restrict packet)
