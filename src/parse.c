@@ -33,8 +33,7 @@ static int (*const dispatch_table[]) = {
 size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list)
 {
 	FILE *file;
-	pgp_packet cur = {0};
-
+	pgp_packet cur = {0, {0}, {0}, NULL, {{0}}};
 	/* sanity checks */
 	if (!list)
 		ERR("read_pgp_bin() NULL pgp_list");
