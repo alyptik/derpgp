@@ -137,6 +137,125 @@ typedef struct _mpi {
 	u8 *mdata;
 } mpi;
 
+/*
+ * pgp packet types
+ */
+
+/* Reserved - a packet tag MUST NOT have this value */
+typedef struct  _rsrvd_packet {
+	u8 *octets;
+} rsrvd_packet;
+
+/* Public-Key Encrypted Session Key Packet */
+typedef struct  _pkesess_packet {
+	u8 *octets;
+} pkesess_packet;
+
+/* Symmetric-Key Encrypted Session Key Packet */
+typedef struct  _skesess_packet {
+	u8 *octets;
+} skesess_packet;
+
+/* One-Pass Signature Packet */
+typedef struct  _opsig_packet {
+	u8 *octets;
+} opsig_packet;
+
+/* Secret-Key Packet */
+typedef struct  _seckey_packet {
+	u8 string_to_key;
+	u8 sym_encryption_algo;
+	u8 *iv;
+	mpi exponent_d;
+	mpi prime_p;
+	mpi prime_q;
+	mpi mult_inverse;
+	u16 checksum;
+} seckey_packet;
+
+/* Public-Key Packet
+ * FIXME: we only support V4 :>
+ */
+typedef struct  _pubkey_packet {
+	/* NOTE: must be always 4 (or 3 in the future) */
+	u8 version;
+	/* posix timestamp */
+	u32 timestamp;
+	/* 1 for RSA, 2 for DSA */
+	u8 algorithm;
+	mpi modulus_n;
+	mpi exponent;
+} pubkey_packet;
+
+/* Secret-Subkey Packet */
+typedef struct  _secsubkey_packet {
+	u8 *octets;
+} secsubkey_packet;
+
+/* Compressed Data Packet */
+typedef struct  _cdata_packet {
+	u8 *octets;
+} cdata_packet;
+
+/* Symmetrically Encrypted Data Packet */
+typedef struct  _sedat_packet {
+	u8 *octets;
+} sedat_packet;
+
+/* Marker Packet */
+typedef struct  _marker_packet {
+	u8 *octets;
+} marker_packet;
+
+/* Literal Data Packet */
+typedef struct  _litdata_packet {
+	u8 *octets;
+} litdata_packet;
+
+/* Trust Packet */
+typedef struct  _trust_packet {
+	u8 *octets;
+} trust_packet;
+
+/* User ID Packet */
+typedef struct  _ui_packet {
+	u8 *octets;
+} ui_packet;
+
+/* Public-Subkey Packet */
+typedef struct  _pubsubkey_packet {
+	u8 *octets;
+} pubsubkey_packet;
+
+/* User Attribute Packet */
+typedef struct  _uattr_packet {
+	u8 *octets;
+} uattr_packet;
+
+/* Sym. Encrypted and Integrity Protected Data Packet */
+typedef struct  _seipdata_packet {
+	u8 *octets;
+} seipdata_packet;
+
+/* Modification Detection Code Packet */
+typedef struct  _mdcode_packet {
+	u8 *octets;
+} mdcode_packet;
+
+/* Private or Experimental Values */
+typedef struct  _prvt0_packet {
+	u8 *octets;
+} prvt0_packet;
+typedef struct  _prvt1_packet {
+	u8 *octets;
+} prvt1_packet;
+typedef struct  _prvt2_packet {
+	u8 *octets;
+} prvt2_packet;
+typedef struct  _prvt3_packet {
+	u8 *octets;
+} prvt3_packet;
+
 /* struct definition for pgp packet data */
 typedef struct _pgp_packet {
 	u8 pheader;
@@ -149,65 +268,27 @@ typedef struct _pgp_packet {
 	u8 *pdata;
 	/* parsed packet data */
 	union {
-		/* Reserved - a packet tag MUST NOT have this value */
-		struct { void *decoded; } rsrvd;
-		/* Public-Key Encrypted Session Key Packet */
-		struct { void *decoded; } pkesess;
-		/* Symmetric-Key Encrypted Session Key Packet */
-		struct { void *decoded; } skesess;
-		/* One-Pass Signature Packet */
-		struct { void *decoded; } opsig;
-		/* Secret-Key Packet */
-		struct {
-			u8 string_to_key;
-			u8 sym_encryption_algo;
-			u8 *IV;
-			mpi exponent_d;
-			mpi prime_p;
-			mpi prime_q;
-			mpi mult_inverse;
-			u16 checksum;
-		} seckey;
-		/* Public-Key Packet
-		 * FIXME: we only support V4 :>
-		 */
-		struct {
-			/* NOTE: must be always 4 (or 3 in the future) */
-			u8 version;
-			/* posix timestamp */
-			u32 timestamp;
-			/* 1 for RSA, 2 for DSA */
-			u8 algorithm;
-			mpi modulus_n;
-			mpi exponent;
-		} pubkey;
-		/* Secret-Subkey Packet */
-		struct { void *decoded; } secsubkey;
-		/* Compressed Data Packet */
-		struct { void *decoded; } cdata;
-		/* Symmetrically Encrypted Data Packet */
-		struct { void *decoded; } sedat;
-		/* Marker Packet */
-		struct { void *decoded; } marker;
-		/* Literal Data Packet */
-		struct { void *decoded; } litdata;
-		/* Trust Packet */
-		struct { void *decoded; } trust;
-		/* User ID Packet */
-		struct { void *decoded; } ui;
-		/* Public-Subkey Packet */
-		struct { void *decoded; } pubsubkey;
-		/* User Attribute Packet */
-		struct { void *decoded; } uattr;
-		/* Sym. Encrypted and Integrity Protected Data Packet */
-		struct { void *decoded; } seipdata;
-		/* Modification Detection Code Packet */
-		struct { void *decoded; } mdcode;
-		/* Private or Experimental Values */
-		struct { void *decoded; } prvt0;
-		struct { void *decoded; } prvt1;
-		struct { void *decoded; } prvt2;
-		struct { void *decoded; } prvt3;
+		rsrvd_packet rsrvd;
+		pkesess_packet pkesess;
+		skesess_packet skesess;
+		opsig_packet opsig;
+		seckey_packet seckey;
+		pubkey_packet pubkey;
+		secsubkey_packet secsubkey;
+		cdata_packet cdata;
+		sedat_packet sedat;
+		marker_packet marker;
+		litdata_packet litdata;
+		trust_packet trust;
+		ui_packet ui;
+		pubsubkey_packet pubsubkey;
+		uattr_packet uattr;
+		seipdata_packet seipdata;
+		mdcode_packet mdcode;
+		prvt0_packet prvt0;
+		prvt1_packet prvt1;
+		prvt2_packet prvt2;
+		prvt3_packet prvt3;
 	};
 } pgp_packet;
 
