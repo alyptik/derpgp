@@ -34,7 +34,7 @@ int main(void)
 	pgp_list packets = {0};
 
 	/* start test block */
-	plan(5);
+	plan(6);
 
 	/* tests */
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
@@ -42,8 +42,9 @@ int main(void)
 	/* by manually inspecting the key, we infer this is the actual data */
 	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test finding secret key header");
 	ok((packets.list[3].pheader & (T_SECSUBKEY << 2)) != 0, "test finding secret subkey header");
+	ok(parse_seckey_packet(&packets.list[0]) > 0, "test successful sec key packet parsing");
 	/* test vector doesn't have a public key */
-	ok(parse_pubkey_packet(&packets.list[3]) != 0, "test public key packet parsing");
+	ok(parse_pubkey_packet(&packets.list[3]) > 0, "test successful public key packet parsing");
 
 	/* cleanup */
 	free_pgp_pubkey(&packets.list[3]);

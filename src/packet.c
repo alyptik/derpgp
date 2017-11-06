@@ -69,5 +69,5 @@ size_t parse_seckey_packet(pgp_packet *restrict packet)
 	/* TODO XXX: implement mpi seckey parsing */
 	puts("Ayylmao");
 
-	return 0;
+	return mpi_offset;
 }
