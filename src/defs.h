@@ -117,6 +117,19 @@ enum packet_lengths {
 };
 /* TODO XXX: add support for new format packet headers */
 
+/* pubkey algorithm types */
+enum pubkey_algorithms {
+	T_RSA = 0x01,
+};
+
+/* string-to-key usage conventions */
+enum s2k_conventions {
+	T_RAW = 0x00,
+	T_S2K1 = 0xfe,
+	T_S2K2 = 0xff,
+};
+
+
 /* structures */
 
 /* Multi precision integers */
