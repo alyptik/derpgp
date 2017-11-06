@@ -13,32 +13,23 @@
 int main(void)
 {
 	/* by manually inspecting the key, we infer this is the actual data */
-	int expected_pheaders[] = {
-		T_SECKEY,
-		T_UID,
-		T_SIG,
-		T_SECSUBKEY,
-		T_SIG
-	};
+	int expected[] = {T_SECKEY, T_UID, T_SIG, T_SECSUBKEY, T_SIG};
 	char const *vec_bin = "./t/4yyylmao.gpg";
-	pgp_list packets = {0};
+	pgp_list pkts = {0};
 
 	/* start test block */
-	plan(8);
+	plan(7);
 
 	/* tests */
-	ok(1 == 1, "test ayy lmao");
-	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
-
-	ok(packets.cnt == 5, "binary parsed the 5 available packets");
-	for (size_t i = 0; i < packets.cnt; i++) {
-		HEX(packets.list[i].pheader);
-		ok((packets.list[i].pheader & (expected_pheaders[i] << 2)) != 0,
-				"test header %zu is the correct tag", i);
+	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
+	ok(pkts.cnt == 5, "test finding 5 binary packets");
+	for (size_t i = 0; i < pkts.cnt; i++) {
+		HPRINT(pkts.list[i].pheader);
+		ok((pkts.list[i].pheader & (expected[i] << 2)) != 0, "test header tag %zu", i);
 	}
 
 	/* cleanup */
-	free_pgp_list(&packets);
+	free_pgp_list(&pkts);
 
 	/* return handled */
 	done_testing();

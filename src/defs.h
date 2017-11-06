@@ -20,7 +20,7 @@
 #define FALLBACK(ARG, DEF)	((ARG) ? (ARG) : (DEF))
 #define BETOH16(DATA)		(((DATA)[1]) | ((DATA)[0] << 0x08))
 #define BETOH32(DATA)		(((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
-#define HEX(X)			printf("[%#x] ", (X))
+#define HPRINT(VAL)		printf("[%#x] ", (VAL))
 
 /* global version and usage strings */
 
@@ -36,8 +36,6 @@
 #define	RST			"\\033[00m"
 /* page size for buffer count */
 #define PAGE_SIZE		sysconf(_SC_PAGESIZE)
-/* max possible types */
-#define TNUM			7
 /* max eval string length */
 #define EVAL_LIMIT		4096
 /* `strmv() `concat constant */
@@ -59,14 +57,14 @@ typedef uint64_t u64;
 /* enumerations */
 
 /* packet header is defined as `[2 bit format][4 bit type][2 bit length size]` */
-enum {
+enum packet_header {
 	/* packet formats */
 	F_OLD = 0x00,
 	F_NEW = 0x01,
 };
 
 /* packet tags */
-enum {
+enum packet_tag {
 	/* Reserved - a packet tag MUST NOT have this value */
 	T_RSRVD = 0x00,
 	/* Public-Key Encrypted Session Key Packet */
@@ -111,7 +109,7 @@ enum {
 };
 
 /* old format packet lengths */
-enum {
+enum packet_lengths {
 	L_ONE = 0x00,
 	L_TWO = 0x01,
 	L_FOUR = 0x02,

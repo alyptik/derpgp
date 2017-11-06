@@ -22,14 +22,13 @@ int main(void)
 
 	/* by manually inspecting the key, we infer this is the actual data */
 	/* start test block */
-	plan(5);
+	plan(4);
 
 	/* tests */
-	ok(1 == 1, "test ayy lmao");
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
-	ok(packets.cnt == 5, "binary parsed the 5 available packets");
-	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "The first header is a secret key header");
-	ok(parse_pubkey_packet(&packets.list[0]) != 0);
+	ok(packets.cnt == 5, "test finding 5 binary packets");
+	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test finding secret key header");
+	ok(parse_pubkey_packet(&packets.list[0]) != 0, "test public key packet parsing");
 
 	/* cleanup */
 	free_pgp_list(&packets);
