@@ -24,48 +24,26 @@
 
 /* global version and usage strings */
 
-#define VERSION_STRING	"DerpGP v0.0.1"
-#define USAGE_STRING	"[-hptvw] [(-a|-i)“<asm.s>”] [-c“<compiler>”] [-e“<code>”] " \
-	"[-l“<libs>”] [-I“<includes>”] [-o“<out.c>”]\n\t" \
-	"-a,--att:\t\tName of the file to output AT&T-dialect assembler code to\n\t" \
-	"-c,--cc:\t\tSpecify alternate compiler\n\t" \
-	"-e,--eval:\t\tEvaluate the following argument as C code\n\t" \
+#define VERSION_STRING		"DerpGP v0.0.1"
+#define USAGE_STRING		"[-hv] [-i“<int.gpg>”] [-o“<out.pem>”]\n\t" \
 	"-h,--help:\t\tShow help/usage information\n\t" \
-	"-i,--intel:\t\tName of the file to output Intel-dialect assembler code to\n\t" \
-	"-o,--output:\t\tName of the file to output C source code to\n\t" \
-	"-p,--parse:\t\tDisable addition of dynamic library symbols to readline completion\n\t" \
-	"-t,--tracking:\t\tToggle variable tracking\n\t" \
+	"-i,--input:\t\tName of the file to use for input\n\t" \
+	"-o,--output:\t\tName of the file to use for output\n\t" \
 	"-v,--version:\t\tShow version information\n\t" \
-	"-w,--warnings:\t\tCompile with ”-pedantic -Wall -Wextra” flags\n\t" \
-	"-l:\t\t\tLink against specified library (flag can be repeated)\n\t" \
-	"-I:\t\t\tSearch directory for header files (flag can be repeated)\n" \
-	"Input lines prefixed with a “;” are used to control internal state\n\t" \
-	";a[tt]:\t\t\tToggle -a (output AT&T-dialect assembler code) flag\n\t" \
-	";f[unction]:\t\tDefine a function (e.g. “;f void bork(void) { puts(\"wark\"); }”)\n\t" \
-	";h[elp]:\t\tShow help\n\t" \
-	";i[ntel]:\t\tToggle -a (output Intel-dialect assembler code) flag\n\t" \
-	";m[acro]:\t\tDefine a macro (e.g. “;m #define SWAP2(X) ((((X) >> 8) & 0xff) | (((X) & 0xff) << 8))”)\n\t" \
-	";o[utput]:\t\tToggle -o (output C source code) flag\n\t" \
-	";p[arse]:\t\tToggle -p (shared library parsing) flag\n\t" \
-	";q[uit]:\t\tExit CEPL\n\t" \
-	";r[eset]:\t\tReset CEPL to its initial program state\n\t" \
-	";t[racking]:\t\tToggle variable tracking\n\t" \
-	";u[ndo]:\t\tIncremental pop_history (can be repeated)\n\t" \
-	";w[arnings]:\t\tToggle -w (pedantic warnings) flag"
-#define	RED		"\\033[31m"
-#define	GREEN		"\\033[32m"
-#define	YELLOW		"\\033[33m"
-#define	RST		"\\033[00m"
+#define	RED			"\\033[31m"
+#define	GREEN			"\\033[32m"
+#define	YELLOW			"\\033[33m"
+#define	RST			"\\033[00m"
 /* page size for buffer count */
-#define PAGE_SIZE	sysconf(_SC_PAGESIZE)
+#define PAGE_SIZE		sysconf(_SC_PAGESIZE)
 /* max possible types */
-#define TNUM		7
+#define TNUM			7
 /* max eval string length */
-#define EVAL_LIMIT	4096
+#define EVAL_LIMIT		4096
 /* `strmv() `concat constant */
-#define CONCAT		(-1)
+#define CONCAT			(-1)
 /* `malloc()` size ceiling */
-#define ARRAY_MAX	(SIZE_MAX / 2 - 1)
+#define ARRAY_MAX		(SIZE_MAX / 2 - 1)
 
 /* typedefs */
 
