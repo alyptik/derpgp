@@ -22,16 +22,16 @@ size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *rest
 
 inline void free_pgp_pubkey(pgp_packet *restrict packet)
 {
-	free(packet->pubkey.modulus_n.mdata);
-	free(packet->pubkey.exponent.mdata);
+	free(packet->modulus_n.mdata);
+	free(packet->pub_exponent.mdata);
 }
 
 inline void free_pgp_seckey(pgp_packet *restrict packet)
 {
-	free(packet->seckey.exponent_d.mdata);
-	free(packet->seckey.mult_inverse.mdata);
-	free(packet->seckey.prime_p.mdata);
-	free(packet->seckey.prime_q.mdata);
+	free(packet->exponent_d.mdata);
+	free(packet->mult_inverse.mdata);
+	free(packet->prime_p.mdata);
+	free(packet->prime_q.mdata);
 }
 
 inline void free_pgp_list(pgp_list *restrict list_struct)

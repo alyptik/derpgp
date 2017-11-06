@@ -150,13 +150,13 @@ typedef struct _pgp_packet {
 	/* parsed packet data */
 	union {
 		/* Reserved - a packet tag MUST NOT have this value */
-		struct { void *decoded; } rsrvd;
+		struct { void *rsrvd; };
 		/* Public-Key Encrypted Session Key Packet */
-		struct { void *decoded; } pkesess;
+		struct { void *pkesess; };
 		/* Symmetric-Key Encrypted Session Key Packet */
-		struct { void *decoded; } skesess;
+		struct { void *skesess; };
 		/* One-Pass Signature Packet */
-		struct { void *decoded; } opsig;
+		struct { void *opsig; };
 		/* Secret-Key Packet */
 		struct {
 			u8 string_to_key;
@@ -167,7 +167,7 @@ typedef struct _pgp_packet {
 			mpi prime_q;
 			mpi mult_inverse;
 			u16 checksum;
-		} seckey;
+		};
 		/* Public-Key Packet
 		 * FIXME: we only support V4 :>
 		 */
@@ -179,35 +179,35 @@ typedef struct _pgp_packet {
 			/* 1 for RSA, 2 for DSA */
 			u8 algorithm;
 			mpi modulus_n;
-			mpi exponent;
-		} pubkey;
+			mpi pub_exponent;
+		};
 		/* Secret-Subkey Packet */
-		struct { void *decoded; } secsubkey;
+		struct { void *secsubkey; };
 		/* Compressed Data Packet */
-		struct { void *decoded; } cdata;
+		struct { void *cdata; };
 		/* Symmetrically Encrypted Data Packet */
-		struct { void *decoded; } sedat;
+		struct { void *sedat; };
 		/* Marker Packet */
-		struct { void *decoded; } marker;
+		struct { void *marker; };
 		/* Literal Data Packet */
-		struct { void *decoded; } litdata;
+		struct { void *litdata; };
 		/* Trust Packet */
-		struct { void *decoded; } trust;
+		struct { void *trust; };
 		/* User ID Packet */
-		struct { void *decoded; } ui;
+		struct { void *ui; };
 		/* Public-Subkey Packet */
-		struct { void *decoded; } pubsubkey;
+		struct { void *pubsubkey; };
 		/* User Attribute Packet */
-		struct { void *decoded; } uattr;
+		struct { void *uattr; };
 		/* Sym. Encrypted and Integrity Protected Data Packet */
-		struct { void *decoded; } seipdata;
+		struct { void *seipdata; };
 		/* Modification Detection Code Packet */
-		struct { void *decoded; } mdcode;
+		struct { void *mdcode; };
 		/* Private or Experimental Values */
-		struct { void *decoded; } prvt0;
-		struct { void *decoded; } prvt1;
-		struct { void *decoded; } prvt2;
-		struct { void *decoded; } prvt3;
+		struct { void *prvt0; };
+		struct { void *prvt1; };
+		struct { void *prvt2; };
+		struct { void *prvt3; };
 	};
 } pgp_packet;
 

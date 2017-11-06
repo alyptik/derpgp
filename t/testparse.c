@@ -36,7 +36,7 @@ int main(void)
 	ok(pkts.cnt == 5, "test finding 5 binary packets");
 	for (size_t i = 0; i < pkts.cnt; i++) {
 		HPRINT(pkts.list[i].pheader);
-		ok((pkts.list[i].pheader & (expected[i] << 2)) != 0, "test header tag %zu", i);
+		ok((((pkts.list[i].pheader & 0x3c) >> 2) & expected[i]) != 0, "test header tag %zu", i);
 	}
 	ok(parse_pgp_packets(&pkts) > 0, "test successful parser dispatch");
 

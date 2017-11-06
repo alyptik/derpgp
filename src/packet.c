@@ -19,23 +19,23 @@ size_t parse_pubkey_packet(pgp_packet *restrict packet)
 	size_t mpi_offset = 0;
 
 	/* one byte */
-	packet->pubkey.version = packet->pdata[mpi_offset];
-	assert(packet->pubkey.version == 4);
+	packet->version = packet->pdata[mpi_offset];
+	assert(packet->version == 4);
 	mpi_offset++;
 	/* four bytes */
-	packet->pubkey.timestamp = BETOH32(packet->pdata + mpi_offset);
+	packet->timestamp = BETOH32(packet->pdata + mpi_offset);
 	mpi_offset += 4;
 	/* one byte */
-	packet->pubkey.algorithm = packet->pdata[mpi_offset];
-	assert(packet->pubkey.algorithm == T_RSA);
+	packet->algorithm = packet->pdata[mpi_offset];
+	assert(packet->algorithm == T_RSA);
 	mpi_offset++;
 	tmp.length = BETOH16(packet->pdata + mpi_offset);
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
 	/* one mpi struct */
-	packet->pubkey.modulus_n = tmp;
+	packet->modulus_n = tmp;
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
 	/* one mpi struct */
-	packet->pubkey.exponent = tmp;
+	packet->pub_exponent = tmp;
 
 	return mpi_offset;
 }
@@ -46,10 +46,10 @@ size_t parse_seckey_packet(pgp_packet *restrict packet)
 	size_t mpi_offset = 0;
 
 	/* one byte */
-	packet->seckey.string_to_key = packet->pdata[mpi_offset];
+	packet->string_to_key = packet->pdata[mpi_offset];
 	mpi_offset++;
 	/* string-to-key usage convention */
-	switch (packet->seckey.string_to_key) {
+	switch (packet->string_to_key) {
 	/* unencrypted */
 	case T_RAW:
 		break;
@@ -57,7 +57,7 @@ size_t parse_seckey_packet(pgp_packet *restrict packet)
 	case T_S2K1: /* fallthrough */
 	case T_S2K2:
 		/* one byte */
-		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];
+		packet->sym_encryption_algo = packet->pdata[mpi_offset];
 		mpi_offset++;
 		/* TODO XXX: implement rest of s2k handling */
 		break;
