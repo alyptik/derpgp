@@ -43,10 +43,10 @@ int main(void)
 	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test finding secret key header");
 	ok((packets.list[3].pheader & (T_SECSUBKEY << 2)) != 0, "test finding secret subkey header");
 	/* test vector doesn't have a public key */
-	ok(parse_pubkey_packet(&packets.list[2]) != 0, "test public key packet parsing");
+	ok(parse_pubkey_packet(&packets.list[3]) != 0, "test public key packet parsing");
 
 	/* cleanup */
-	free_pgp_pubkey(&packets.list[2]);
+	free_pgp_pubkey(&packets.list[3]);
 	/* test vector doesn't have a public key */
 	free_pgp_list(&packets);
 
