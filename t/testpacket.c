@@ -23,6 +23,8 @@ extern inline void init_str_list(str_list *restrict list_struct, char *restrict 
 extern inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t pad);
 extern inline void init_pgp_list(pgp_list *restrict list_struct);
 extern inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const *restrict packet);
+extern inline void free_pgp_pubkey(pgp_packet *restrict packet);
+extern inline void free_pgp_seckey(pgp_packet *restrict packet);
 extern inline void free_pgp_list(pgp_list *restrict list_struct);
 extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
 

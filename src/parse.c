@@ -10,6 +10,8 @@
 #include "parse.h"
 
 /* extern inline prototypes to prevent linker errors */
+extern inline void free_pgp_pubkey(pgp_packet *restrict packet);
+extern inline void free_pgp_seckey(pgp_packet *restrict packet);
 extern inline void free_pgp_list(pgp_list *restrict list_struct);
 extern inline void init_pgp_list(pgp_list *restrict list_struct);
 extern inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const *restrict packet);

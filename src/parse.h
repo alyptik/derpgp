@@ -42,6 +42,20 @@ static int (*const dispatch_table[]) = {
 
 size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
 
+inline void free_pgp_pubkey(pgp_packet *restrict packet)
+{
+	free(packet->pubkey.modulus_n.mdata);
+	free(packet->pubkey.exponent.mdata);
+}
+
+inline void free_pgp_seckey(pgp_packet *restrict packet)
+{
+	free(packet->seckey.exponent_d.mdata);
+	free(packet->seckey.mult_inverse.mdata);
+	free(packet->seckey.prime_p.mdata);
+	free(packet->seckey.prime_q.mdata);
+}
+
 inline void free_pgp_list(pgp_list *restrict list_struct)
 {
 	/* return if passed NULL pointers */
@@ -51,14 +65,10 @@ inline void free_pgp_list(pgp_list *restrict list_struct)
 		/* TODO XXX: use better `free()` strategy */
 		switch ((list_struct->list[i].pheader & 0x3c) >> 2) {
 		case T_PUBKEY:
-			free(list_struct->list[i].pubkey.modulus_n.mdata);
-			free(list_struct->list[i].pubkey.exponent.mdata);
+			free_pgp_pubkey(&list_struct->list[i]);
 			break;
 		case T_SECKEY:
-			free(list_struct->list[i].seckey.exponent_d.mdata);
-			free(list_struct->list[i].seckey.mult_inverse.mdata);
-			free(list_struct->list[i].seckey.prime_p.mdata);
-			free(list_struct->list[i].seckey.prime_q.mdata);
+			free_pgp_seckey(&list_struct->list[i]);
 			break;
 		}
 		free(list_struct->list[i].pdata);
