@@ -23,25 +23,25 @@ extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename,
  * TODO XXX: implement handlers
  */
 static size_t (*const dispatch_table[])(pgp_packet *restrict) = {
-	/* parse_rsrvd_packet, parse_pkesess_packet, parse_skesess_packet, */
+	/* &parse_rsrvd_packet, &parse_pkesess_packet, &parse_skesess_packet, */
 	0, 0, 0,
-	/* parse_opsig_packet, parse_seckey_packet, parse_pubkey_packet, */
-	0, parse_seckey_packet, parse_pubkey_packet,
-	/* parse_cdata_packet, parse_secsubkey_packet, parse_sedat_packet, */
+	/* &parse_opsig_packet, &parse_seckey_packet, &parse_pubkey_packet, */
+	0, &parse_seckey_packet, &parse_pubkey_packet,
+	/* &parse_cdata_packet, &parse_secsubkey_packet, &parse_sedat_packet, */
 	0, 0, 0,
-	/* parse_marker_packet, parse_litdata_packet, parse_trust_packet, */
+	/* &parse_marker_packet, &parse_litdata_packet, &parse_trust_packet, */
 	0, 0, 0,
-	/* parse_ui_packet, parse_pubsubkey_packet, */
+	/* &parse_ui_packet, &parse_pubsubkey_packet, */
 	0, 0, 0,
-	/* two placeholder indices */
+	/* &two &placeholder &indices */
 	0, 0,
-	/* parse_uattr_packet, parse_seipdata_packet, parse_mdcode_packet, */
+	/* &parse_uattr_packet, &parse_seipdata_packet, &parse_mdcode_packet, */
 	0, 0, 0,
-	/* ten placeholder indices */
+	/* &ten &placeholder &indices */
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	/* ten placeholder indices */
+	/* &ten &placeholder &indices */
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	/* parse_prvt0, parse_prvt1_packet, parse_prvt2_packet, parse_prvt3_packet, */
+	/* &parse_prvt0, &parse_prvt1_packet, &parse_prvt2_packet, &parse_prvt3_packet, */
 	0, 0, 0, 0,
 };
 
