@@ -33,6 +33,7 @@ CPPFLAGS := -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D_XOPEN
 LIBS :=
 TARGET := derpgp
 TAP := t/tap
+PARSE := t/testparse
 BINDIR := bin
 MANDIR := share/man/man1
 MKALL += Makefile debug.mk

@@ -29,6 +29,8 @@ $(TARGET): %: $(OBJ)
 	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $^ -o $@
 $(TEST): %: %.o $(TAP).o $(OBJ)
 	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(<:t/test%=src/%) $< -o $@
+$(PARSE): %: %.o $(TAP).o $(OBJ)
+	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(filter-out src/$(TARGET).o,$(OBJ)) $< -o $@
 %.d %.o: %.c
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
