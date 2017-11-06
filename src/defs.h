@@ -255,7 +255,7 @@ inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict
 /* recursive free */
 inline ptrdiff_t free_argv(char ***restrict argv)
 {
-	size_t cnt;
+	ptrdiff_t cnt;
 	if (!argv || !*argv)
 		return -1;
 	for (cnt = 0; (*argv)[cnt]; cnt++)
