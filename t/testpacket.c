@@ -30,20 +30,24 @@ extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename,
 
 int main(void)
 {
-	char vec_bin[] = "./t/4yyylmao.gpg";
+	char const *vec_bin = "./t/4yyylmao.gpg";
 	pgp_list packets = {0};
 
 	/* start test block */
-	plan(4);
+	plan(5);
 
 	/* tests */
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
 	ok(packets.cnt == 5, "test finding 5 binary packets");
 	/* by manually inspecting the key, we infer this is the actual data */
 	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test finding secret key header");
-	ok(parse_pubkey_packet(&packets.list[0]) != 0, "test public key packet parsing");
+	ok((packets.list[3].pheader & (T_SECSUBKEY << 2)) != 0, "test finding secret subkey header");
+	/* test vector doesn't have a public key */
+	ok(parse_pubkey_packet(&packets.list[2]) != 0, "test public key packet parsing");
 
 	/* cleanup */
+	free_pgp_pubkey(&packets.list[2]);
+	/* test vector doesn't have a public key */
 	free_pgp_list(&packets);
 
 	/* return handled */
