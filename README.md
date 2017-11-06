@@ -10,7 +10,7 @@ derpgp
 
 ## Usage
 ```bash
-./derpgp [-hv] [-o<output.c>]
+./derpgp [-hv] [-i<in.gpg>] [-o<out.pem>]
 ```
 
 Run `make` then `./derpgp`.

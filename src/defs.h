@@ -25,7 +25,7 @@
 /* global version and usage strings */
 
 #define VERSION_STRING		"DerpGP v0.0.1"
-#define USAGE_STRING		"[-hv] [-i“<int.gpg>”] [-o“<out.pem>”]\n\t" \
+#define USAGE_STRING		"[-hv] [-i“<in.gpg>”] [-o“<out.pem>”]\n\t" \
 	"-h,--help:\t\tShow help/usage information\n\t" \
 	"-i,--input:\t\tName of the file to use for input\n\t" \
 	"-o,--output:\t\tName of the file to use for output\n\t" \
