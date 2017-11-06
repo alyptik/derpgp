@@ -38,7 +38,7 @@ static int (*const dispatch_table[]) = {
 };
 
 /* read binary pgp format */
-size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list)
+size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list)
 {
 	FILE *file = file_ctx;
 	pgp_packet cur = {0, {0}, {0}, NULL, {{0}}};
@@ -125,7 +125,7 @@ BASE_CASE:
 }
 
 /* read ascii armor pgp format */
-size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list)
+size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list)
 {
 	/* silence linter */
 	(void)dispatch_table, (void)filename, (void)file_ctx;

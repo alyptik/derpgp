@@ -41,8 +41,8 @@
 #include <unistd.h>
 #include <wchar.h>
 
-size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list);
-size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, pgp_list *restrict list);
+size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
+size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
 
 static inline void free_pgp_list(pgp_list *restrict list_struct)
 {

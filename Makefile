@@ -27,15 +27,17 @@ debug:
 
 $(TARGET): %: $(OBJ)
 	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $^ -o $@
-$(TEST): %: %.o $(TAP).o $(OBJ)
-	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(filter-out src/derpgp.o, $(OBJ)) $< -o $@
+$(TEST): %: %.o $(TAP).o $(PARSE).o $(OBJ)
+	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(PARSE).o $(filter-out $(PARSE).o,$(<:t/test%=src/%)) $< -o $@
 %.d %.o: %.c
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
 test check: $(TOBJ) $(TEST)
-	./t/testparse 
+	@echo "=========="
+	./t/testparse
 	@echo "=========="
 	./t/testpacket
+	@echo "=========="
 clean:
 	@echo "cleaning"
 	@rm -fv $(DEP) $(TARGET) $(TEST) $(OBJ) $(TOBJ) $(TARGET).tar.gz debug.mk

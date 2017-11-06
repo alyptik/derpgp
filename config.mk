@@ -33,6 +33,7 @@ LIBS :=
 TARGET := derpgp
 MANPAGE := derpgp.1
 TAP := t/tap
+PARSE := src/parse
 BINDIR := bin
 MANDIR := share/man/man1
 MKALL += Makefile debug.mk
