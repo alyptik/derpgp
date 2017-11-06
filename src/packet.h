@@ -12,15 +12,12 @@
 
 #include "errs.h"
 #include "defs.h"
-#include <limits.h>
-#include <stdint.h>
-#include <unistd.h>
 
 /* prototypes */
 size_t parse_pubkey_packet(pgp_packet *packet);
 size_t parse_seckey_packet(pgp_packet *packet);
 
-inline size_t read_mpi(u8 *restrict mpi_buf, mpi *restrict mpi_ptr)
+static inline size_t read_mpi(u8 *restrict mpi_buf, mpi *restrict mpi_ptr)
 {
 	mpi_ptr->length = BETOH16(mpi_buf);
 	size_t byte_length = (mpi_ptr->length + 1) / 8;
