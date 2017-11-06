@@ -129,7 +129,6 @@ enum s2k_conventions {
 	T_S2K2 = 0xff,
 };
 
-
 /* structures */
 
 /* Multi precision integers */
