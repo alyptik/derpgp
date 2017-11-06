@@ -13,8 +13,8 @@
 #include "defs.h"
 
 /* parser prototypes */
-size_t parse_pubkey_packet(pgp_packet *packet);
-size_t parse_seckey_packet(pgp_packet *packet);
+size_t parse_pubkey_packet(pgp_packet *restrict packet);
+size_t parse_seckey_packet(pgp_packet *restrict packet);
 
 /* function prototypes */
 size_t parse_pgp_packets(pgp_list *restrict pkts);

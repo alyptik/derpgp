@@ -14,8 +14,8 @@
 #include "defs.h"
 
 /* prototypes */
-size_t parse_pubkey_packet(pgp_packet *packet);
-size_t parse_seckey_packet(pgp_packet *packet);
+size_t parse_pubkey_packet(pgp_packet *restrict packet);
+size_t parse_seckey_packet(pgp_packet *restrict packet);
 
 static inline size_t read_mpi(u8 *restrict mpi_buf, mpi *restrict mpi_ptr)
 {
