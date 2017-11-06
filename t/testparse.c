@@ -29,7 +29,7 @@ int main(void)
 	pgp_list pkts = {0};
 
 	/* start test block */
-	plan(7);
+	plan(8);
 
 	/* tests */
 	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
@@ -38,6 +38,7 @@ int main(void)
 		HPRINT(pkts.list[i].pheader);
 		ok((pkts.list[i].pheader & (expected[i] << 2)) != 0, "test header tag %zu", i);
 	}
+	ok(parse_pgp_packets(&pkts) > 0, "test successful parser dispatch");
 
 	/* cleanup */
 	free_pgp_list(&pkts);
