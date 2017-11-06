@@ -9,37 +9,35 @@
 
 #include "packet.h"
 
-size_t parse_pubkey_packet(pgp_packet *packet) {
-	u8 *pub_data = packet->pdata;
-
-	// FIXME: we only support version 4, so bail if the version identifier is
-	// any different.
-	assert(pub_data[0] == 4);
+size_t parse_pubkey_packet(pgp_packet *restrict packet)
+{
+	/*
+	 * FIXME: we only support version 4, so bail if the
+	 * version identifier is any different.
+	 */
+	assert(packet->pdata[0] == 4);
 
 	packet->pubkey.version = 4;
-	packet->pubkey.timestamp = BETOH32(pub_data + 1);
-	packet->pubkey.algorithm = pub_data[5];
-
+	packet->pubkey.timestamp = BETOH32(packet->pdata + 1);
+	packet->pubkey.algorithm = packet->pdata[5];
 	assert(packet->pubkey.algorithm == 1);
 
-	ptrdiff_t mpi_offset = 6;
 	mpi tmp;
-	tmp.length = BETOH16(pub_data + mpi_offset);
-	mpi_offset += read_mpi(pub_data + mpi_offset, &tmp);
-
+	ptrdiff_t mpi_offset = 6;
+	tmp.length = BETOH16(packet->pdata + mpi_offset);
+	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
 	packet->pubkey.modulus_n = tmp;
-	mpi_offset += read_mpi(pub_data + mpi_offset, &tmp);
-
-	(void)mpi_offset;
-
+	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
 	packet->pubkey.exponent = tmp;
 
-	return 1;
+	return mpi_offset;
 }
 
 
-size_t parse_seckey_packet(pgp_packet *packet) {
+size_t parse_seckey_packet(pgp_packet *restrict packet)
+{
 	(void) packet;
 	puts("Ayylmao");
+
 	return 0;
 }
