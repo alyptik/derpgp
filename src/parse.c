@@ -20,7 +20,7 @@ extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename,
 /*
  * static function pointer array
  *
- * TODO XXX: implement handlers
+ * TODO XXX: implement remaining handlers
  */
 static size_t (*const dispatch_table[])(pgp_packet *restrict) = {
 	/* &parse_rsrvd_packet, &parse_pkesess_packet, &parse_skesess_packet, */
