@@ -40,8 +40,8 @@ int main(void)
 	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
 	ok(packets.cnt == 5, "test finding 5 binary packets");
 	/* by manually inspecting the key, we infer this is the actual data */
-	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test finding secret key header");
-	ok((packets.list[3].pheader & (T_SECSUBKEY << 2)) != 0, "test finding secret subkey header");
+	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test secret key header match");
+	ok((packets.list[3].pheader & (T_SECSUBKEY << 2)) != 0, "test secret subkey header match");
 	ok(parse_seckey_packet(&packets.list[0]) > 0, "test successful sec key packet parsing");
 	/* test vector doesn't have a public key */
 	ok(parse_pubkey_packet(&packets.list[3]) > 0, "test successful public key packet parsing");
