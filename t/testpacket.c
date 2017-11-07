@@ -99,14 +99,11 @@ int main(void)
 	ok(packets.cnt == 5, "test finding 5 binary packets");
 	/* by manually inspecting the key, we infer this is the actual data */
 	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test secret key header match");
-	ok((packets.list[3].pheader & (T_SECSUBKEY << 2)) != 0, "test secret subkey header match");
+	ok((packets.list[0].pheader & (T_SECSUBKEY << 2)) != 0, "test secret subkey header match");
+	ok(parse_pubkey_packet(&packets.list[0]) > 0, "test successful public key packet parsing");
 	ok(parse_seckey_packet(&packets.list[0]) > 0, "test successful sec key packet parsing");
-	/* test vector doesn't have a public key */
-	ok(parse_pubkey_packet(&packets.list[3]) > 0, "test successful public key packet parsing");
 
 	/* cleanup */
-	free_pubkey_packet(&packets.list[3]);
-	/* test vector doesn't have a public key */
 	free_pgp_list(&packets);
 
 	/* return handled */
