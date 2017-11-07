@@ -25,16 +25,19 @@ size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *rest
 inline size_t free_pubkey_packet(pgp_packet *restrict packet)
 {
 	size_t ret = 0;
+	/* count number of non-NULL pointers */
 	ret += !!packet->pubkey.modulus_n.mdata;
 	ret += !!packet->pubkey.exponent.mdata;
 	free(packet->pubkey.modulus_n.mdata);
 	free(packet->pubkey.exponent.mdata);
+
 	return ret;
 }
 
 inline size_t free_seckey_packet(pgp_packet *restrict packet)
 {
 	size_t ret = 0;
+	/* count number of non-NULL pointers */
 	ret += !!packet->seckey.prime_q.mdata;
 	ret += !!packet->seckey.prime_p.mdata;
 	ret += !!packet->seckey.mult_inverse.mdata;
@@ -43,6 +46,7 @@ inline size_t free_seckey_packet(pgp_packet *restrict packet)
 	free(packet->seckey.mult_inverse.mdata);
 	free(packet->seckey.prime_p.mdata);
 	free(packet->seckey.prime_q.mdata);
+
 	return ret;
 }
 
