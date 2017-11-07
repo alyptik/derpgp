@@ -149,14 +149,27 @@ typedef struct _pgp_packet {
 	u8 *pdata;
 	/* parsed packet data */
 	union {
+
 		/* Reserved - a packet tag MUST NOT have this value */
-		struct { void *rsrvd; };
+		struct {
+			u8 *rsrvd;
+		};
+
 		/* Public-Key Encrypted Session Key Packet */
-		struct { void *pkesess; };
+		struct {
+			u8 *pkesess;
+		};
+
 		/* Symmetric-Key Encrypted Session Key Packet */
-		struct { void *skesess; };
+		struct {
+			u8 *skesess;
+		};
+
 		/* One-Pass Signature Packet */
-		struct { void *opsig; };
+		struct {
+			u8 *opsig;
+		};
+
 		/* Secret-Key Packet */
 		struct {
 			u8 string_to_key;
@@ -168,6 +181,7 @@ typedef struct _pgp_packet {
 			mpi mult_inverse;
 			u16 checksum;
 		};
+
 		/* Public-Key Packet
 		 * FIXME: we only support V4 :>
 		 */
@@ -181,33 +195,74 @@ typedef struct _pgp_packet {
 			mpi modulus_n;
 			mpi pub_exponent;
 		};
+
 		/* Secret-Subkey Packet */
-		struct { void *secsubkey; };
+		struct {
+			u8 *secsubkey;
+		};
+
 		/* Compressed Data Packet */
-		struct { void *cdata; };
+		struct {
+			u8 *cdata;
+		};
+
 		/* Symmetrically Encrypted Data Packet */
-		struct { void *sedat; };
+		struct {
+			u8 *sedat;
+		};
+
 		/* Marker Packet */
-		struct { void *marker; };
+		struct {
+			u8 *marker;
+		};
+
 		/* Literal Data Packet */
-		struct { void *litdata; };
+		struct {
+			u8 *litdata;
+		};
+
 		/* Trust Packet */
-		struct { void *trust; };
+		struct {
+			u8 *trust;
+		};
+
 		/* User ID Packet */
-		struct { void *ui; };
+		struct {
+			u8 *ui;
+		};
+
 		/* Public-Subkey Packet */
-		struct { void *pubsubkey; };
+		struct {
+			u8 *pubsubkey;
+		};
+
 		/* User Attribute Packet */
-		struct { void *uattr; };
+		struct {
+			u8 *uattr;
+		};
+
 		/* Sym. Encrypted and Integrity Protected Data Packet */
-		struct { void *seipdata; };
+		struct {
+			u8 *seipdata;
+		};
+
 		/* Modification Detection Code Packet */
-		struct { void *mdcode; };
+		struct {
+			u8 *mdcode;
+		};
 		/* Private or Experimental Values */
-		struct { void *prvt0; };
-		struct { void *prvt1; };
-		struct { void *prvt2; };
-		struct { void *prvt3; };
+		struct {
+			u8 *prvt0;
+		};
+		struct {
+			u8 *prvt1;
+		};
+		struct {
+			u8 *prvt2;
+		};
+		struct {
+			u8 *prvt3;
+		};
 	};
 } pgp_packet;
 
