@@ -67,7 +67,7 @@ size_t (*const dispatch_table[64][2])(pgp_packet *restrict) = {
 	/* ten placeholder indices */
 	{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0},
 	/*
-	 * {&parse_prvt{0}_packet, &free_prvt{0}_pacet},
+	 * {&parse_prvt0_packet, &free_prvt0_packet},
 	 * {&parse_prvt1_packet, &free_prvt1_packet},
 	 * {&parse_prvt2_packet, &free_prvt2_packet},
 	 * {&parse_prvt3_packet, &free_prvt3_packet},
