@@ -17,56 +17,28 @@
  * TODO XXX: implement remaining handlers
  */
 size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict) = {
-	/*
-	 * {&parse_rsrvd_packet, &free_rsrvd_packet},
-	 * {&parse_pkesess_packet, &free_pkesess_packet},
-	 * {&parse_skesess_packet, &free_skesess_packet},
-	 */
-	{0}, {0}, {0},
-	/*
-	 * {&parse_opsig_packet, &free_opsig_packet},
-	 * {&parse_seckey_packet, &free_seckey_packet},
-	 * {&parse_pubkey_packet, &free_pubkey_packet},
-	 */
-	{0},
-	{&parse_seckey_packet, &free_seckey_packet},
-	{&parse_pubkey_packet, &free_pubkey_packet},
-	/*
-	 * {&parse_cdata_packet, &free_cdata_packet},
-	 * {&parse_secsubkey_packet, &free_secsubkey_packet},
-	 * {&parse_sedat_packet, &free_sedat_packet},
-	 */
-	{0}, {0}, {0},
-	/*
-	 * {&parse_marker_packet, &free_marker_packet},
-	 * {&parse_litdata_packet, &free_litdata_packet},
-	 * {&parse_trust_packet, &free_trust_packet},
-	 */
-	{0}, {0}, {0},
-	/*
-	 * {&parse_ui_packet, &free_ui_packet},
-	 * {&parse_pubsubkey_packet, &free_pubsubkey_packet},
-	 */
-	{0}, {0},
-	/* two placeholder indices */
-	{0}, {0},
-	/*
-	 * {&parse_uattr_packet, &free_uattr_packet},
-	 * {&parse_seipdata_packet, &free_seipdata_packet},
-	 * {&parse_mdcode_packet, &free_mdcode_packet},
-	 */
-	{0}, {0}, {0},
-	/* ten placeholder indices */
-	{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0},
-	/* ten placeholder indices */
-	{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0},
-	/*
-	 * {&parse_prvt{0}_packet, &free_prvt{0}_pacet},
-	 * {&parse_prvt1_packet, &free_prvt1_packet},
-	 * {&parse_prvt2_packet, &free_prvt2_packet},
-	 * {&parse_prvt3_packet, &free_prvt3_packet},
-	 */
-	{0}, {0}, {0}, {0},
+	[T_RSRVD] = {0},
+	[T_PKESESS] = {0},
+	[T_SIG] = {0},
+	[T_SKESESS] = {0},
+	[T_OPSIG] = {0},
+	[T_SECKEY] = {&parse_seckey_packet, &free_seckey_packet},
+	[T_PUBKEY] = {&parse_pubkey_packet, &free_pubkey_packet},
+	[T_SECSUBKEY] = {0},
+	[T_CDATA] = {0},
+	[T_SEDATA] = {0},
+	[T_MARKER] = {0},
+	[T_LITDATA] = {0},
+	[T_TRUST] = {0},
+	[T_UID] = {0},
+	[T_PUBSUBKEY] = {0},
+	[T_UATTR] = {0},
+	[T_SEIPDATA] = {0},
+	[T_MDCODE] = {0},
+	[T_PRVT0] = {0},
+	[T_PRVT1] = {0},
+	[T_PRVT2] = {0},
+	[T_PRVT3] = {0},
 };
 
 /* extern inline prototypes to prevent linker errors */
