@@ -29,7 +29,7 @@
 	"-h,--help:\t\tShow help/usage information\n\t" \
 	"-i,--input:\t\tName of the file to use for input\n\t" \
 	"-o,--output:\t\tName of the file to use for output\n\t" \
-	"-v,--version:\t\tShow version information\n\t" \
+	"-v,--version:\t\tShow version information\n\t"
 #define	RED			"\\033[31m"
 #define	GREEN			"\\033[32m"
 #define	YELLOW			"\\033[33m"
