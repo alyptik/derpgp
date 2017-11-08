@@ -12,8 +12,8 @@
 
 #include "defs.h"
 
-/* parser/destructor function array */
-extern size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict);
+/* dispatch table forward declaration */
+static size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict);
 
 /* parser prototypes */
 size_t parse_pubkey_packet(PGP_PACKET *restrict packet);
@@ -22,7 +22,7 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet);
 size_t parse_pgp_packets(PGP_LIST *restrict pkts);
 size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list);
 
-inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
+static inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 {
 	size_t ret = 0;
 	/* count number of non-NULL pointers */
@@ -34,7 +34,7 @@ inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 	return ret;
 }
 
-inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
+static inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
 {
 	size_t ret = 0;
 	/* count number of non-NULL pointers */
@@ -50,7 +50,7 @@ inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
 	return ret;
 }
 
-inline void free_pgp_list(PGP_LIST *restrict pkts)
+static inline void free_pgp_list(PGP_LIST *restrict pkts)
 {
 	/* return if passed NULL pointers */
 	if (!pkts || !pkts->list)
@@ -68,14 +68,14 @@ inline void free_pgp_list(PGP_LIST *restrict pkts)
 	pkts->max = 1;
 }
 
-inline void init_pgp_list(PGP_LIST *restrict pkts)
+static inline void init_pgp_list(PGP_LIST *restrict pkts)
 {
 	pkts->cnt = 0;
 	pkts->max = 1;
 	xcalloc(&pkts->list, 1, sizeof *pkts->list, "error during initial list_ptr calloc()");
 }
 
-inline void add_pgp_list(PGP_LIST *restrict pkts, PGP_PACKET const *restrict packet)
+static inline void add_pgp_list(PGP_LIST *restrict pkts, PGP_PACKET const *restrict packet)
 {
 	pkts->cnt++;
 	/* realloc if cnt reaches current size */
@@ -90,7 +90,7 @@ inline void add_pgp_list(PGP_LIST *restrict pkts, PGP_PACKET const *restrict pac
 }
 
 /* read binary pgp format */
-inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list)
+static inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list)
 {
 	FILE *file = file_ctx;
 	PGP_PACKET cur = {0};
@@ -175,5 +175,36 @@ BASE_CASE:
 	fclose(file);
 	return list->cnt;
 }
+
+/*
+ * static function pointer array
+ *
+ * TODO XXX: implement remaining handlers
+ */
+static size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict) = {
+	[T_RSRVD] = {0},
+	[T_PKESESS] = {0},
+	[T_SIG] = {0},
+	[T_SKESESS] = {0},
+	[T_OPSIG] = {0},
+	[T_SECKEY] = {&parse_seckey_packet, &free_seckey_packet},
+	[T_PUBKEY] = {&parse_pubkey_packet, &free_pubkey_packet},
+	[T_SECSUBKEY] = {0},
+	[T_CDATA] = {0},
+	[T_SEDATA] = {0},
+	[T_MARKER] = {0},
+	[T_LITDATA] = {0},
+	[T_TRUST] = {0},
+	[T_UID] = {0},
+	[T_PUBSUBKEY] = {0},
+	[T_UATTR] = {0},
+	[T_SEIPDATA] = {0},
+	[T_MDCODE] = {0},
+	[T_PRVT0] = {0},
+	[T_PRVT1] = {0},
+	[T_PRVT2] = {0},
+	[T_PRVT3] = {0},
+};
+
 
 #endif
