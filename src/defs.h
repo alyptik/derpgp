@@ -16,13 +16,6 @@
 #include <stdint.h>
 #include <unistd.h>
 
-/* macros */
-
-#define FALLBACK(ARG, DEF)	((ARG) ? (ARG) : (DEF))
-#define BETOH16(DATA)		(((DATA)[1]) | ((DATA)[0] << 0x08))
-#define BETOH32(DATA)		(((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
-#define HPRINT(VAL)		printf("[%#x] ", (VAL))
-
 /* global version and usage strings */
 
 #define VERSION_STRING		"DerpGP v0.0.1"
@@ -31,10 +24,12 @@
 	"-i,--input:\t\tName of the file to use for input\n\t" \
 	"-o,--output:\t\tName of the file to use for output\n\t" \
 	"-v,--version:\t\tShow version information\n\t"
-#define	RED			"\\033[31m"
-#define	GREEN			"\\033[32m"
-#define	YELLOW			"\\033[33m"
-#define	RST			"\\033[00m"
+#define	RED			"\033[91m"
+#define	GREEN			"\033[92m"
+#define	YELLOW			"\033[93m"
+#define	BLUE			"\033[94m"
+#define	PURPLE			"\033[95m"
+#define	RST			"\033[00m"
 /* page size for buffer count */
 #define PAGE_SIZE		sysconf(_SC_PAGESIZE)
 /* max eval string length */
@@ -43,6 +38,13 @@
 #define CONCAT			(-1)
 /* `malloc()` size ceiling */
 #define ARRAY_MAX		(SIZE_MAX / 2 - 1)
+
+/* macros */
+
+#define FALLBACK(ARG, DEF)	((ARG) ? (ARG) : (DEF))
+#define BETOH16(DATA)		(((DATA)[1]) | ((DATA)[0] << 0x08))
+#define BETOH32(DATA)		(((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
+#define HPRINT(VAL)		printf(RED "[%#x] " RST, (VAL))
 
 /* typedefs */
 
@@ -85,7 +87,7 @@ enum packet_tag {
 	/* Compressed Data Packet */
 	T_CDATA = 0x08,
 	/* Symmetrically Encrypted Data Packet */
-	T_SEDATA= 0x09,
+	T_SEDATA = 0x09,
 	/* Marker Packet */
 	T_MARKER = 0x0a,
 	/* Literal Data Packet */
@@ -93,7 +95,7 @@ enum packet_tag {
 	/* Trust Packet */
 	T_TRUST = 0x0c,
 	/* User ID Packet */
-	T_UID= 0x0d,
+	T_UID = 0x0d,
 	/* Public-Subkey Packet */
 	T_PUBSUBKEY = 0x0e,
 	/* User Attribute Packet */
@@ -304,6 +306,21 @@ typedef struct _str_list {
 	size_t cnt, max;
 	char **list;
 } STR_LIST;
+
+/* packet tag names for debug printing */
+static char const *const packet_types[64] = {
+	[T_RSRVD] = "T_RSRVD", [T_PKESESS] = "T_PKESESS",
+	[T_SIG] = "T_SIG", [T_SKESESS] = "T_SKESESS",
+	[T_OPSIG] = "T_OPSIG", [T_SECKEY] = "T_SECKEY",
+	[T_PUBKEY] = "T_PUBKEY", [T_SECSUBKEY] = "T_SECSUBKEY",
+	[T_CDATA] = "T_CDATA", [T_SEDATA] = "T_SEDATA",
+	[T_MARKER] = "T_MARKER", [T_LITDATA] = "T_LITDATA",
+	[T_TRUST] = "T_TRUST", [T_UID] = "T_UID",
+	[T_PUBSUBKEY] = "T_PUBSUBKEY", [T_UATTR] = "T_UATTR",
+	[T_SEIPDATA] = "T_SEIPDATA", [T_MDCODE] = "T_MDCODE",
+	[T_PRVT0] = "T_PRVT0", [T_PRVT1] = "T_PRVT1",
+	[T_PRVT2] = "T_PRVT2", [T_PRVT3] = "T_PRVT3",
+};
 
 /* `malloc()` wrapper */
 inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
