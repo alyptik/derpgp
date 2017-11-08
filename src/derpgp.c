@@ -46,7 +46,7 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
 	PGP_LIST pkts = {0};
 	bool read_stdin = false;
 
-	/* don't print an error if option not found */
+	/* print an error if option not found */
 	opterr = 1;
 	/* reset option indices to reuse argv */
 	option_index = 0;
