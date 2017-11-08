@@ -40,7 +40,6 @@ size_t parse_pubkey_packet(PGP_PACKET *restrict packet)
 	return mpi_offset;
 }
 
-
 size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 {
 	size_t mpi_offset = 0;
