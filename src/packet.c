@@ -1,5 +1,5 @@
 /*
- * packet.c:	option parsing
+ * packet.c:	mpi_data parsing and handling functions
  *
  * AUTHORS:	Joey Pabalinas <alyptik@protonmail.com>
  *		Santiago Torres <sangy@riseup.net>

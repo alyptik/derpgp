@@ -1,5 +1,5 @@
 /*
- * parse.c:	option parsing
+ * parse.c:	pgp key parsing
  *
  * AUTHORS:	Joey Pabalinas <alyptik@protonmail.com>
  *		Santiago Torres <sangy@riseup.net>

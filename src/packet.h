@@ -1,5 +1,5 @@
 /*
- * packet.h: packet mpi_data parsing and handling functions
+ * packet.h:	header to packet.c
  *
  * AUTHORS:	Joey Pabalinas <alyptik@protonmail.com>
  *		Santiago Torres <sangy@riseup.net>
