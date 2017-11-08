@@ -10,19 +10,19 @@
 #include "parse.h"
 
 /* extern inline prototypes to prevent linker errors */
-extern inline size_t free_pubkey_packet(pgp_packet *restrict packet);
-extern inline size_t free_seckey_packet(pgp_packet *restrict packet);
-extern inline void free_pgp_list(pgp_list *restrict pkts);
-extern inline void init_pgp_list(pgp_list *restrict list_struct);
-extern inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const *restrict packet);
-extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
+extern inline size_t free_pubkey_packet(PGP_PACKET *restrict packet);
+extern inline size_t free_seckey_packet(PGP_PACKET *restrict packet);
+extern inline void free_pgp_list(PGP_LIST *restrict pkts);
+extern inline void init_pgp_list(PGP_LIST *restrict list_struct);
+extern inline void add_pgp_list(PGP_LIST *restrict list_struct, PGP_PACKET const *restrict packet);
+extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list);
 
 /*
  * static function pointer array
  *
  * TODO XXX: implement remaining handlers
  */
-size_t (*const dispatch_table[64][2])(pgp_packet *restrict) = {
+size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict) = {
 	/*
 	 * {&parse_rsrvd_packet, &free_rsrvd_packet},
 	 * {&parse_pkesess_packet, &free_pkesess_packet},
@@ -76,14 +76,14 @@ size_t (*const dispatch_table[64][2])(pgp_packet *restrict) = {
 };
 
 /* dispatch each packet to a parser */
-size_t parse_pgp_packets(pgp_list *restrict pkts)
+size_t parse_pgp_packets(PGP_LIST *restrict pkts)
 {
 	size_t i = 0;
 	if (!pkts)
 		ERRX("NULL list passed to parse_pgp_packets()");
 	for (i = 0; i < pkts->cnt; i++) {
 		int packet_type = (pkts->list[i].pheader & 0x3c) >> 2;
-		size_t (*const parse)(pgp_packet *restrict) = dispatch_table[packet_type][0];
+		size_t (*const parse)(PGP_PACKET *restrict) = dispatch_table[packet_type][0];
 		if (parse)
 			parse(&pkts->list[i]);
 	}
@@ -91,7 +91,7 @@ size_t parse_pgp_packets(pgp_list *restrict pkts)
 }
 
 /* read ascii armor pgp format */
-size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list)
+size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list)
 {
 	/* silence linter */
 	(void)dispatch_table, (void)filename, (void)file_ctx;

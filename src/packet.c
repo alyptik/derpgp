@@ -9,13 +9,13 @@
 
 #include "packet.h"
 
-size_t parse_pubkey_packet(pgp_packet *restrict packet)
+size_t parse_pubkey_packet(PGP_PACKET *restrict packet)
 {
 	/*
 	 * FIXME: we only support version 4, so bail if the
 	 * version identifier is any different.
 	 */
-	mpi tmp = {0};
+	MPI tmp = {0};
 	size_t mpi_offset = 0;
 
 	/* one byte */
@@ -41,7 +41,7 @@ size_t parse_pubkey_packet(pgp_packet *restrict packet)
 }
 
 
-size_t parse_seckey_packet(pgp_packet *restrict packet)
+size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 {
 	size_t mpi_offset = 0;
 

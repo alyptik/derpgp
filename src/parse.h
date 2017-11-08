@@ -13,16 +13,16 @@
 #include "defs.h"
 
 /* parser/destructor function array */
-extern size_t (*const dispatch_table[64][2])(pgp_packet *restrict);
+extern size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict);
 
 /* parser prototypes */
-size_t parse_pubkey_packet(pgp_packet *restrict packet);
-size_t parse_seckey_packet(pgp_packet *restrict packet);
+size_t parse_pubkey_packet(PGP_PACKET *restrict packet);
+size_t parse_seckey_packet(PGP_PACKET *restrict packet);
 /* function prototypes */
-size_t parse_pgp_packets(pgp_list *restrict pkts);
-size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
+size_t parse_pgp_packets(PGP_LIST *restrict pkts);
+size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list);
 
-inline size_t free_pubkey_packet(pgp_packet *restrict packet)
+inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 {
 	size_t ret = 0;
 	/* count number of non-NULL pointers */
@@ -34,7 +34,7 @@ inline size_t free_pubkey_packet(pgp_packet *restrict packet)
 	return ret;
 }
 
-inline size_t free_seckey_packet(pgp_packet *restrict packet)
+inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
 {
 	size_t ret = 0;
 	/* count number of non-NULL pointers */
@@ -50,14 +50,14 @@ inline size_t free_seckey_packet(pgp_packet *restrict packet)
 	return ret;
 }
 
-inline void free_pgp_list(pgp_list *restrict pkts)
+inline void free_pgp_list(PGP_LIST *restrict pkts)
 {
 	/* return if passed NULL pointers */
 	if (!pkts || !pkts->list)
 		return;
 	for (size_t i = 0; i < pkts->cnt; i++) {
 		int packet_type = (pkts->list[i].pheader & 0x3c) >> 2;
-		size_t (*const cleanup)(pgp_packet *restrict) = dispatch_table[packet_type][1];
+		size_t (*const cleanup)(PGP_PACKET *restrict) = dispatch_table[packet_type][1];
 		if (cleanup)
 			cleanup(&pkts->list[i]);
 		free(pkts->list[i].pdata);
@@ -68,14 +68,14 @@ inline void free_pgp_list(pgp_list *restrict pkts)
 	pkts->max = 1;
 }
 
-inline void init_pgp_list(pgp_list *restrict pkts)
+inline void init_pgp_list(PGP_LIST *restrict pkts)
 {
 	pkts->cnt = 0;
 	pkts->max = 1;
 	xcalloc(&pkts->list, 1, sizeof *pkts->list, "error during initial list_ptr calloc()");
 }
 
-inline void add_pgp_list(pgp_list *restrict pkts, pgp_packet const *restrict packet)
+inline void add_pgp_list(PGP_LIST *restrict pkts, PGP_PACKET const *restrict packet)
 {
 	pkts->cnt++;
 	/* realloc if cnt reaches current size */
@@ -90,10 +90,10 @@ inline void add_pgp_list(pgp_list *restrict pkts, pgp_packet const *restrict pac
 }
 
 /* read binary pgp format */
-inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list)
+inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list)
 {
 	FILE *file = file_ctx;
-	pgp_packet cur = {0};
+	PGP_PACKET cur = {0};
 
 	/* sanity checks */
 	if (!file) {

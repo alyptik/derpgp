@@ -14,10 +14,10 @@
 #include "defs.h"
 
 /* prototypes */
-size_t parse_pubkey_packet(pgp_packet *restrict packet);
-size_t parse_seckey_packet(pgp_packet *restrict packet);
+size_t parse_pubkey_packet(PGP_PACKET *restrict packet);
+size_t parse_seckey_packet(PGP_PACKET *restrict packet);
 
-static inline size_t read_mpi(u8 *restrict mpi_buf, mpi *restrict mpi_ptr)
+static inline size_t read_mpi(u8 *restrict mpi_buf, MPI *restrict mpi_ptr)
 {
 	mpi_ptr->length = BETOH16(mpi_buf);
 	size_t byte_length = (mpi_ptr->length + 1) / 8;

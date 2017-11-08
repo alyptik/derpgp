@@ -132,10 +132,10 @@ enum s2k_conventions {
 /* structures */
 
 /* Multi precision integers */
-typedef struct _mpi {
+typedef struct _MPI {
 	u16 length;
 	u8 *mdata;
-} mpi;
+} MPI;
 
 /*
  * pgp packet types
@@ -144,34 +144,34 @@ typedef struct _mpi {
 /* Reserved - a packet tag MUST NOT have this value */
 typedef struct  _rsrvd_packet {
 	u8 *octets;
-} rsrvd_packet;
+} RSRVD_PACKET;
 
 /* Public-Key Encrypted Session Key Packet */
 typedef struct  _pkesess_packet {
 	u8 *octets;
-} pkesess_packet;
+} PKESESS_PACKET;
 
 /* Symmetric-Key Encrypted Session Key Packet */
 typedef struct  _skesess_packet {
 	u8 *octets;
-} skesess_packet;
+} SKESESS_PACKET;
 
 /* One-Pass Signature Packet */
 typedef struct  _opsig_packet {
 	u8 *octets;
-} opsig_packet;
+} OPSIG_PACKET;
 
 /* Secret-Key Packet */
 typedef struct  _seckey_packet {
 	u8 string_to_key;
 	u8 sym_encryption_algo;
 	u8 *iv;
-	mpi exponent_d;
-	mpi prime_p;
-	mpi prime_q;
-	mpi mult_inverse;
+	MPI exponent_d;
+	MPI prime_p;
+	MPI prime_q;
+	MPI mult_inverse;
 	u16 checksum;
-} seckey_packet;
+} SECKEY_PACKET;
 
 /* Public-Key Packet
  * FIXME: we only support V4 :>
@@ -183,78 +183,78 @@ typedef struct  _pubkey_packet {
 	u32 timestamp;
 	/* 1 for RSA, 2 for DSA */
 	u8 algorithm;
-	mpi modulus_n;
-	mpi exponent;
-} pubkey_packet;
+	MPI modulus_n;
+	MPI exponent;
+} PUBKEY_PACKET;
 
 /* Secret-Subkey Packet */
 typedef struct  _secsubkey_packet {
 	u8 *octets;
-} secsubkey_packet;
+} SECSUBKEY_PACKET;
 
 /* Compressed Data Packet */
 typedef struct  _cdata_packet {
 	u8 *octets;
-} cdata_packet;
+} CDATA_PACKET;
 
 /* Symmetrically Encrypted Data Packet */
 typedef struct  _sedat_packet {
 	u8 *octets;
-} sedat_packet;
+} SEDAT_PACKET;
 
 /* Marker Packet */
 typedef struct  _marker_packet {
 	u8 *octets;
-} marker_packet;
+} MARKER_PACKET;
 
 /* Literal Data Packet */
 typedef struct  _litdata_packet {
 	u8 *octets;
-} litdata_packet;
+} LITDATA_PACKET;
 
 /* Trust Packet */
 typedef struct  _trust_packet {
 	u8 *octets;
-} trust_packet;
+} TRUST_PACKET;
 
 /* User ID Packet */
 typedef struct  _ui_packet {
 	u8 *octets;
-} ui_packet;
+} UI_PACKET;
 
 /* Public-Subkey Packet */
 typedef struct  _pubsubkey_packet {
 	u8 *octets;
-} pubsubkey_packet;
+} PUBSUBKEY_PACKET;
 
 /* User Attribute Packet */
 typedef struct  _uattr_packet {
 	u8 *octets;
-} uattr_packet;
+} UATTR_PACKET;
 
 /* Sym. Encrypted and Integrity Protected Data Packet */
 typedef struct  _seipdata_packet {
 	u8 *octets;
-} seipdata_packet;
+} SEIPDATA_PACKET;
 
 /* Modification Detection Code Packet */
 typedef struct  _mdcode_packet {
 	u8 *octets;
-} mdcode_packet;
+} MDCODE_PACKET;
 
 /* Private or Experimental Values */
 typedef struct  _prvt0_packet {
 	u8 *octets;
-} prvt0_packet;
+} PRVT0_PACKET;
 typedef struct  _prvt1_packet {
 	u8 *octets;
-} prvt1_packet;
+} PRVT1_PACKET;
 typedef struct  _prvt2_packet {
 	u8 *octets;
-} prvt2_packet;
+} PRVT2_PACKET;
 typedef struct  _prvt3_packet {
 	u8 *octets;
-} prvt3_packet;
+} PRVT3_PACKET;
 
 /* struct definition for pgp packet data */
 typedef struct _pgp_packet {
@@ -268,41 +268,41 @@ typedef struct _pgp_packet {
 	u8 *pdata;
 	/* parsed packet data */
 	union {
-		rsrvd_packet rsrvd;
-		pkesess_packet pkesess;
-		skesess_packet skesess;
-		opsig_packet opsig;
-		seckey_packet seckey;
-		pubkey_packet pubkey;
-		secsubkey_packet secsubkey;
-		cdata_packet cdata;
-		sedat_packet sedat;
-		marker_packet marker;
-		litdata_packet litdata;
-		trust_packet trust;
-		ui_packet ui;
-		pubsubkey_packet pubsubkey;
-		uattr_packet uattr;
-		seipdata_packet seipdata;
-		mdcode_packet mdcode;
-		prvt0_packet prvt0;
-		prvt1_packet prvt1;
-		prvt2_packet prvt2;
-		prvt3_packet prvt3;
+		RSRVD_PACKET rsrvd;
+		PKESESS_PACKET pkesess;
+		SKESESS_PACKET skesess;
+		OPSIG_PACKET opsig;
+		SECKEY_PACKET seckey;
+		PUBKEY_PACKET pubkey;
+		SECSUBKEY_PACKET secsubkey;
+		CDATA_PACKET cdata;
+		SEDAT_PACKET sedat;
+		MARKER_PACKET marker;
+		LITDATA_PACKET litdata;
+		TRUST_PACKET trust;
+		UI_PACKET ui;
+		PUBSUBKEY_PACKET pubsubkey;
+		UATTR_PACKET uattr;
+		SEIPDATA_PACKET seipdata;
+		MDCODE_PACKET mdcode;
+		PRVT0_PACKET prvt0;
+		PRVT1_PACKET prvt1;
+		PRVT2_PACKET prvt2;
+		PRVT3_PACKET prvt3;
 	};
-} pgp_packet;
+} PGP_PACKET;
 
 /* struct definition for dynamic array of pgp structs */
 typedef struct _pgp_list {
 	size_t cnt, max;
-	pgp_packet *list;
-} pgp_list;
+	PGP_PACKET *list;
+} PGP_LIST;
 
 /* struct definition for NULL-terminated string dynamic array */
 typedef struct _str_list {
 	size_t cnt, max;
 	char **list;
-} str_list;
+} STR_LIST;
 
 /* `malloc()` wrapper */
 inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
@@ -377,7 +377,7 @@ inline void strmv(ptrdiff_t off, char *restrict dest, char const *restrict src)
 	memcpy(dest_ptr, src, (size_t)src_sz + 1);
 }
 
-inline ptrdiff_t free_str_list(str_list *restrict plist)
+inline ptrdiff_t free_str_list(STR_LIST *restrict plist)
 {
 	size_t null_cnt = 0;
 	/* return -1 if passed NULL pointers */
@@ -399,7 +399,7 @@ inline ptrdiff_t free_str_list(str_list *restrict plist)
 	return null_cnt;
 }
 
-inline void init_str_list(str_list *restrict list_struct, char *restrict init_str)
+inline void init_str_list(STR_LIST *restrict list_struct, char *restrict init_str)
 {
 	list_struct->cnt = 0;
 	list_struct->max = 1;
@@ -414,7 +414,7 @@ inline void init_str_list(str_list *restrict list_struct, char *restrict init_st
 	memcpy(list_struct->list[list_struct->cnt - 1], init_str, strlen(init_str) + 1);
 }
 
-inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t pad)
+inline void append_str(STR_LIST *restrict list_struct, char const *restrict string, size_t pad)
 {
 	void *tmp;
 	list_struct->cnt++;

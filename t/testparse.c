@@ -17,16 +17,16 @@ extern inline void xrealloc(void *restrict ptr, size_t sz, char const *msg);
 extern inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream);
 extern inline ptrdiff_t free_argv(char ***restrict argv);
 extern inline void strmv(ptrdiff_t off, char *restrict dest, char const *restrict src);
-extern inline ptrdiff_t free_str_list(str_list *restrict plist);
-extern inline void init_str_list(str_list *restrict list_struct, char *restrict init_str);
-extern inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t pad);
+extern inline ptrdiff_t free_str_list(STR_LIST *restrict plist);
+extern inline void init_str_list(STR_LIST *restrict list_struct, char *restrict init_str);
+extern inline void append_str(STR_LIST *restrict list_struct, char const *restrict string, size_t pad);
 
 int main(void)
 {
 	/* by manually inspecting the key, we infer this is the actual data */
 	int expected[] = {T_SECKEY, T_UID, T_SIG, T_SECSUBKEY, T_SIG};
 	char const *vec_bin = "./t/4yyylmao.gpg";
-	pgp_list pkts = {0};
+	PGP_LIST pkts = {0};
 
 	/* start test block */
 	plan(8);

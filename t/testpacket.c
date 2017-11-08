@@ -16,7 +16,7 @@
  *
  * TODO XXX: implement remaining handlers
  */
-size_t (*const dispatch_table[64][2])(pgp_packet *restrict) = {
+size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict) = {
 	/*
 	 * {&parse_rsrvd_packet, &free_rsrvd_packet},
 	 * {&parse_pkesess_packet, &free_pkesess_packet},
@@ -76,20 +76,20 @@ extern inline void xrealloc(void *restrict ptr, size_t sz, char const *msg);
 extern inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream);
 extern inline ptrdiff_t free_argv(char ***restrict argv);
 extern inline void strmv(ptrdiff_t off, char *restrict dest, char const *restrict src);
-extern inline ptrdiff_t free_str_list(str_list *restrict plist);
-extern inline void init_str_list(str_list *restrict list_struct, char *restrict init_str);
-extern inline void append_str(str_list *restrict list_struct, char const *restrict string, size_t pad);
-extern inline void init_pgp_list(pgp_list *restrict list_struct);
-extern inline size_t free_pubkey_packet(pgp_packet *restrict packet);
-extern inline size_t free_seckey_packet(pgp_packet *restrict packet);
-extern inline void free_pgp_list(pgp_list *restrict pkts);
-extern inline void add_pgp_list(pgp_list *restrict list_struct, pgp_packet const *restrict packet);
-extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, pgp_list *restrict list);
+extern inline ptrdiff_t free_str_list(STR_LIST *restrict plist);
+extern inline void init_str_list(STR_LIST *restrict list_struct, char *restrict init_str);
+extern inline void append_str(STR_LIST *restrict list_struct, char const *restrict string, size_t pad);
+extern inline void init_pgp_list(PGP_LIST *restrict list_struct);
+extern inline size_t free_pubkey_packet(PGP_PACKET *restrict packet);
+extern inline size_t free_seckey_packet(PGP_PACKET *restrict packet);
+extern inline void free_pgp_list(PGP_LIST *restrict pkts);
+extern inline void add_pgp_list(PGP_LIST *restrict list_struct, PGP_PACKET const *restrict packet);
+extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list);
 
 int main(void)
 {
 	char const *vec_bin = "./t/4yyylmao.gpg";
-	pgp_list packets = {0};
+	PGP_LIST packets = {0};
 
 	/* start test block */
 	plan(6);
