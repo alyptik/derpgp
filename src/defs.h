@@ -355,6 +355,15 @@ static inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
 }
 
 /* `fread()` wrapper */
+static inline FILE *xfopen(char const *restrict path, char const *restrict fmode)
+{
+	FILE *file;
+	if (!(file = fopen(path, fmode)))
+		ERR("xfopen()");
+	return file;
+}
+
+/* `fread()` wrapper */
 static inline size_t xfread(void *restrict ptr, size_t sz, size_t nmemb, FILE *restrict stream)
 {
 	size_t cnt;
