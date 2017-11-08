@@ -34,7 +34,7 @@ void parse_opts(int argc, char **argv, char const *optstring)
 	int opt;
 
 	/* don't print an error if option not found */
-	opterr = 0;
+	opterr = 1;
 	/* reset option indices to reuse argv */
 	option_index = 0;
 	optind = 1;
@@ -71,7 +71,8 @@ void parse_opts(int argc, char **argv, char const *optstring)
 
 int main(int argc, char **argv)
 {
-	(void)argc, (void)argv;
+	char const optstring[] = "hvi:o:";
+	parse_opts(argc, argv, optstring);
 	puts("derp derp derp");
 
 	return 0;
