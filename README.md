@@ -19,6 +19,7 @@ Run `make` then `./derpgp`.
 
 	-h,--help:		Show help/usage information.
 	-v,--version:		Show version information.
+	-i,--input:		ame of the file to use for input.
 	-o:			Name of the file to output source to.
 
 ## Libraries used:
