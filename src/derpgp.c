@@ -29,7 +29,7 @@ extern char **environ;
 /* silence linter */
 int getopt_long(int ___argc, char *const ___argv[], char const *__shortopts, struct option const *__longopts, int *__longind);
 
-PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
+PGP_LIST parse_opts(int argc, char **argv, char const *optstring, FILE **restrict out_file)
 {
 	int opt;
 	PGP_LIST pkts = {0};
@@ -40,13 +40,13 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
 	/* reset option indices to reuse argv */
 	option_index = 0;
 	optind = 1;
-
 	/* attempt to read standard input if part of a pipe */
 	if (!isatty(STDIN_FILENO)) {
 		read_pgp_bin(NULL, "/dev/stdin", &pkts);
 		read_stdin = true;
 	}
 
+	/* process options */
 	while ((opt = getopt_long(argc, argv, optstring, long_opts, &option_index)) != -1) {
 		switch (opt) {
 
@@ -67,7 +67,9 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
 
 		/* output file flag */
 		case 'o':
-			/* TODO XXX: implement */
+			if (!out_file)
+				break;
+			*out_file = xfopen(optarg, "wb");
 			break;
 
 		/* version flag */
@@ -91,8 +93,9 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
 
 int main(int argc, char **argv)
 {
+	FILE *out_file = NULL;
 	char const *const optstring = "hvi:o:";
-	PGP_LIST pkts = parse_opts(argc, argv, optstring);
+	PGP_LIST pkts = parse_opts(argc, argv, optstring, &out_file);
 
 	/* handle packets */
 	parse_pgp_packets(&pkts);
@@ -107,6 +110,7 @@ int main(int argc, char **argv)
 
 	/* cleanup */
 	free_pgp_list(&pkts);
+	xfclose(&out_file);
 
 	return 0;
 }
