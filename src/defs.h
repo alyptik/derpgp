@@ -354,7 +354,16 @@ static inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
 	*(void **)ptr = tmp;
 }
 
-/* `fread()` wrapper */
+/* `fclose()` wrapper */
+static inline void xfclose(FILE **restrict out_file)
+{
+	if (!out_file)
+		return;
+	if (!fclose(*out_file))
+		WARN("xfclose()");
+}
+
+/* `fopen()` wrapper */
 static inline FILE *xfopen(char const *restrict path, char const *restrict fmode)
 {
 	FILE *file;
