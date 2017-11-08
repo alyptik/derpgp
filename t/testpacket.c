@@ -13,7 +13,7 @@
 
 int main(void)
 {
-	char const *vec_bin = "./t/4yyylmao.gpg";
+	char const *const vec_bin = "./t/4yyylmao.gpg";
 	PGP_LIST pkts = {0};
 
 	/* start test block */

@@ -15,16 +15,16 @@
 /* dispatch table forward declaration */
 static size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict);
 
-/* parser prototypes */
+/* function prototypes */
 size_t parse_pubkey_packet(PGP_PACKET *restrict packet);
 size_t parse_seckey_packet(PGP_PACKET *restrict packet);
-/* function prototypes */
 size_t parse_pgp_packets(PGP_LIST *restrict pkts);
 size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list);
 
 static inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 {
 	size_t ret = 0;
+
 	/* count number of non-NULL pointers */
 	ret += !!packet->pubkey.modulus_n.mdata;
 	ret += !!packet->pubkey.exponent.mdata;
@@ -37,6 +37,7 @@ static inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 static inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
 {
 	size_t ret = 0;
+
 	/* count number of non-NULL pointers */
 	ret += !!packet->seckey.prime_q.mdata;
 	ret += !!packet->seckey.prime_p.mdata;
@@ -170,7 +171,7 @@ static inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename,
 	add_pgp_list(list, &cur);
 	return read_pgp_bin(file, filename, list);
 
-/* base case common exit point */
+/* base-case common exit point */
 BASE_CASE:
 	fclose(file);
 	return list->cnt;

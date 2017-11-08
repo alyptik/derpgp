@@ -12,10 +12,10 @@
 
 int main(void)
 {
+	char const *const vec_bin = "./t/4yyylmao.gpg";
+	PGP_LIST pkts = {0};
 	/* by manually inspecting the key, we infer this is the actual data */
 	int expected[] = {T_SECKEY, T_UID, T_SIG, T_SECSUBKEY, T_SIG};
-	char const *vec_bin = "./t/4yyylmao.gpg";
-	PGP_LIST pkts = {0};
 
 	/* start test block */
 	plan(9);
