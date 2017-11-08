@@ -357,7 +357,7 @@ static inline void xrealloc(void *restrict ptr, size_t sz, char const *msg)
 /* `fclose()` wrapper */
 static inline void xfclose(FILE **restrict out_file)
 {
-	if (!out_file)
+	if (!out_file || !*out_file)
 		return;
 	if (!fclose(*out_file))
 		WARN("xfclose()");
