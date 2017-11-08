@@ -35,8 +35,10 @@ int main(void)
 	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
 	ok(pkts.cnt == 5, "test finding 5 binary packets");
 	for (size_t i = 0; i < pkts.cnt; i++) {
+		int cur_tag = (pkts.list[i].pheader & 0x3c) >> 2;
 		HPRINT(pkts.list[i].pheader);
-		ok((pkts.list[i].pheader & (expected[i] << 2)) != 0, "test header tag %zu", i);
+		printf(YELLOW "%-10s\t" RST, packet_types[cur_tag]);
+		ok(cur_tag == expected[i], "test header tag %zu", i);
 	}
 	ok(parse_pgp_packets(&pkts) > 0, "test successful parser dispatch");
 

@@ -109,11 +109,11 @@ int main(int argc, char **argv)
 	parse_pgp_packets(&pkts);
 
 	/* debug packet parsing */
-	printf(GREEN "PGP packets found:" RST "\n");
+	puts(GREEN "PGP packets found:" RST);
 	for (size_t i = 0; i < pkts.cnt; i++) {
-		int cur_tag = (pkts.list[i].pheader & 0x32) >> 2;
+		int cur_tag = (pkts.list[i].pheader & 0x3c) >> 2;
 		HPRINT(pkts.list[i].pheader);
-		printf(YELLOW "%s" RST "\n", packet_types[cur_tag]);
+		printf(YELLOW "%-10s\n" RST, packet_types[cur_tag]);
 	}
 
 	/* cleanup */
