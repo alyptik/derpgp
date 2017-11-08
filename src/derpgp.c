@@ -102,7 +102,7 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
 
 int main(int argc, char **argv)
 {
-	char const optstring[] = "hvi:o:";
+	char const *const optstring = "hvi:o:";
 	PGP_LIST pkts = parse_opts(argc, argv, optstring);
 
 	/* handle packets */
