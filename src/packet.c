@@ -62,9 +62,11 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 		break;
 	/* symmetric-key algorithm */
 	default:
+		/* TODO XXX: implement symmetric-key handling */
 		break;
 	}
 
 	/* TODO XXX: implement mpi seckey parsing */
+
 	return mpi_offset;
 }

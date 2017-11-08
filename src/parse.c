@@ -13,14 +13,15 @@
 size_t parse_pgp_packets(PGP_LIST *restrict pkts)
 {
 	size_t i = 0;
-	if (!pkts)
-		ERRX("NULL list passed to parse_pgp_packets()");
-	for (i = 0; i < pkts->cnt; i++) {
+
+	/* dispatch each packet to parsers */
+	for (; i < pkts->cnt; i++) {
 		int packet_type = (pkts->list[i].pheader & 0x3c) >> 2;
 		size_t (*const parse)(PGP_PACKET *restrict) = dispatch_table[packet_type][0];
 		if (parse)
 			parse(&pkts->list[i]);
 	}
+
 	return i;
 }
 
