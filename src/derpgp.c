@@ -44,6 +44,7 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
 {
 	int opt;
 	PGP_LIST pkts = {0};
+	bool read_stdin = false;
 
 	/* don't print an error if option not found */
 	opterr = 1;
@@ -51,13 +52,28 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring)
 	option_index = 0;
 	optind = 1;
 
+	/* attempt to read standard input if part of a pipe */
+	if (!isatty(STDIN_FILENO)) {
+		read_pgp_bin(NULL, "/dev/stdin", &pkts);
+		read_stdin = true;
+	}
+
 	while ((opt = getopt_long(argc, argv, optstring, long_opts, &option_index)) != -1) {
 		switch (opt) {
 
 		/* input file flag */
 		case 'i':
+			/* attempt to read standard input if argument is "-" */
+			if (!strcmp(optarg, "-")) {
+				/* don't read stdin twice */
+				if (read_stdin)
+					break;
+				read_pgp_bin(NULL, "/dev/stdin", &pkts);
+				read_stdin = true;
+				break;
+			}
+			/* else read the file specified */
 			read_pgp_bin(NULL, optarg, &pkts);
-			parse_pgp_packets(&pkts);
 			break;
 
 		/* output file flag */
@@ -89,14 +105,16 @@ int main(int argc, char **argv)
 	char const optstring[] = "hvi:o:";
 	PGP_LIST pkts = parse_opts(argc, argv, optstring);
 
+	/* handle packets */
+	parse_pgp_packets(&pkts);
 
+	/* debug packet parsing */
 	for (size_t i = 0; i < pkts.cnt; i++)
 		HPRINT(pkts.list[i].pheader);
+	putchar('\n');
 
 	/* cleanup */
 	free_pgp_list(&pkts);
-
-	puts("derp derp derp");
 
 	return 0;
 }
