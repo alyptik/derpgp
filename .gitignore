@@ -9,6 +9,8 @@ derpgp
 t/*
 !t/*.c
 !t/*.h
+!t/README.md
+!t/COPYING
 
 # Object files
 *.o
