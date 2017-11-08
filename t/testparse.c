@@ -29,7 +29,7 @@ int main(void)
 	PGP_LIST pkts = {0};
 
 	/* start test block */
-	plan(8);
+	plan(9);
 
 	/* tests */
 	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
@@ -41,9 +41,7 @@ int main(void)
 		ok(cur_tag == expected[i], "test header tag %zu", i);
 	}
 	ok(parse_pgp_packets(&pkts) > 0, "test successful parser dispatch");
-
-	/* cleanup */
-	free_pgp_list(&pkts);
+	lives_ok({free_pgp_list(&pkts);}, "test successful packet list cleanup");
 
 	/* return handled */
 	done_testing();

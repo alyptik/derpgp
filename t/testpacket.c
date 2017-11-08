@@ -61,22 +61,20 @@ extern inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename,
 int main(void)
 {
 	char const *vec_bin = "./t/4yyylmao.gpg";
-	PGP_LIST packets = {0};
+	PGP_LIST pkts = {0};
 
 	/* start test block */
-	plan(6);
+	plan(7);
 
 	/* tests */
-	ok(read_pgp_bin(NULL, vec_bin, &packets) > 0, "test binary parsing");
-	ok(packets.cnt == 5, "test finding 5 binary packets");
+	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
+	ok(pkts.cnt == 5, "test finding 5 binary pkts");
 	/* by manually inspecting the key, we infer this is the actual data */
-	ok((packets.list[0].pheader & (T_SECKEY << 2)) != 0, "test secret key header match");
-	ok((packets.list[0].pheader & (T_SECSUBKEY << 2)) != 0, "test secret subkey header match");
-	ok(parse_pubkey_packet(&packets.list[0]) > 0, "test successful public key packet parsing");
-	ok(parse_seckey_packet(&packets.list[0]) > 0, "test successful sec key packet parsing");
-
-	/* cleanup */
-	free_pgp_list(&packets);
+	ok((pkts.list[0].pheader & (T_SECKEY << 2)) != 0, "test secret key header match");
+	ok((pkts.list[0].pheader & (T_SECSUBKEY << 2)) != 0, "test secret subkey header match");
+	ok(parse_pubkey_packet(&pkts.list[0]) > 0, "test successful public key packet parsing");
+	ok(parse_seckey_packet(&pkts.list[0]) > 0, "test successful sec key packet parsing");
+	lives_ok({free_pgp_list(&pkts);}, "test successful packet list cleanup");
 
 	/* return handled */
 	done_testing();
