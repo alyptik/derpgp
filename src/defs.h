@@ -208,6 +208,33 @@ enum s2k_conventions {
 	STR_S2K1 = 0xfe, STR_S2K2 = 0xff,
 };
 
+/* hash algorithms */
+enum hash_algorithms {
+	/* MD5 [HAC] "MD5" */
+	HASH_MD5 = 0x01,
+	/* SHA-1 [FIPS180] "SHA1" */
+	HASH_SHA = 0x02,
+	/* RIPE-MD/160 [HAC] "RIPEMD160" */
+	HASH_RIPE = 0x03,
+	/* Reserved */
+	HASH_RSVRD0 = 0x04, HASH_RSVRD1 = 0x05,
+	HASH_RSVRD3 = 0x06, HASH_RSVRD4 = 0x07,
+	/* SHA256 [FIPS180] "SHA256" */
+	HASH_SHA256  = 0x08,
+	/* SHA384 [FIPS180] "SHA384" */
+	HASH_SHA384  = 0x09,
+	/* SHA512 [FIPS180] "SHA512" */
+	HASH_SHA512  = 0x0a,
+	/* SHA224 [FIPS180] "SHA224" */
+	HASH_SHA224  = 0x0b,
+	/* Private/Experimental algorithm */
+	HASH_PRIV0 = 0x64, HASH_PRIV1 = 0x65,
+	HASH_PRIV2 = 0x66, HASH_PRIV3 = 0x67,
+	HASH_PRIV4 = 0x68, HASH_PRIV5 = 0x69,
+	HASH_PRIV6 = 0x6a, HASH_PRIV7 = 0x6b,
+	HASH_PRIV8 = 0x6c, HASH_PRIV9 = 0x6d,
+};
+
 /* structures */
 
 /* Multi precision integers */
