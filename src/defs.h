@@ -62,63 +62,63 @@ typedef uint64_t u64;
 /* enumerations */
 
 /* packet header is defined as `[2 bit format][4 bit type][2 bit length size]` */
-enum packet_header {
+enum header_format {
 	/* packet formats */
-	F_OLD = 0x00,
-	F_NEW = 0x01,
+	FMT_OLD = 0x00,
+	FMT_NEW = 0x01,
 };
 
 /* packet tags */
 enum packet_tag {
 	/* Reserved - a packet tag MUST NOT have this value */
-	T_RSRVD = 0x00,
+	TAG_RSRVD = 0x00,
 	/* Public-Key Encrypted Session Key Packet */
-	T_PKESESS = 0x01,
+	TAG_PKESESS = 0x01,
 	/* Signature Packet */
-	T_SIG = 0x02,
+	TAG_SIG = 0x02,
 	/* Symmetric-Key Encrypted Session Key Packet */
-	T_SKESESS = 0x03,
+	TAG_SKESESS = 0x03,
 	/* One-Pass Signature Packet */
-	T_OPSIG = 0x04,
+	TAG_OPSIG = 0x04,
 	/* Secret-Key Packet */
-	T_SECKEY = 0x05,
+	TAG_SECKEY = 0x05,
 	/* Public-Key Packet */
-	T_PUBKEY = 0x06,
+	TAG_PUBKEY = 0x06,
 	/* Secret-Subkey Packet */
-	T_SECSUBKEY = 0x07,
+	TAG_SECSUBKEY = 0x07,
 	/* Compressed Data Packet */
-	T_CDATA = 0x08,
+	TAG_CDATA = 0x08,
 	/* Symmetrically Encrypted Data Packet */
-	T_SEDATA = 0x09,
+	TAG_SEDATA = 0x09,
 	/* Marker Packet */
-	T_MARKER = 0x0a,
+	TAG_MARKER = 0x0a,
 	/* Literal Data Packet */
-	T_LITDATA = 0x0b,
+	TAG_LITDATA = 0x0b,
 	/* Trust Packet */
-	T_TRUST = 0x0c,
+	TAG_TRUST = 0x0c,
 	/* User ID Packet */
-	T_UID = 0x0d,
+	TAG_UID = 0x0d,
 	/* Public-Subkey Packet */
-	T_PUBSUBKEY = 0x0e,
+	TAG_PUBSUBKEY = 0x0e,
 	/* User Attribute Packet */
-	T_UATTR = 0x11,
+	TAG_UATTR = 0x11,
 	/* Sym. Encrypted and Integrity Protected Data Packet */
-	T_SEIPDATA = 0x12,
+	TAG_SEIPDATA = 0x12,
 	/* Modification Detection Code Packet */
-	T_MDCODE = 0x13,
+	TAG_MDCODE = 0x13,
 	/* Private or Experimental Values */
-	T_PRVT0 = 0x3c,
-	T_PRVT1 = 0x3d,
-	T_PRVT2 = 0x3e,
-	T_PRVT3 = 0x3f,
+	TAG_PRVT0 = 0x3c,
+	TAG_PRVT1 = 0x3d,
+	TAG_PRVT2 = 0x3e,
+	TAG_PRVT3 = 0x3f,
 };
 
 /* old format packet lengths */
 enum packet_lengths {
-	L_ONE = 0x00,
-	L_TWO = 0x01,
-	L_FOUR = 0x02,
-	L_OTHER = 0x03,
+	LEN_ONE = 0x00,
+	LEN_TWO = 0x01,
+	LEN_FOUR = 0x02,
+	LEN_OTHER = 0x03,
 };
 /* TODO XXX: add support for new format packet headers */
 
@@ -202,9 +202,10 @@ enum compression_algorithms {
 
 /* string-to-key usage conventions */
 enum s2k_conventions {
-	T_RAW = 0x00,
-	T_S2K1 = 0xfe,
-	T_S2K2 = 0xff,
+	/* unencrypted */
+	STR_RAW = 0x00,
+	/* followed by algorithm octet and S2K specifier */
+	STR_S2K1 = 0xfe, STR_S2K2 = 0xff,
 };
 
 /* structures */
@@ -382,19 +383,24 @@ typedef struct _str_list {
 	char **list;
 } STR_LIST;
 
+/* packet header names for debug printing */
+static char const *const header_formats[0x2] = {
+	[FMT_OLD] = "FMT_OLD", [FMT_NEW] = "FMT_NEW",
+};
+
 /* packet tag names for debug printing */
 static char const *const packet_types[0x40] = {
-	[T_RSRVD] = "T_RSRVD", [T_PKESESS] = "T_PKESESS",
-	[T_SIG] = "T_SIG", [T_SKESESS] = "T_SKESESS",
-	[T_OPSIG] = "T_OPSIG", [T_SECKEY] = "T_SECKEY",
-	[T_PUBKEY] = "T_PUBKEY", [T_SECSUBKEY] = "T_SECSUBKEY",
-	[T_CDATA] = "T_CDATA", [T_SEDATA] = "T_SEDATA",
-	[T_MARKER] = "T_MARKER", [T_LITDATA] = "T_LITDATA",
-	[T_TRUST] = "T_TRUST", [T_UID] = "T_UID",
-	[T_PUBSUBKEY] = "T_PUBSUBKEY", [T_UATTR] = "T_UATTR",
-	[T_SEIPDATA] = "T_SEIPDATA", [T_MDCODE] = "T_MDCODE",
-	[T_PRVT0] = "T_PRVT0", [T_PRVT1] = "T_PRVT1",
-	[T_PRVT2] = "T_PRVT2", [T_PRVT3] = "T_PRVT3",
+	[TAG_RSRVD] = "TAG_RSRVD", [TAG_PKESESS] = "TAG_PKESESS",
+	[TAG_SIG] = "TAG_SIG", [TAG_SKESESS] = "TAG_SKESESS",
+	[TAG_OPSIG] = "TAG_OPSIG", [TAG_SECKEY] = "TAG_SECKEY",
+	[TAG_PUBKEY] = "TAG_PUBKEY", [TAG_SECSUBKEY] = "TAG_SECSUBKEY",
+	[TAG_CDATA] = "TAG_CDATA", [TAG_SEDATA] = "TAG_SEDATA",
+	[TAG_MARKER] = "TAG_MARKER", [TAG_LITDATA] = "TAG_LITDATA",
+	[TAG_TRUST] = "TAG_TRUST", [TAG_UID] = "TAG_UID",
+	[TAG_PUBSUBKEY] = "TAG_PUBSUBKEY", [TAG_UATTR] = "TAG_UATTR",
+	[TAG_SEIPDATA] = "TAG_SEIPDATA", [TAG_MDCODE] = "TAG_MDCODE",
+	[TAG_PRVT0] = "TAG_PRVT0", [TAG_PRVT1] = "TAG_PRVT1",
+	[TAG_PRVT2] = "TAG_PRVT2", [TAG_PRVT3] = "TAG_PRVT3",
 };
 
 /* pubkey algorithm names for debug printing */
@@ -439,8 +445,7 @@ static char const *const compression_types[0x80] = {
 
 /* string-to-key usage conventions names for debug printing */
 static char const *const s2k_types[0x100] = {
-	[T_RAW] = "T_RAW", [T_S2K1] = "T_S2K1",
-	[T_S2K2] = "T_S2K2",
+	[STR_RAW] = "STR_RAW", [STR_S2K1] = "STR_S2K1", [STR_S2K2] = "STR_S2K2",
 };
 
 /* `malloc()` wrapper */
