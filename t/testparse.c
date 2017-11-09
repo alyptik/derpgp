@@ -24,7 +24,7 @@ int main(void)
 	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
 	ok(pkts.cnt == 5, "test finding 5 binary packets");
 	for (size_t i = 0; i < pkts.cnt; i++) {
-		int cur_tag = (pkts.list[i].pheader & 0x3c) >> 2;
+		int cur_tag = TAGBITS(pkts.list[i].pheader);
 		size_t header_len = snprintf(NULL, 0,
 				RED "[%#x]\t" YELLOW "%-10s\t" RST,
 				pkts.list[i].pheader, packet_types[cur_tag]);

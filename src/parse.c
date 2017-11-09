@@ -16,7 +16,7 @@ size_t parse_pgp_packets(PGP_LIST *restrict pkts)
 
 	/* dispatch each packet to parsers */
 	for (; i < pkts->cnt; i++) {
-		int packet_type = (pkts->list[i].pheader & 0x3c) >> 2;
+		int packet_type = TAGBITS(pkts->list[i].pheader);
 		size_t (*const parse)(PGP_PACKET *restrict) = dispatch_table[packet_type][0];
 		if (parse)
 			parse(&pkts->list[i]);

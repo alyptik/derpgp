@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	/* debug packet parsing */
 	puts(GREEN "PGP packets found:" RST);
 	for (size_t i = 0; i < pkts.cnt; i++) {
-		int cur_tag = (pkts.list[i].pheader & 0x3c) >> 2;
+		int cur_tag = TAGBITS(pkts.list[i].pheader);
 		HPRINT(pkts.list[i].pheader);
 		printf(YELLOW "%-10s\n" RST, packet_types[cur_tag]);
 	}

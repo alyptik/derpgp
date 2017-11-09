@@ -23,8 +23,8 @@ int main(void)
 	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
 	ok(pkts.cnt == 5, "test finding 5 binary pkts");
 	/* by manually inspecting the key, we infer this is the actual data */
-	ok((pkts.list[0].pheader & 0x3c) >> 2 == T_SECKEY, "test secret key header match");
-	ok((pkts.list[3].pheader & 0x3c) >> 2 == T_SECSUBKEY, "test secret subkey header match");
+	ok(TAGBITS(pkts.list[0].pheader) == T_SECKEY, "test secret key header match");
+	ok(TAGBITS(pkts.list[3].pheader) == T_SECSUBKEY, "test secret subkey header match");
 	ok(parse_pubkey_packet(&pkts.list[0]) > 0, "test successful public key packet parsing");
 	ok(parse_seckey_packet(&pkts.list[0]) > 0, "test successful sec key packet parsing");
 	lives_ok({free_pgp_list(&pkts);}, "test successful packet list cleanup");
