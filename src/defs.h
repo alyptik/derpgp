@@ -182,6 +182,24 @@ enum symkey_algorithms {
 	SYM_PRIV8 = 0x6c, SYM_PRIV9 = 0x6d,
 };
 
+/* compression algorithms */
+enum compression_algorithms {
+	/* Uncompressed */
+	CMPR_RAW = 0x00,
+	/* ZIP [RFC1951] */
+	CMPR_ZIP = 0x01,
+	/* ZLIB [RFC1950] */
+	CMPR_ZLIB = 0x02,
+	/* BZip2 [BZ2] */
+	CMPR_BZ2 = 0x03,
+	/* Private/Experimental algorithm */
+	CMPR_PRIV0 = 0x64, CMPR_PRIV1 = 0x65,
+	CMPR_PRIV2 = 0x66, CMPR_PRIV3 = 0x67,
+	CMPR_PRIV4 = 0x68, CMPR_PRIV5 = 0x69,
+	CMPR_PRIV6 = 0x6a, CMPR_PRIV7 = 0x6b,
+	CMPR_PRIV8 = 0x6c, CMPR_PRIV9 = 0x6d,
+};
+
 /* string-to-key usage conventions */
 enum s2k_conventions {
 	T_RAW = 0x00,
@@ -406,6 +424,23 @@ static char const *const symkey_types[0x80] = {
 	[SYM_PRIV5] = "SYM_PRIV5", [SYM_PRIV6] = "SYM_PRIV6",
 	[SYM_PRIV7] = "SYM_PRIV7", [SYM_PRIV8] = "SYM_PRIV8",
 	[SYM_PRIV9] = "SYM_PRIV9",
+};
+
+/* compression algorithms names for debug printing */
+static char const *const compression_types[0x80] = {
+	[CMPR_RAW] = "CMPR_RAW", [CMPR_ZIP] = "CMPR_ZIP",
+	[CMPR_ZLIB] = "CMPR_ZLIB", [CMPR_BZ2] = "CMPR_BZ2",
+	[CMPR_PRIV0] = "CMPR_PRIV0", [CMPR_PRIV1] = "CMPR_PRIV1",
+	[CMPR_PRIV2] = "CMPR_PRIV2", [CMPR_PRIV3] = "CMPR_PRIV3",
+	[CMPR_PRIV4] = "CMPR_PRIV4", [CMPR_PRIV5] = "CMPR_PRIV5",
+	[CMPR_PRIV6] = "CMPR_PRIV6", [CMPR_PRIV7] = "CMPR_PRIV7",
+	[CMPR_PRIV8] = "CMPR_PRIV8", [CMPR_PRIV9] = "CMPR_PRIV9",
+};
+
+/* string-to-key usage conventions names for debug printing */
+static char const *const s2k_types[0x100] = {
+	[T_RAW] = "T_RAW", [T_S2K1] = "T_S2K1",
+	[T_S2K2] = "T_S2K2",
 };
 
 /* `malloc()` wrapper */
