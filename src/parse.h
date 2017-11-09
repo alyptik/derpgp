@@ -108,11 +108,11 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 	/* header type */
 	switch (FMTBITS(cur.pheader)) {
 	/* old format header */
-	case F_OLD:
+	case FMT_OLD:
 		/* header length */
 		switch (cur.pheader & 0x03) {
 		/* one byte length */
-		case L_ONE:
+		case LEN_ONE:
 			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_one, file))
 				goto BASE_CASE;
 			cur.plen_one = cur.plen_raw[0];
@@ -124,7 +124,7 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 			break;
 
 		/* two byte length */
-		case L_TWO:
+		case LEN_TWO:
 			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_two, file))
 				goto BASE_CASE;
 			cur.plen_two = BETOH16(cur.plen_raw);
@@ -136,7 +136,7 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 			break;
 
 		/* four byte length */
-		case L_FOUR:
+		case LEN_FOUR:
 			if (!xfread(&cur.plen_raw, 1, sizeof cur.plen_four, file))
 				goto BASE_CASE;
 			cur.plen_four = BETOH32(cur.plen_raw);
@@ -152,7 +152,7 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 		 *
 		 * TODO XXX: add handling for indeterminate packet length
 		 */
-		case L_OTHER: /* fallthrough */
+		case LEN_OTHER: /* fallthrough */
 		default:
 			goto BASE_CASE;
 		}
@@ -163,7 +163,7 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 	 *
 	 * TODO XXX: implement new format header handling
 	 */
-	case F_NEW: /* fallthrough */
+	case FMT_NEW: /* fallthrough */
 	/* unrecognized header */
 	default:
 		goto BASE_CASE;
@@ -185,28 +185,28 @@ BASE_CASE:
  * TODO XXX: implement remaining handlers
  */
 static size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict) = {
-	[T_RSRVD] = {0},
-	[T_PKESESS] = {0},
-	[T_SIG] = {0},
-	[T_SKESESS] = {0},
-	[T_OPSIG] = {0},
-	[T_SECKEY] = {parse_seckey_packet, free_seckey_packet},
-	[T_PUBKEY] = {parse_pubkey_packet, free_pubkey_packet},
-	[T_SECSUBKEY] = {0},
-	[T_CDATA] = {0},
-	[T_SEDATA] = {0},
-	[T_MARKER] = {0},
-	[T_LITDATA] = {0},
-	[T_TRUST] = {0},
-	[T_UID] = {0},
-	[T_PUBSUBKEY] = {0},
-	[T_UATTR] = {0},
-	[T_SEIPDATA] = {0},
-	[T_MDCODE] = {0},
-	[T_PRVT0] = {0},
-	[T_PRVT1] = {0},
-	[T_PRVT2] = {0},
-	[T_PRVT3] = {0},
+	[TAG_RSRVD] = {0},
+	[TAG_PKESESS] = {0},
+	[TAG_SIG] = {0},
+	[TAG_SKESESS] = {0},
+	[TAG_OPSIG] = {0},
+	[TAG_SECKEY] = {parse_seckey_packet, free_seckey_packet},
+	[TAG_PUBKEY] = {parse_pubkey_packet, free_pubkey_packet},
+	[TAG_SECSUBKEY] = {0},
+	[TAG_CDATA] = {0},
+	[TAG_SEDATA] = {0},
+	[TAG_MARKER] = {0},
+	[TAG_LITDATA] = {0},
+	[TAG_TRUST] = {0},
+	[TAG_UID] = {0},
+	[TAG_PUBSUBKEY] = {0},
+	[TAG_UATTR] = {0},
+	[TAG_SEIPDATA] = {0},
+	[TAG_MDCODE] = {0},
+	[TAG_PRVT0] = {0},
+	[TAG_PRVT1] = {0},
+	[TAG_PRVT2] = {0},
+	[TAG_PRVT3] = {0},
 };
 
 #endif

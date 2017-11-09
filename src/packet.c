@@ -55,11 +55,11 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	/* string-to-key usage convention */
 	switch (packet->seckey.string_to_key) {
 	/* unencrypted */
-	case T_RAW:
+	case STR_RAW:
 		break;
 	/* s2k specifier */
-	case T_S2K1: /* fallthrough */
-	case T_S2K2:
+	case STR_S2K1: /* fallthrough */
+	case STR_S2K2:
 		/* one byte */
 		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];
 		mpi_offset++;
