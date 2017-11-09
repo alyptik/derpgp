@@ -110,7 +110,7 @@ static inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename,
 		goto BASE_CASE;
 
 	/* header type */
-	switch ((cur.pheader & (0x01 << 6)) >> 6) {
+	switch (FMTBITS(cur.pheader)) {
 	/* old format header */
 	case F_OLD:
 		/* header length */
