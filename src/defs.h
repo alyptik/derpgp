@@ -379,6 +379,35 @@ static char const *const packet_types[0x40] = {
 	[T_PRVT2] = "T_PRVT2", [T_PRVT3] = "T_PRVT3",
 };
 
+/* pubkey algorithm names for debug printing */
+static char const *const pubkey_types[0x80] = {
+	[PUB_RSA] = "PUB_RSA", [PUB_RSAENC] = "PUB_RSAENC",
+	[PUB_RSASIG] = "PUB_RSASIG", [PUB_ELGAENC] = "PUB_ELGAENC",
+	[PUB_DSA] = "PUB_DSA", [PUB_ELCURVE] = "PUB_ELCURVE",
+	[PUB_ECDSA] = "PUB_ECDSA", [PUB_ELGA] = "PUB_ELGA",
+	[PUB_DH] = "PUB_DH", [PUB_PRIV0] = "PUB_PRIV0",
+	[PUB_PRIV1] = "PUB_PRIV1", [PUB_PRIV2] = "PUB_PRIV2",
+	[PUB_PRIV3] = "PUB_PRIV3", [PUB_PRIV4] = "PUB_PRIV4",
+	[PUB_PRIV5] = "PUB_PRIV5", [PUB_PRIV6] = "PUB_PRIV6",
+	[PUB_PRIV7] = "PUB_PRIV7", [PUB_PRIV8] = "PUB_PRIV8",
+	[PUB_PRIV9] = "PUB_PRIV9",
+};
+
+/* symmetric-key algorithm names for debug printing */
+static char const *const symkey_types[0x80] = {
+	[SYM_RAW] = "SYM_RAW", [SYM_IDEA] = "SYM_IDEA",
+	[SYM_TDES] = "SYM_TDES", [SYM_CAST5] = "SYM_CAST5",
+	[SYM_BLOWFISH] = "SYM_BLOWFISH", [SYM_RSRVD0] = "SYM_RSRVD0",
+	[SYM_RSRVD1] = "SYM_RSRVD1", [SYM_AES128] = "SYM_AES128",
+	[SYM_AES192] = "SYM_AES192", [SYM_AES256] = "SYM_AES256",
+	[SYM_TWOFISH] = "SYM_TWOFISH", [SYM_PRIV0] = "SYM_PRIV0",
+	[SYM_PRIV1] = "SYM_PRIV1", [SYM_PRIV2] = "SYM_PRIV2",
+	[SYM_PRIV3] = "SYM_PRIV3", [SYM_PRIV4] = "SYM_PRIV4",
+	[SYM_PRIV5] = "SYM_PRIV5", [SYM_PRIV6] = "SYM_PRIV6",
+	[SYM_PRIV7] = "SYM_PRIV7", [SYM_PRIV8] = "SYM_PRIV8",
+	[SYM_PRIV9] = "SYM_PRIV9",
+};
+
 /* `malloc()` wrapper */
 static inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
 {
