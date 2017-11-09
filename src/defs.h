@@ -124,7 +124,62 @@ enum packet_lengths {
 
 /* pubkey algorithm types */
 enum pubkey_algorithms {
-	T_RSA = 0x01,
+	/* RSA (Encrypt or Sign) [HAC] */
+	PUB_RSA = 0x01,
+	/* RSA Encrypt-Only [HAC] */
+	PUB_RSAENC = 0x02,
+	/* RSA Sign-Only [HAC] */
+	PUB_RSASIG = 0x03,
+	/* Elgamal (Encrypt-Only) [ELGAMAL] [HAC] */
+	PUB_ELGAENC = 0x10,
+	/* DSA (Digital Signature Algorithm) [FIPS186] [HAC] */
+	PUB_DSA = 0x11,
+	/* Reserved for Elliptic Curve */
+	PUB_ELCURVE = 0x12,
+	/* Reserved for ECDSA */
+	PUB_ECDSA = 0x13,
+	/* Reserved (formerly Elgamal Encrypt or Sign) */
+	PUB_ELGA = 0x14,
+	/* Reserved for Diffie-Hellman (X9.42, as defined for IETF-S/MIME) */
+	PUB_DH = 0x15,
+	/* Private/Experimental algorithm */
+	PUB_PRIV0 = 0x64, PUB_PRIV1 = 0x65,
+	PUB_PRIV2 = 0x66, PUB_PRIV3 = 0x67,
+	PUB_PRIV4 = 0x68, PUB_PRIV5 = 0x69,
+	PUB_PRIV6 = 0x6a, PUB_PRIV7 = 0x6b,
+	PUB_PRIV8 = 0x6c, PUB_PRIV9 = 0x6d,
+};
+
+/* symmetric-key algorithm types */
+enum symkey_algorithms {
+	/* Plaintext or unencrypted data */
+	SYM_RAW = 0x00,
+	/* IDEA [IDEA] */
+	SYM_IDEA = 0x01,
+	/* TripleDES (DES-EDE, [SCHNEIER] [HAC] - 168 bit key derived from 192) */
+	SYM_TDES = 0x02,
+	/* CAST5 (128 bit key, as per [RFC2144]) */
+	SYM_CAST4 = 0x04,
+	/* Blowfish (128 bit key, 16 rounds) [BLOWFISH] */
+	SYM_BLOWFISH = 0x04,
+	/* Reserved */
+	SYM_RSRVD0 = 0x05,
+	/* Reserved */
+	SYM_RSRVD1 = 0x06,
+	/* AES with 128-bit key [AES] */
+	SYM_AES128 = 0x07,
+	/* AES with 192-bit key */
+	SYM_AES192 = 0x08,
+	/* AES with 256-bit key */
+	SYM_AES256 = 0x09,
+	/* Twofish with 256-bit key [TWOFISH] */
+	SYM_TWOFISH = 0x0a,
+	/* Private/Experimental algorithm */
+	SYM_PRIV0 = 0x64, SYM_PRIV1 = 0x65,
+	SYM_PRIV2 = 0x66, SYM_PRIV3 = 0x67,
+	SYM_PRIV4 = 0x68, SYM_PRIV5 = 0x69,
+	SYM_PRIV6 = 0x6a, SYM_PRIV7 = 0x6b,
+	SYM_PRIV8 = 0x6c, SYM_PRIV9 = 0x6d,
 };
 
 /* string-to-key usage conventions */
