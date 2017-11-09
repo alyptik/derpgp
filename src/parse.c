@@ -34,5 +34,10 @@ size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, PGP_L
 	free_pgp_list(list);
 	init_pgp_list(list);
 
+	/*
+	 * TODO XXX: implement radix-64 handling
+	 */
+	read_pgp_bin(NULL, filename, list);
+	free_pgp_list(list);
 	return 0;
 }
