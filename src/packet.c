@@ -48,6 +48,11 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	/* one byte */
 	packet->seckey.string_to_key = packet->pdata[mpi_offset];
 	mpi_offset++;
+
+	/* debug printing */
+	HPRINT(packet->seckey.string_to_key);
+	printf(YELLOW "%s\n" RST, symkey_types[packet->seckey.string_to_key]);
+
 	/* string-to-key usage convention */
 	switch (packet->seckey.string_to_key) {
 	/* unencrypted */
