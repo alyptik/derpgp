@@ -22,9 +22,13 @@ static inline size_t read_mpi(u8 *restrict mpi_buf, MPI *restrict mpi_ptr)
 	size_t byte_length;
 
 	mpi_ptr->length = BETOH16(mpi_buf);
-	byte_length = (mpi_ptr->length + 1) / 8;
+	byte_length = (mpi_ptr->length + 7) / 8;
 	xmalloc(&mpi_ptr->mdata, sizeof *mpi_ptr->mdata * byte_length, "read_mpi()");
 	memcpy(mpi_ptr->mdata, mpi_buf + 2, byte_length);
+	/*
+	 * FIXME: assert to check MPI integrity currently fails on encrypted MPIs
+	 */
+	/* assert(((mpi_ptr->mdata[0]) >> (mpi_ptr->length % 8)) == 0); */
 
 	return byte_length + 2;
 }
