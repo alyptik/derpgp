@@ -27,7 +27,7 @@ size_t parse_pubkey_packet(PGP_PACKET *restrict packet)
 	mpi_offset += 4;
 	/* one byte */
 	packet->pubkey.algorithm = packet->pdata[mpi_offset];
-	assert(packet->pubkey.algorithm == T_RSA);
+	assert(packet->pubkey.algorithm == PUB_RSA);
 	mpi_offset++;
 	tmp.length = BETOH16(packet->pdata + mpi_offset);
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
