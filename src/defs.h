@@ -159,7 +159,7 @@ enum symkey_algorithms {
 	/* TripleDES (DES-EDE, [SCHNEIER] [HAC] - 168 bit key derived from 192) */
 	SYM_TDES = 0x02,
 	/* CAST5 (128 bit key, as per [RFC2144]) */
-	SYM_CAST4 = 0x04,
+	SYM_CAST5 = 0x03,
 	/* Blowfish (128 bit key, 16 rounds) [BLOWFISH] */
 	SYM_BLOWFISH = 0x04,
 	/* Reserved */
@@ -365,7 +365,7 @@ typedef struct _str_list {
 } STR_LIST;
 
 /* packet tag names for debug printing */
-static char const *const packet_types[64] = {
+static char const *const packet_types[0x40] = {
 	[T_RSRVD] = "T_RSRVD", [T_PKESESS] = "T_PKESESS",
 	[T_SIG] = "T_SIG", [T_SKESESS] = "T_SKESESS",
 	[T_OPSIG] = "T_OPSIG", [T_SECKEY] = "T_SECKEY",
