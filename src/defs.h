@@ -411,12 +411,12 @@ typedef struct _str_list {
 } STR_LIST;
 
 /* packet header names for debug printing */
-static char const *const header_formats[0x2] = {
+static char const *const header_formats[2] = {
 	[FMT_OLD] = "FMT_OLD", [FMT_NEW] = "FMT_NEW",
 };
 
 /* packet tag names for debug printing */
-static char const *const packet_types[0x40] = {
+static char const *const packet_types[64] = {
 	[TAG_RSRVD] = "TAG_RSRVD", [TAG_PKESESS] = "TAG_PKESESS",
 	[TAG_SIG] = "TAG_SIG", [TAG_SKESESS] = "TAG_SKESESS",
 	[TAG_OPSIG] = "TAG_OPSIG", [TAG_SECKEY] = "TAG_SECKEY",
@@ -431,7 +431,7 @@ static char const *const packet_types[0x40] = {
 };
 
 /* pubkey algorithm names for debug printing */
-static char const *const pubkey_types[0x80] = {
+static char const *const pubkey_types[128] = {
 	[PUB_RSA] = "PUB_RSA", [PUB_RSAENC] = "PUB_RSAENC",
 	[PUB_RSASIG] = "PUB_RSASIG", [PUB_ELGAENC] = "PUB_ELGAENC",
 	[PUB_DSA] = "PUB_DSA", [PUB_ELCURVE] = "PUB_ELCURVE",
@@ -445,7 +445,7 @@ static char const *const pubkey_types[0x80] = {
 };
 
 /* symmetric-key algorithm names for debug printing */
-static char const *const symkey_types[0x80] = {
+static char const *const symkey_types[128] = {
 	[SYM_RAW] = "SYM_RAW", [SYM_IDEA] = "SYM_IDEA",
 	[SYM_TDES] = "SYM_TDES", [SYM_CAST5] = "SYM_CAST5",
 	[SYM_BLOWFISH] = "SYM_BLOWFISH", [SYM_RSRVD0] = "SYM_RSRVD0",
@@ -460,7 +460,7 @@ static char const *const symkey_types[0x80] = {
 };
 
 /* compression algorithm names for debug printing */
-static char const *const compression_types[0x80] = {
+static char const *const compression_types[128] = {
 	[CMPR_RAW] = "CMPR_RAW", [CMPR_ZIP] = "CMPR_ZIP",
 	[CMPR_ZLIB] = "CMPR_ZLIB", [CMPR_BZ2] = "CMPR_BZ2",
 	[CMPR_PRIV0] = "CMPR_PRIV0", [CMPR_PRIV1] = "CMPR_PRIV1",
@@ -471,7 +471,7 @@ static char const *const compression_types[0x80] = {
 };
 
 /* hash algorithm names for debug printing */
-static char const *const hash_types[0x80] = {
+static char const *const hash_types[128] = {
 	[HASH_MD5] = "HASH_MD5", [HASH_SHA] = "HASH_SHA",
 	[HASH_RIPE] = "HASH_RIPE", [HASH_RSVRD0] = "HASH_RSVRD0",
 	[HASH_RSVRD1] = "HASH_RSVRD1", [HASH_RSVRD3] = "HASH_RSVRD3",
@@ -486,7 +486,7 @@ static char const *const hash_types[0x80] = {
 };
 
 /* string-to-key usage conventions names for debug printing */
-static char const *const s2k_types[0x100] = {
+static char const *const s2k_types[256] = {
 	[STR_RAW] = "STR_RAW", [STR_S2K1] = "STR_S2K1", [STR_S2K2] = "STR_S2K2",
 };
 
