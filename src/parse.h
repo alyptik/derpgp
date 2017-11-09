@@ -54,9 +54,9 @@ static inline void free_pgp_list(PGP_LIST *restrict pkts)
 		return;
 	for (size_t i = 0; i < pkts->cnt; i++) {
 		int packet_type = TAGBITS(pkts->list[i].pheader);
-		size_t (*const cleanup)(PGP_PACKET *restrict) = dispatch_table[packet_type][1];
-		if (cleanup)
-			cleanup(&pkts->list[i]);
+		size_t (*const cleanup_pkt)(PGP_PACKET *restrict) = dispatch_table[packet_type][1];
+		if (cleanup_pkt)
+			cleanup_pkt(&pkts->list[i]);
 		free(pkts->list[i].pdata);
 	}
 	free(pkts->list);
