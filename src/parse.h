@@ -19,7 +19,7 @@ static size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict);
 size_t parse_pubkey_packet(PGP_PACKET *restrict packet);
 size_t parse_seckey_packet(PGP_PACKET *restrict packet);
 size_t parse_pgp_packets(PGP_LIST *restrict pkts);
-size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list);
+size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, PGP_LIST *restrict list);
 
 static inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 {
@@ -87,7 +87,7 @@ static inline void add_pgp_list(PGP_LIST *restrict pkts, PGP_PACKET const *restr
 }
 
 /* read binary pgp format */
-static inline size_t read_pgp_bin(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list)
+static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict filename, PGP_LIST *restrict list)
 {
 	FILE *file = file_ctx;
 	PGP_PACKET cur = {0};

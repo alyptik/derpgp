@@ -26,7 +26,7 @@ size_t parse_pgp_packets(PGP_LIST *restrict pkts)
 }
 
 /* read ascii armor pgp format */
-size_t read_pgp_aa(FILE *file_ctx, char const *restrict filename, PGP_LIST *restrict list)
+size_t read_pgp_aa(FILE *restrict file_ctx, char const *restrict filename, PGP_LIST *restrict list)
 {
 	/* silence linter */
 	(void)dispatch_table, (void)filename, (void)file_ctx;
