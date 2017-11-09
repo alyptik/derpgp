@@ -33,6 +33,7 @@ size_t parse_pubkey_packet(PGP_PACKET *restrict packet)
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
 	/* one mpi struct */
 	packet->pubkey.modulus_n = tmp;
+	tmp = (MPI){0};
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
 	/* one mpi struct */
 	packet->pubkey.exponent = tmp;
