@@ -44,6 +44,7 @@
 #define FALLBACK(ARG, DEF)	((ARG) ? (ARG) : (DEF))
 #define BETOH16(DATA)		(((DATA)[1]) | ((DATA)[0] << 0x08))
 #define BETOH32(DATA)		(((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
+#define TAGBITS(DATA)		(((DATA) & 0x3c) >> 2)
 #define HPRINT(VAL)		printf(RED "[%#x] " RST, (VAL))
 
 /* typedefs */
