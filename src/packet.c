@@ -51,7 +51,6 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 
 	/* debug printing */
 	HPRINT(packet->seckey.string_to_key);
-	printf(YELLOW "%s\n" RST, symkey_types[packet->seckey.string_to_key]);
 
 	/* string-to-key usage convention */
 	switch (packet->seckey.string_to_key) {
@@ -65,10 +64,12 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];
 		mpi_offset++;
 		/* TODO XXX: implement rest of s2k handling */
+		printf(YELLOW "%s\n" RST, s2k_types[packet->seckey.string_to_key]);
 		break;
 	/* symmetric-key algorithm */
 	default:
 		/* TODO XXX: implement symmetric-key handling */
+		printf(YELLOW "%s\n" RST, symkey_types[packet->seckey.string_to_key]);
 		break;
 	}
 
