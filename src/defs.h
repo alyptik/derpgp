@@ -459,7 +459,7 @@ static char const *const symkey_types[0x80] = {
 	[SYM_PRIV9] = "SYM_PRIV9",
 };
 
-/* compression algorithms names for debug printing */
+/* compression algorithm names for debug printing */
 static char const *const compression_types[0x80] = {
 	[CMPR_RAW] = "CMPR_RAW", [CMPR_ZIP] = "CMPR_ZIP",
 	[CMPR_ZLIB] = "CMPR_ZLIB", [CMPR_BZ2] = "CMPR_BZ2",
@@ -468,6 +468,21 @@ static char const *const compression_types[0x80] = {
 	[CMPR_PRIV4] = "CMPR_PRIV4", [CMPR_PRIV5] = "CMPR_PRIV5",
 	[CMPR_PRIV6] = "CMPR_PRIV6", [CMPR_PRIV7] = "CMPR_PRIV7",
 	[CMPR_PRIV8] = "CMPR_PRIV8", [CMPR_PRIV9] = "CMPR_PRIV9",
+};
+
+/* hash algorithm names for debug printing */
+static char const *const hash_types[0x80] = {
+	[HASH_MD5] = "HASH_MD5", [HASH_SHA] = "HASH_SHA",
+	[HASH_RIPE] = "HASH_RIPE", [HASH_RSVRD0] = "HASH_RSVRD0",
+	[HASH_RSVRD1] = "HASH_RSVRD1", [HASH_RSVRD3] = "HASH_RSVRD3",
+	[HASH_RSVRD4] = "HASH_RSVRD4", [HASH_SHA256 ] = "HASH_SHA256 ",
+	[HASH_SHA384 ] = "HASH_SHA384 ", [HASH_SHA512 ] = "HASH_SHA512 ",
+	[HASH_SHA224 ] = "HASH_SHA224 ", [HASH_PRIV0] = "HASH_PRIV0",
+	[HASH_PRIV1] = "HASH_PRIV1", [HASH_PRIV2] = "HASH_PRIV2",
+	[HASH_PRIV3] = "HASH_PRIV3", [HASH_PRIV4] = "HASH_PRIV4",
+	[HASH_PRIV5] = "HASH_PRIV5", [HASH_PRIV6] = "HASH_PRIV6",
+	[HASH_PRIV7] = "HASH_PRIV7", [HASH_PRIV8] = "HASH_PRIV8",
+	[HASH_PRIV9] = "HASH_PRIV9",
 };
 
 /* string-to-key usage conventions names for debug printing */
