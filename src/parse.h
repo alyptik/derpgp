@@ -117,8 +117,10 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 				goto BASE_CASE;
 			cur.plen_one = cur.plen_raw[0];
 			xcalloc(&cur.pdata, cur.plen_one, sizeof *cur.pdata, "read_pgp() cur.plen_one calloc()");
-			if (!xfread(cur.pdata, 1, cur.plen_one, file))
+			if (!xfread(cur.pdata, 1, cur.plen_one, file)) {
+				free(cur.pdata);
 				goto BASE_CASE;
+			}
 			break;
 
 		/* two byte length */
@@ -127,8 +129,10 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 				goto BASE_CASE;
 			cur.plen_two = BETOH16(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_two, sizeof *cur.pdata, "read_pgp() cur.plen_two calloc()");
-			if (!xfread(cur.pdata, 1, cur.plen_two, file))
+			if (!xfread(cur.pdata, 1, cur.plen_two, file)) {
+				free(cur.pdata);
 				goto BASE_CASE;
+			}
 			break;
 
 		/* four byte length */
@@ -137,8 +141,10 @@ static inline size_t read_pgp_bin(FILE *restrict file_ctx, char const *restrict 
 				goto BASE_CASE;
 			cur.plen_four = BETOH32(cur.plen_raw);
 			xcalloc(&cur.pdata, cur.plen_four, sizeof *cur.pdata, "read_pgp() cur.plen_four calloc()");
-			if (!xfread(cur.pdata, 1, cur.plen_four, file))
+			if (!xfread(cur.pdata, 1, cur.plen_four, file)) {
+				free(cur.pdata);
 				goto BASE_CASE;
+			}
 			break;
 
 		/*
