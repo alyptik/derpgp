@@ -207,5 +207,4 @@ static size_t (*const dispatch_table[64][2])(PGP_PACKET *restrict) = {
 	[T_PRVT3] = {0},
 };
 
-
 #endif
