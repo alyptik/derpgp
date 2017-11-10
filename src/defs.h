@@ -283,7 +283,7 @@ typedef struct _seckey_info {
 
 /* Reserved - a packet tag MUST NOT have this value */
 typedef struct _rsrvd_packet {
-	u8 *octets;
+	u8 *rsrvd_data;
 } RSRVD_PACKET;
 
 /* Public-Key Encrypted Session Key Packet */
@@ -444,16 +444,16 @@ typedef struct _mdcode_packet {
 
 /* Private or Experimental Values */
 typedef struct _prvt0_packet {
-	u8 *octets;
+	u8 *priv_data;
 } PRVT0_PACKET;
 typedef struct _prvt1_packet {
-	u8 *octets;
+	u8 *priv_data;
 } PRVT1_PACKET;
 typedef struct _prvt2_packet {
-	u8 *octets;
+	u8 *priv_data;
 } PRVT2_PACKET;
 typedef struct _prvt3_packet {
-	u8 *octets;
+	u8 *priv_data;
 } PRVT3_PACKET;
 
 /* struct definition for pgp packet data */
