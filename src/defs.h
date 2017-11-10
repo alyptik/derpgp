@@ -246,9 +246,6 @@ enum hash_algorithms {
 
 /* structures */
 
-/* packet forward declarations */
-struct _uattr_packet;
-
 /* Multi Precision Integers */
 typedef struct _mpi {
 	u16 length;
@@ -443,6 +440,9 @@ typedef struct _trust_packet {
 	/* NULL or the URL of the source. */
 	char *src_url;
 } TRUST_PACKET;
+
+/* forward-declaration for User ID Packet */
+struct _uattr_packet;
 
 /* User ID Packet */
 typedef struct _ui_packet {
