@@ -238,10 +238,19 @@ enum hash_algorithms {
 /* structures */
 
 /* Multi precision integers */
-typedef struct _MPI {
+typedef struct _mpi {
 	u16 length;
 	u8 *mdata;
 } MPI;
+
+/* string-to-key specifiers */
+typedef struct _s2k {
+	int s2k_mode;
+	u8 hash_algo;
+	u8 salt[8];
+	/* the serialized iteration count.  */
+	u32 cnt;
+} S2K;
 
 /*
  * pgp packet types
