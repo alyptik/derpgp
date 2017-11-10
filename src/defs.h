@@ -213,7 +213,7 @@ enum hash_algorithms {
 	/* MD5 [HAC] "MD5" */
 	HASH_MD5 = 0x01,
 	/* SHA-1 [FIPS180] "SHA1" */
-	HASH_SHA = 0x02,
+	HASH_SHA1 = 0x02,
 	/* RIPE-MD/160 [HAC] "RIPEMD160" */
 	HASH_RIPE = 0x03,
 	/* Reserved */
@@ -588,7 +588,7 @@ static char const *const compression_types[128] = {
 
 /* hash algorithm names for debug printing */
 static char const *const hash_types[128] = {
-	[HASH_MD5] = "HASH_MD5", [HASH_SHA] = "HASH_SHA",
+	[HASH_MD5] = "HASH_MD5", [HASH_SHA1] = "HASH_SHA1",
 	[HASH_RIPE] = "HASH_RIPE", [HASH_RSVRD0] = "HASH_RSVRD0",
 	[HASH_RSVRD1] = "HASH_RSVRD1", [HASH_RSVRD3] = "HASH_RSVRD3",
 	[HASH_RSVRD4] = "HASH_RSVRD4", [HASH_SHA256 ] = "HASH_SHA256 ",
