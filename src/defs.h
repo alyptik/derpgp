@@ -243,7 +243,7 @@ typedef struct _mpi {
 	u8 *mdata;
 } MPI;
 
-/* string-to-key specifiers */
+/* String-to-key specifiers */
 typedef struct _s2k {
 	int s2k_mode;
 	u8 hash_algo;
@@ -263,12 +263,20 @@ typedef struct  _rsrvd_packet {
 
 /* Public-Key Encrypted Session Key Packet */
 typedef struct  _pkesess_packet {
-	u8 *octets;
+	u32 keyid[2];
+	u8 version;
+	u8 pub_encryption_algo;
+	u8 hide_keyid;
+	MPI sess_data[2];
 } PKESESS_PACKET;
 
 /* Symmetric-Key Encrypted Session Key Packet */
 typedef struct  _skesess_packet {
-	u8 *octets;
+	u8 version;
+	u8 cipher_algo;
+	S2K s2k;
+	u8 sess_len;
+	u8 *sess_key;
 } SKESESS_PACKET;
 
 /* One-Pass Signature Packet */
