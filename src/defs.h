@@ -255,6 +255,28 @@ typedef struct _s2k {
 	u32 cnt;
 } S2K;
 
+/* Secret-Key Info */
+typedef struct _seckey_info {
+	/*
+	 * The secret info is protected and must
+	 * be decrypted before use; the protected
+	 * MPIs are simply (void* ) pointers to memory
+	 */
+	int is_protected : 1;
+	/* SHA1 instead of a 16-bit checksum */
+	int sha1_chk;
+	/* checksum for old protection modes */
+	u16 ckh_sum;
+	/* cipher used to protect the secret information */
+	u8 seckey_algo;
+	/* S2K parameter */
+	S2K s2k;
+	/* used length of the initialization vector */
+	u8 iv_len;
+	/* initialization vector for CFB modes */
+	u8 iv[16];
+} SECKEY_INFO;
+
 /*
  * pgp packet types
  */
