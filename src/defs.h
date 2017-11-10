@@ -237,7 +237,7 @@ enum hash_algorithms {
 
 /* structures */
 
-/* forward declaration for user if packet */
+/* forward declaration for user id packet */
 struct _uattr_packet;
 
 /* Multi Precision Integers */
