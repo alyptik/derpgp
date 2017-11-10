@@ -531,18 +531,13 @@ typedef struct _mdcode_packet {
 } MDCODE_PACKET;
 
 /* Private or Experimental Values */
-typedef struct _prvt0_packet {
+struct _prvt_packet {
 	u8 const *priv_data;
-} PRVT0_PACKET;
-typedef struct _prvt1_packet {
-	u8 const *priv_data;
-} PRVT1_PACKET;
-typedef struct _prvt2_packet {
-	u8 const *priv_data;
-} PRVT2_PACKET;
-typedef struct _prvt3_packet {
-	u8 const *priv_data;
-} PRVT3_PACKET;
+};
+typedef struct _prvt_packet PRVT0_PACKET;
+typedef struct _prvt_packet PRVT1_PACKET;
+typedef struct _prvt_packet PRVT2_PACKET;
+typedef struct _prvt_packet PRVT3_PACKET;
 
 /* struct definition for pgp packet data */
 typedef struct _pgp_packet {
