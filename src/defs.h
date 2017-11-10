@@ -367,7 +367,19 @@ typedef struct _marker_packet {
 
 /* Literal Data Packet */
 typedef struct _litdata_packet {
-	u8 *octets;
+	/* length of buffer; 0 if unknown */
+	u32 len;
+	u8 *data_buf;
+	/* whether new format is used */
+	u8 new_ctb;
+	/* indeterminate length (old) or partial body length headers (new) */
+	u8 is_partial;
+	/* data formatting: ['b', 't', 'u', 'l' or '1'] (last two are deprecated) */
+	int data_mode;
+	u32 timestamp;
+	/* filename; at most 255 characters (max one byte when serialized) */
+	int name_len;
+	char *txt_name;
 } LITDATA_PACKET;
 
 /* Trust Packet */
