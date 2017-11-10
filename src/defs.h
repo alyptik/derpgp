@@ -38,6 +38,15 @@
 #define CONCAT			(-1)
 /* `malloc()` size ceiling */
 #define ARRAY_MAX		(SIZE_MAX / 2 - 1)
+/*
+ * Subtypes for the ring trust gpg packets.
+ */
+/* The classical signature cache. */
+#define RING_TRUST_SIG 0
+/* A KEYORG on a primary key. */
+#define RING_TRUST_KEY 1
+/* A KEYORG on a user id. */
+#define RING_TRUST_UID 2
 
 /* macros */
 
@@ -237,6 +246,11 @@ enum hash_algorithms {
 
 /* structures */
 
+/* forward declarations for subkey packets */
+struct _seckey_packet;
+struct _pubkey_packet;
+typedef struct _seckey_packet SECSUBKEY_PACKET;
+typedef struct _pubkey_packet PUBSUBKEY_PACKET;
 /* forward declaration for user id packet */
 struct _uattr_packet;
 
@@ -277,8 +291,18 @@ typedef struct _seckey_info {
 	u8 iv[16];
 } SECKEY_INFO;
 
+/* PGP signatures have hashed and unhashed areas with signature subpackets */
+typedef struct _sub_packet {
+	/* allocated */
+	size_t subpkt_size;
+	/* used (serialized) */
+	size_t subpkt_len;
+	/* the serialized subpackes (serialized) */
+	u8 *subpkt_data;
+} SIGSUB_PACKET;
+
 /*
- * pgp packet types
+ * PGP Packet Types
  */
 
 /* Reserved - a packet tag MUST NOT have this value */
@@ -324,6 +348,7 @@ typedef struct _seckey_packet {
 	MPI prime_q;
 	MPI mult_inverse;
 	u16 checksum;
+	SECKEY_INFO *seckey_info;
 } SECKEY_PACKET;
 
 /* Public-Key Packet
@@ -338,12 +363,8 @@ typedef struct _pubkey_packet {
 	u8 algorithm;
 	MPI modulus_n;
 	MPI exponent;
+	SECKEY_INFO *seckey_info;
 } PUBKEY_PACKET;
-
-/* Secret-Subkey Packet */
-typedef struct _secsubkey_packet {
-	u8 *octets;
-} SECSUBKEY_PACKET;
 
 /* Compressed Data Packet */
 typedef struct _cdata_packet {
@@ -378,9 +399,10 @@ typedef struct _sedat_packet {
 	u8 *seipdata;
 } SEDAT_PACKET;
 
-/* Marker Packet */
+/* Marker Packet (MUST BE IGNORED WHEN RECEIVED) */
 typedef struct _marker_packet {
-	u8 *octets;
+	/* the three octets 0x50, 0x47, 0x50 (which spell "PGP" in UTF-8). */
+	u8 octets[3];
 } MARKER_PACKET;
 
 /* Literal Data Packet */
@@ -400,9 +422,27 @@ typedef struct _litdata_packet {
 	char *txt_name;
 } LITDATA_PACKET;
 
-/* Trust Packet */
+/*
+ * Trust Packet
+ *
+ * The local only ring trust packet which OpenPGP declares as
+ * implementation defined. GnuPG uses this to cache signature
+ * verification status and since 2.1.18 also to convey information
+ * about the origin of a key. Note that this packet is not part
+ * struct packet_struct because we use it only local in the packet
+ * parser and builder. (from GnuPG source)
+ */
 typedef struct _trust_packet {
-	u8 *octets;
+	unsigned trust_val;
+	unsigned sig_cache;
+	/* The subtype of this ring trust packet. */
+	unsigned char sub_type;
+	/* The origin of the key (KEYORG_*). */
+	unsigned char key_org;
+	/* The wall time the key was last updated. */
+	u32 key_update;
+	/* NULL or the URL of the source. */
+	char *src_url;
 } TRUST_PACKET;
 
 /* User ID Packet */
@@ -429,11 +469,11 @@ typedef struct _ui_packet {
 	} *prefs;
 	/* according to the self-signature */
 	u32 created;
-	/* From the ring trust packet.  */
+	/* From the ring trust packet. */
 	u32 key_update;
-	/* NULL or the URL of the last update origin.  */
+	/* NULL or the URL of the last update origin. */
 	char *update_url;
-	/* From the ring trust packet.  */
+	/* From the ring trust packet. */
 	u8 key_org;
 	u8 self_sig_version;
 	struct {
@@ -454,11 +494,6 @@ typedef struct _ui_packet {
 	 */
 	char *uid_txt;
 } UI_PACKET;
-
-/* Public-Subkey Packet */
-typedef struct _pubsubkey_packet {
-	u8 *octets;
-} PUBSUBKEY_PACKET;
 
 /* User Attribute Packet */
 typedef struct _uattr_packet {
