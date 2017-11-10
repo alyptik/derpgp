@@ -237,13 +237,13 @@ enum hash_algorithms {
 
 /* structures */
 
-/* Multi precision integers */
+/* Multi Precision Integers */
 typedef struct _mpi {
 	u16 length;
 	u8 *mdata;
 } MPI;
 
-/* String-to-key specifiers */
+/* String-to-Key Specifiers */
 typedef struct _s2k {
 	int s2k_mode;
 	u8 hash_algo;
@@ -357,7 +357,9 @@ typedef struct  _pubsubkey_packet {
 
 /* User Attribute Packet */
 typedef struct  _uattr_packet {
-	u8 *octets;
+	u8 attr_type;
+	u8 const *attr_data;
+	u32 len;
 } UATTR_PACKET;
 
 /* Sym. Encrypted and Integrity Protected Data Packet */
