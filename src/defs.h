@@ -281,7 +281,12 @@ typedef struct  _skesess_packet {
 
 /* One-Pass Signature Packet */
 typedef struct  _opsig_packet {
-	u8 *octets;
+	u32 keyid[2];
+	u8 sig_class;
+	u8 digest_algo;
+	u8 pubkey_algo;
+	/* if set then sign all of the data starting at the next packet */
+	u8 sign_next;
 } OPSIG_PACKET;
 
 /* Secret-Key Packet */
