@@ -439,7 +439,24 @@ typedef struct _uattr_packet {
 
 /* Sym. Encrypted and Integrity Protected Data Packet */
 typedef struct _seipdata_packet {
-	u8 *octets;
+	u32 len;
+	/*
+	 * the first block size bytes of data are random data
+	 * and the following two bytes are copies of the last two bytes
+	 * of random data.
+	 */
+	int extra_len;
+	/* whether new format is used */
+	u8 new_ctb;
+	/* indeterminate length (old) or partial body length headers (new) */
+	u8 is_partial;
+	/*
+	 * 0 is disabled; otherwise the MDC method used
+	 * currently only HASH_SHA1 is supported by GnuPG
+	 */
+	u8 mdc_method;
+	/* data to be decrypted */
+	u8 *seipdata;
 } SEIPDATA_PACKET;
 
 /* Modification Detection Code Packet */
