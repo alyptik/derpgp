@@ -220,13 +220,13 @@ enum hash_algorithms {
 	HASH_RSVRD0 = 0x04, HASH_RSVRD1 = 0x05,
 	HASH_RSVRD3 = 0x06, HASH_RSVRD4 = 0x07,
 	/* SHA256 [FIPS180] "SHA256" */
-	HASH_SHA256  = 0x08,
+	HASH_SHA256 = 0x08,
 	/* SHA384 [FIPS180] "SHA384" */
-	HASH_SHA384  = 0x09,
+	HASH_SHA384 = 0x09,
 	/* SHA512 [FIPS180] "SHA512" */
-	HASH_SHA512  = 0x0a,
+	HASH_SHA512 = 0x0a,
 	/* SHA224 [FIPS180] "SHA224" */
-	HASH_SHA224  = 0x0b,
+	HASH_SHA224 = 0x0b,
 	/* Private/Experimental algorithm */
 	HASH_PRIV0 = 0x64, HASH_PRIV1 = 0x65,
 	HASH_PRIV2 = 0x66, HASH_PRIV3 = 0x67,
@@ -236,6 +236,9 @@ enum hash_algorithms {
 };
 
 /* structures */
+
+/* forward declaration for user if packet */
+struct _uattr_packet;
 
 /* Multi Precision Integers */
 typedef struct _mpi {
@@ -248,7 +251,7 @@ typedef struct _s2k {
 	int s2k_mode;
 	u8 hash_algo;
 	u8 salt[8];
-	/* the serialized iteration count.  */
+	/* the serialized iteration count. */
 	u32 cnt;
 } S2K;
 
@@ -257,12 +260,12 @@ typedef struct _s2k {
  */
 
 /* Reserved - a packet tag MUST NOT have this value */
-typedef struct  _rsrvd_packet {
+typedef struct _rsrvd_packet {
 	u8 *octets;
 } RSRVD_PACKET;
 
 /* Public-Key Encrypted Session Key Packet */
-typedef struct  _pkesess_packet {
+typedef struct _pkesess_packet {
 	u32 keyid[2];
 	u8 version;
 	u8 pub_encryption_algo;
@@ -271,7 +274,7 @@ typedef struct  _pkesess_packet {
 } PKESESS_PACKET;
 
 /* Symmetric-Key Encrypted Session Key Packet */
-typedef struct  _skesess_packet {
+typedef struct _skesess_packet {
 	u8 version;
 	u8 cipher_algo;
 	S2K s2k;
@@ -280,7 +283,7 @@ typedef struct  _skesess_packet {
 } SKESESS_PACKET;
 
 /* One-Pass Signature Packet */
-typedef struct  _opsig_packet {
+typedef struct _opsig_packet {
 	u32 keyid[2];
 	u8 sig_class;
 	u8 digest_algo;
@@ -290,7 +293,7 @@ typedef struct  _opsig_packet {
 } OPSIG_PACKET;
 
 /* Secret-Key Packet */
-typedef struct  _seckey_packet {
+typedef struct _seckey_packet {
 	u8 string_to_key;
 	u8 sym_encryption_algo;
 	u8 *iv;
@@ -304,7 +307,7 @@ typedef struct  _seckey_packet {
 /* Public-Key Packet
  * FIXME: we only support V4 :>
  */
-typedef struct  _pubkey_packet {
+typedef struct _pubkey_packet {
 	/* NOTE: must be always 4 (or 3 in the future) */
 	u8 version;
 	/* posix timestamp */
@@ -316,73 +319,118 @@ typedef struct  _pubkey_packet {
 } PUBKEY_PACKET;
 
 /* Secret-Subkey Packet */
-typedef struct  _secsubkey_packet {
+typedef struct _secsubkey_packet {
 	u8 *octets;
 } SECSUBKEY_PACKET;
 
 /* Compressed Data Packet */
-typedef struct  _cdata_packet {
+typedef struct _cdata_packet {
 	u8 *octets;
 } CDATA_PACKET;
 
 /* Symmetrically Encrypted Data Packet */
-typedef struct  _sedat_packet {
+typedef struct _sedat_packet {
 	u8 *octets;
 } SEDAT_PACKET;
 
 /* Marker Packet */
-typedef struct  _marker_packet {
+typedef struct _marker_packet {
 	u8 *octets;
 } MARKER_PACKET;
 
 /* Literal Data Packet */
-typedef struct  _litdata_packet {
+typedef struct _litdata_packet {
 	u8 *octets;
 } LITDATA_PACKET;
 
 /* Trust Packet */
-typedef struct  _trust_packet {
+typedef struct _trust_packet {
 	u8 *octets;
 } TRUST_PACKET;
 
 /* User ID Packet */
-typedef struct  _ui_packet {
-	u8 *octets;
+typedef struct _ui_packet {
+	/* reference count */
+	int ref;
+	int name_len;
+	struct _uattr_packet *attributes;
+	int attr_cnt;
+	/* if not NULL then the packet is a user attribute */
+	u8 *attr_data;
+	long attr_len;
+	u8 *name_hash;
+	int help_key_usage;
+	u32 help_key_expire;
+	int help_full_count;
+	int help_marginal_count;
+	/* expires at this date or 0 if not at all */
+	u32 expire_date;
+	/* list of preferences (may be NULL)*/
+	struct {
+		u8 pref_type;
+		u8 pref_val;
+	} *prefs;
+	/* according to the self-signature */
+	u32 created;
+	/* From the ring trust packet.  */
+	u32 key_update;
+	/* NULL or the URL of the last update origin.  */
+	char *update_url;
+	/* From the ring trust packet.  */
+	u8 key_org;
+	u8 self_sig_version;
+	struct {
+		unsigned mdc : 1;
+		int ks_modify : 1;
+		unsigned compacted : 1;
+		/* 2 if set via the primary flag, 1 if calculated */
+		int primary : 2;
+		unsigned revoked : 1;
+		int expired : 1;
+	} flags;
+	/* NULL or the result of mailbox_from_userid. */
+	char *mbox;
+	/*
+	 * the text contained in the user id packet, which is normally the
+	 * name and email address of the key holder.
+	 * for convenience an extra Nul is always appended.
+	 */
+	char *uid_txt;
 } UI_PACKET;
 
 /* Public-Subkey Packet */
-typedef struct  _pubsubkey_packet {
+typedef struct _pubsubkey_packet {
 	u8 *octets;
 } PUBSUBKEY_PACKET;
 
 /* User Attribute Packet */
-typedef struct  _uattr_packet {
+typedef struct _uattr_packet {
 	u8 attr_type;
 	u8 const *attr_data;
 	u32 len;
 } UATTR_PACKET;
 
 /* Sym. Encrypted and Integrity Protected Data Packet */
-typedef struct  _seipdata_packet {
+typedef struct _seipdata_packet {
 	u8 *octets;
 } SEIPDATA_PACKET;
 
 /* Modification Detection Code Packet */
-typedef struct  _mdcode_packet {
+typedef struct _mdcode_packet {
 	u8 *octets;
 } MDCODE_PACKET;
 
 /* Private or Experimental Values */
-typedef struct  _prvt0_packet {
+typedef struct _prvt0_packet {
 	u8 *octets;
 } PRVT0_PACKET;
-typedef struct  _prvt1_packet {
+typedef struct _prvt1_packet {
 	u8 *octets;
 } PRVT1_PACKET;
-typedef struct  _prvt2_packet {
+typedef struct _prvt2_packet {
 	u8 *octets;
 } PRVT2_PACKET;
-typedef struct  _prvt3_packet {
+typedef struct _prvt3_packet {
 	u8 *octets;
 } PRVT3_PACKET;
 
