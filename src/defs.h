@@ -347,7 +347,12 @@ typedef struct _secsubkey_packet {
 
 /* Compressed Data Packet */
 typedef struct _cdata_packet {
-	u8 *octets;
+	u32 len;
+	/* whether new format is used */
+	u8 new_ctb;
+	u8 compr_algo;
+	/* data to be decompressed */
+	u8 *compr_data;
 } CDATA_PACKET;
 
 /* Symmetrically Encrypted Data Packet */
