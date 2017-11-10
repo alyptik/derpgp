@@ -246,13 +246,12 @@ enum hash_algorithms {
 
 /* structures */
 
-/* forward declarations for subkey packets */
+/* packet forward declarations */
+struct _uattr_packet;
 struct _seckey_packet;
 struct _pubkey_packet;
 typedef struct _seckey_packet SECSUBKEY_PACKET;
 typedef struct _pubkey_packet PUBSUBKEY_PACKET;
-/* forward declaration for user id packet */
-struct _uattr_packet;
 
 /* Multi Precision Integers */
 typedef struct _mpi {
