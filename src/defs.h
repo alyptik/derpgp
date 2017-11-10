@@ -248,10 +248,6 @@ enum hash_algorithms {
 
 /* packet forward declarations */
 struct _uattr_packet;
-struct _seckey_packet;
-struct _pubkey_packet;
-typedef struct _seckey_packet SECSUBKEY_PACKET;
-typedef struct _pubkey_packet PUBSUBKEY_PACKET;
 
 /* Multi Precision Integers */
 typedef struct _mpi {
@@ -351,6 +347,7 @@ typedef struct _seckey_packet {
 } SECKEY_PACKET;
 
 /* Public-Key Packet
+ *
  * FIXME: we only support V4 :>
  */
 typedef struct _pubkey_packet {
@@ -364,6 +361,9 @@ typedef struct _pubkey_packet {
 	MPI exponent;
 	SECKEY_INFO *seckey_info;
 } PUBKEY_PACKET;
+
+/* Secret-Subkey Packet */
+typedef struct _seckey_packet SECSUBKEY_PACKET;
 
 /* Compressed Data Packet */
 typedef struct _cdata_packet {
@@ -493,6 +493,9 @@ typedef struct _ui_packet {
 	 */
 	char *uid_txt;
 } UI_PACKET;
+
+/* Public-Subkey Packet */
+typedef struct _pubkey_packet PUBSUBKEY_PACKET;
 
 /* User Attribute Packet */
 typedef struct _uattr_packet {
