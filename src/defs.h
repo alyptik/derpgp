@@ -492,7 +492,7 @@ typedef struct _seipdata_packet {
 
 /* Modification Detection Code Packet */
 typedef struct _mdcode_packet {
-	u8 *octets;
+	u8 hash[20];
 } MDCODE_PACKET;
 
 /* Private or Experimental Values */
