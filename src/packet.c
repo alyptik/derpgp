@@ -45,6 +45,9 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 {
 	size_t mpi_offset = 0;
 
+	/* parse public key portion of packet */
+	mpi_offset += parse_pubkey_packet(packet);
+
 	/* one byte */
 	packet->seckey.string_to_key = packet->pdata[mpi_offset];
 	mpi_offset++;
@@ -56,6 +59,7 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	switch (packet->seckey.string_to_key) {
 	/* unencrypted */
 	case STR_RAW:
+		printf(YELLOW "%s\n" RST, s2k_types[packet->seckey.string_to_key]);
 		break;
 	/* s2k specifier */
 	case STR_S2K1: /* fallthrough */
