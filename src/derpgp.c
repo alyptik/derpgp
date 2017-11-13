@@ -7,6 +7,7 @@
  * See LICENSE.md file for copyright and license details.
  */
 
+#include "base64.h"
 #include "packet.h"
 #include "parse.h"
 #include <getopt.h>

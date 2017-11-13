@@ -8,6 +8,7 @@
  */
 
 #include "tap.h"
+#include "../src/base64.h"
 #include "../src/parse.h"
 
 int main(void)
@@ -18,7 +19,7 @@ int main(void)
 	int expected[] = {TAG_SECKEY, TAG_UID, TAG_SIG, TAG_SECSUBKEY, TAG_SIG};
 
 	/* start test block */
-	plan(9);
+	plan(11);
 
 	/* tests */
 	ok(read_pgp_bin(NULL, vec_bin, &pkts) > 0, "test binary parsing");
@@ -36,6 +37,8 @@ int main(void)
 	}
 	ok(parse_pgp_packets(&pkts) > 0, "test successful parser dispatch");
 	lives_ok({free_pgp_list(&pkts);}, "test successful packet list cleanup");
+	ok(memcmp("YQ==", base64((u8 []){'a', 0, 0}), 4) == 0, "test correct base64 encodinag");
+	ok(memcmp("abc", unbase64("YWJj"), 3) == 0, "test correct base64 decodinag");
 
 	/* return handled */
 	done_testing();
