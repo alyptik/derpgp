@@ -29,13 +29,13 @@ size_t parse_pubkey_packet(PGP_PACKET *restrict packet)
 	packet->pubkey.algorithm = packet->pdata[mpi_offset];
 	assert(packet->pubkey.algorithm == PUB_RSA);
 	mpi_offset++;
+	/* one mpi struct */
 	tmp.length = BETOH16(packet->pdata + mpi_offset);
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
-	/* one mpi struct */
 	packet->pubkey.modulus_n = tmp;
+	/* one mpi struct */
 	tmp = (MPI){0};
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &tmp);
-	/* one mpi struct */
 	packet->pubkey.exponent = tmp;
 
 	return mpi_offset;
