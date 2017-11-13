@@ -693,7 +693,7 @@ static const unsigned char unbase64_set[] = {
 };
 
 
-/* encode three octets in base64 */
+/* encode three octets as base64 */
 static inline char *base64(u8 const ra[static 3])
 {
 	static char ar[4];
@@ -707,7 +707,7 @@ static inline char *base64(u8 const ra[static 3])
 	return ar;
 }
 
-/* decode three base64 characters */
+/* decode four base64 characters */
 static inline u8 *unbase64(char const ar[static 4])
 {
 	static u8 ra[3];
