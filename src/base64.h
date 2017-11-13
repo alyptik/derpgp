@@ -64,7 +64,8 @@ static uint8_t const unbase64_set[] = {
  */
 static inline char *base64(uint8_t const ra[static 3])
 {
-	static char ar[4];
+	/* add a null terminator */
+	static char ar[5];
 
 	memset(ar, 0, sizeof ar);
 	ar[0] = base64_set[ra[0] >> 2];
@@ -75,10 +76,15 @@ static inline char *base64(uint8_t const ra[static 3])
 	return ar;
 }
 
-/* decode four base64 `chars` to three `uint8_t` octets */
+/*
+ * decode four base64 `chars` to three `uint8_t` octets
+ *
+ * (unused octets will be set to '\0')
+ */
 static inline uint8_t *unbase64(char const ar[static 4])
 {
-	static uint8_t ra[3];
+	/* add a null terminator */
+	static uint8_t ra[4];
 	size_t pad = 0;
 	/* safely use the the characters as indices */
 	uint8_t *safe = (uint8_t *)ar;
