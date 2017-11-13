@@ -8,6 +8,9 @@ vgcore*
 derpgp
 t/*
 !t/*.gpg
+!t/*.key
+!t/*.der
+!t/*.pem
 !t/*.c
 !t/*.h
 !t/README.md
