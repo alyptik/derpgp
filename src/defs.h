@@ -669,6 +669,77 @@ static char const *const s2k_types[256] = {
 	[STR_RAW] = "STR_RAW", [STR_S2K1] = "STR_S2K1", [STR_S2K2] = "STR_S2K2",
 };
 
+/* for base64 encoding */
+static char const base64_set[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+				 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+				 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+				 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+/* for base64 decoding (maps A => 0, B => 1, ...) */
+static const unsigned char unbase64_set[] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0,
+	0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+	15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 0, 0, 0, 0, 0, 0, 26, 27, 28,
+	29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+	49, 50, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+
+/* encode three octets in base64 */
+static inline char *base64(u8 const ra[static 3])
+{
+	static char ar[4];
+
+	memset(ar, 0, sizeof ar);
+	ar[0] = base64_set[ra[0] >> 2];
+	ar[1] = base64_set[(ra[0] << 4) | ra[1] >> 4];
+	ar[2] = ra[1] ? base64_set[(ra[1] << 2) | ra[2] >> 6] : '=';
+	ar[3] = ra[2] ? base64_set[ra[2]] : '=';
+
+	return ar;
+}
+
+/* decode three base64 characters */
+static inline u8 *unbase64(char const ar[static 4])
+{
+	static u8 ra[3];
+	size_t pad = 0;
+	/* safely use the the characters as indices */
+	u8 *safe = (u8 *)ar;
+	u8 str[] = {
+		unbase64_set[safe[0]], unbase64_set[safe[1]],
+		unbase64_set[safe[2]], unbase64_set[safe[3]]
+	};
+
+	memset(ra, 0, sizeof ra);
+	if (safe[3] == '=')
+		pad++;
+	if (safe[4] == '=')
+		pad++;
+
+	/* switch on padding character count */
+	switch (pad) {
+	case 0:
+		ra[2] = (str[2] << 6) | (str[3]);
+		/* fallthrough */
+	case 1:
+		ra[1] = (str[1] << 4) | (str[2] >> 2);
+		/* fallthrough */
+	default:
+		ra[0] = (str[0] << 2) | (str[1] >> 4);
+	}
+
+	return ra;
+}
+
 /* `malloc()` wrapper */
 static inline void xmalloc(void *restrict ptr, size_t sz, char const *msg)
 {
