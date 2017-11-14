@@ -13,7 +13,8 @@
 
 int main(void)
 {
-	char const *const vec_bin = "./t/4yyylmao.gpg";
+	/* char const *const vec_bin = "./t/4yyylmao.gpg"; */
+	char const *const vec_bin = "./t/nopasswd.gpg";
 	PGP_LIST pkts = {0};
 	/* by manually inspecting the key, we infer this is the actual data */
 	int expected[] = {TAG_SECKEY, TAG_UID, TAG_SIG, TAG_SECSUBKEY, TAG_SIG};
