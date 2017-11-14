@@ -42,6 +42,10 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	 * parse public key portion of packet
 	 */
 	size_t mpi_offset = 0;
+
+	/* allocate DER struct */
+	xmalloc(&packet->seckey.der, sizeof *packet->seckey.der, "parse_seckey_packet() der struct");
+
 	/* one byte */
 	packet->seckey.version = packet->pdata[mpi_offset];
 	assert(packet->seckey.version == 4);
@@ -55,8 +59,10 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	mpi_offset++;
 	/* one mpi struct */
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.modulus_n);
+	packet->seckey.der->modulus_n = packet->seckey.modulus_n;
 	/* one mpi struct */
 	mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.exponent_e);
+	packet->seckey.der->exponent_e = packet->seckey.exponent_e;
 
 	/*
 	 * parse secret key portion of the packet
@@ -74,17 +80,25 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	/* unencrypted */
 	case STR_RAW:
 		printf(YELLOW "%s " RST, s2k_types[packet->seckey.string_to_key]);
+
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.exponent_d);
+		packet->seckey.der->exponent_d = packet->seckey.exponent_d;
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.exponent_d.length);
+
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_p);
+		packet->seckey.der->prime_p = packet->seckey.prime_p;
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.prime_p.length);
+
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_q);
+		packet->seckey.der->prime_q = packet->seckey.prime_q;
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.prime_q.length);
+
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.mult_inverse);
+		packet->seckey.der->mult_inverse = packet->seckey.mult_inverse;
 		printf(RED "[MPI length: %#4x]\n" RST, packet->seckey.mult_inverse.length);
 		break;
 

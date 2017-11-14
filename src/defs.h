@@ -367,6 +367,7 @@ typedef struct _seckey_packet {
 	MPI mult_inverse;
 	u16 checksum;
 	SECKEY_INFO *seckey_info;
+	DER_RSA *der;
 } SECKEY_PACKET;
 
 /* Public-Key Packet
