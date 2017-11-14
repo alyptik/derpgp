@@ -56,6 +56,7 @@
 #define TAGBITS(DATA)		(((DATA) & 0x3c) >> 2)
 #define FMTBITS(DATA)		(((DATA) & (0x01 << 6)) >> 6)
 #define HPRINT(VAL)		printf(RED "[%#x] " RST, (VAL))
+#define MPIBYTES(LEN)		(((LEN) + 7) / 8)
 
 /* typedefs */
 

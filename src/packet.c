@@ -44,7 +44,8 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	size_t mpi_offset = 0;
 
 	/* allocate DER struct */
-	xmalloc(&packet->seckey.der, sizeof *packet->seckey.der, "parse_seckey_packet() der struct");
+	xcalloc(&packet->seckey.der, 1, sizeof *packet->seckey.der,
+			"parse_seckey_packet() der struct");
 
 	/* one byte */
 	packet->seckey.version = packet->pdata[mpi_offset];
@@ -100,6 +101,9 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.mult_inverse);
 		packet->seckey.der->mult_inverse = packet->seckey.mult_inverse;
 		printf(RED "[MPI length: %#4x]\n" RST, packet->seckey.mult_inverse.length);
+
+		/* encode the DER representation */
+		der_encode(packet);
 		break;
 
 	/* s2k specifier */
@@ -122,4 +126,50 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	/* TODO XXX: implement mpi seckey parsing */
 
 	return mpi_offset;
+}
+
+size_t der_encode(PGP_PACKET *restrict packet)
+{
+	u8 const header[2] = {0x30, 0x82};
+	size_t der_offset = 0;
+
+	/* get total length */
+	packet->seckey.der->der_len = 2;
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->modulus_n.length);
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->exponent_e.length);
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->exponent_d.length);
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->prime_p.length);
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->prime_q.length);
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->exponent_dP.length);
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->exponent_dQ.length);
+	packet->seckey.der->der_len += MPIBYTES(packet->seckey.der->mult_inverse.length);
+
+	/* allocate the DER data */
+	xcalloc(&packet->seckey.der->der_data, 1, packet->seckey.der->der_len,
+			"der_encode() xcalloc()");
+
+	/* copy the data */
+	printf("%zu\n", der_offset);
+	memcpy(packet->seckey.der->der_data + der_offset, header, sizeof header);
+	der_offset += 2;
+	memcpy(packet->seckey.der->der_data + der_offset,
+			packet->seckey.modulus_n.mdata, MPIBYTES(packet->seckey.der->modulus_n.length));
+	der_offset += MPIBYTES(packet->seckey.der->modulus_n.length);
+	memcpy(packet->seckey.der->der_data + der_offset,
+			packet->seckey.exponent_e.mdata, MPIBYTES(packet->seckey.der->exponent_e.length));
+	der_offset += MPIBYTES(packet->seckey.der->exponent_e.length);
+	memcpy(packet->seckey.der->der_data + der_offset,
+			packet->seckey.exponent_d.mdata, MPIBYTES(packet->seckey.der->exponent_d.length));
+	der_offset += MPIBYTES(packet->seckey.der->exponent_d.length);
+	memcpy(packet->seckey.der->der_data + der_offset,
+			packet->seckey.prime_p.mdata, MPIBYTES(packet->seckey.der->prime_p.length));
+	der_offset += MPIBYTES(packet->seckey.der->prime_p.length);
+	memcpy(packet->seckey.der->der_data + der_offset,
+			packet->seckey.prime_q.mdata, MPIBYTES(packet->seckey.der->prime_q.length));
+	der_offset += MPIBYTES(packet->seckey.der->prime_q.length);
+	memcpy(packet->seckey.der->der_data + der_offset,
+			packet->seckey.mult_inverse.mdata, MPIBYTES(packet->seckey.der->mult_inverse.length));
+	der_offset += MPIBYTES(packet->seckey.der->mult_inverse.length);
+
+	return der_offset;
 }
