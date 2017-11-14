@@ -24,7 +24,7 @@ static inline size_t read_mpi(u8 *restrict mpi_buf, MPI *restrict mpi_ptr)
 
 	mpi_ptr->length = BETOH16(mpi_buf);
 	/* convert bit-length to size in bytes */
-	byte_length = (mpi_ptr->length + 7) / 8;
+	byte_length = MPIBYTES(mpi_ptr->length);
 	xmalloc(&mpi_ptr->mdata, sizeof *mpi_ptr->mdata * byte_length, "read_mpi()");
 	memcpy(mpi_ptr->mdata, mpi_buf + 2, byte_length);
 	/*
