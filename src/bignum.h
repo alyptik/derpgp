@@ -14,11 +14,11 @@
 #include <stdlib.h>
 
 /* maximum length bignum */
-#define	MAXDIGITS	1024
+#define	MAXDIGITS 1024
 /* positive sign bit */
-#define PLUS		1
+#define PLUS 1
 /* negative sign bit */
-#define MINUS		-1
+#define MINUS (-1)
 
 typedef struct _bignum {
 	/* represent the number */
@@ -29,7 +29,7 @@ typedef struct _bignum {
 	int last_digit;
 } BIGNUM;
 
-void print_bignum(BIGNUM *n)
+static inline void print_bignum(BIGNUM *n)
 {
 	if (n->sign_bit == MINUS)
 		printf("- ");
@@ -38,7 +38,7 @@ void print_bignum(BIGNUM *n)
 	putchar('\n');
 }
 
-void int_to_bignum(int s, BIGNUM *n)
+static inline void int_to_bignum(int s, BIGNUM *n)
 {
 	/* counter */
 	int i;
@@ -65,21 +65,21 @@ void int_to_bignum(int s, BIGNUM *n)
 	if (s == 0) n->last_digit = 0;
 }
 
-void initialize_bignum(BIGNUM *n)
+static inline void initialize_bignum(BIGNUM *n)
 {
 	int_to_bignum(0,n);
 }
 
-int max(int a, int b)
+static inline int max(int a, int b)
 {
 	return (a > b) ? a : b;
 }
 
 /*
- * c = a + - / * b;
+ * c = a [operation] b
  */
 
-void zero_justify(BIGNUM *n)
+static inline void zero_justify(BIGNUM *n)
 {
 	while ((n->last_digit > 0) && (n->digits[n->last_digit] == 0))
 		n->last_digit --;
@@ -89,7 +89,7 @@ void zero_justify(BIGNUM *n)
 		n->sign_bit = PLUS;
 }
 
-int compare_bignum(BIGNUM *a, BIGNUM *b)
+static inline int compare_bignum(BIGNUM *a, BIGNUM *b)
 {
 	/* counter */
 	int i;
@@ -115,9 +115,9 @@ int compare_bignum(BIGNUM *a, BIGNUM *b)
 }
 
 /* forward declaration */
-void subtract_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c);
+static inline void subtract_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c);
 
-void add_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
+static inline void add_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 {
 	int carry;			/* carry digit */
 	int i;				/* counter */
@@ -149,7 +149,7 @@ void add_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 	zero_justify(c);
 }
 
-void subtract_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
+static inline void subtract_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 {
 	/* has anything been borrowed? */
 	int borrow;
@@ -191,7 +191,7 @@ void subtract_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 	zero_justify(c);
 }
 
-void digit_shift(BIGNUM *n, int d)		/* multiply n by 10^d */
+static inline void digit_shift(BIGNUM *n, int d)		/* multiply n by 10^d */
 {
 	int i;				/* counter */
 
@@ -205,7 +205,7 @@ void digit_shift(BIGNUM *n, int d)		/* multiply n by 10^d */
 	n->last_digit = n->last_digit + d;
 }
 
-void multiply_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
+static inline void multiply_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 {
 	BIGNUM row;			/* represent shifted row */
 	BIGNUM tmp;			/* placeholder BIGNUM */
@@ -229,7 +229,7 @@ void multiply_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 }
 
 
-void divide_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
+static inline void divide_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 {
 	/* represent shifted row */
 	BIGNUM row;
@@ -272,7 +272,7 @@ void divide_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 	b->sign_bit = bsign;
 }
 
-void modulo_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
+static inline void modulo_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 {
 	/* represent shifted row */
 	BIGNUM row;
