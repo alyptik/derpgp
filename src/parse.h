@@ -25,10 +25,10 @@ static inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 {
 	/* count number of non-NULL pointers */
 	size_t ret = !!packet->pubkey.modulus_n.mdata
-		+ !!packet->pubkey.exponent.mdata;
+		+ !!packet->pubkey.exponent_e.mdata;
 
 	free(packet->pubkey.modulus_n.mdata);
-	free(packet->pubkey.exponent.mdata);
+	free(packet->pubkey.exponent_e.mdata);
 
 	return ret;
 }
@@ -36,14 +36,20 @@ static inline size_t free_pubkey_packet(PGP_PACKET *restrict packet)
 static inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
 {
 	/* count number of non-NULL pointers */
-	size_t ret = !!packet->seckey.prime_q.mdata
+	size_t ret = !!packet->seckey.modulus_n.mdata
+		+ !!packet->seckey.exponent_e.mdata
+		+ !!packet->seckey.prime_q.mdata
 		+ !!packet->seckey.prime_p.mdata
 		+ !!packet->seckey.mult_inverse.mdata
 		+ !!packet->seckey.exponent_d.mdata;
+
+	free(packet->seckey.modulus_n.mdata);
+	free(packet->seckey.exponent_e.mdata);
 	free(packet->seckey.exponent_d.mdata);
 	free(packet->seckey.mult_inverse.mdata);
 	free(packet->seckey.prime_p.mdata);
 	free(packet->seckey.prime_q.mdata);
+
 	return ret;
 }
 

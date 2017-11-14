@@ -331,7 +331,16 @@ typedef struct _opsig_packet {
 } OPSIG_PACKET;
 
 /* Secret-Key Packet */
+struct _pubkey_packet;
 typedef struct _seckey_packet {
+	/* NOTE: must be always 4 (or 3 in the future) */
+	u8 version;
+	/* posix timestamp */
+	u32 timestamp;
+	/* 1 for RSA, 2 for DSA */
+	u8 algorithm;
+	MPI modulus_n;
+	MPI exponent_e;
 	u8 string_to_key;
 	u8 sym_encryption_algo;
 	u8 *iv;
@@ -355,7 +364,7 @@ typedef struct _pubkey_packet {
 	/* 1 for RSA, 2 for DSA */
 	u8 algorithm;
 	MPI modulus_n;
-	MPI exponent;
+	MPI exponent_e;
 	SECKEY_INFO *seckey_info;
 } PUBKEY_PACKET;
 
