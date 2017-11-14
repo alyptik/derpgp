@@ -119,7 +119,7 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 		break;
 	}
 
-	/* TODO XXX: implement mpi seckey parsing */
+	/* TODO XXX: implement mpi secret key parsing */
 
 	return mpi_offset;
 }
@@ -127,6 +127,7 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 size_t der_encode(PGP_PACKET *restrict packet)
 {
 	u8 const header[2] = {0x30, 0x82};
+	/* version header bytes `0x02, 0x01, 0x00` for INTEGER, SIZE 1, DATA */
 	packet->seckey.der.version[0] = 0x02;
 	packet->seckey.der.version[1] = 0x01;
 	packet->seckey.der.version[2] = 0x00;

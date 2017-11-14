@@ -267,7 +267,7 @@ typedef struct _s2k {
  *
  */
 typedef struct _der_rsa {
-	/* version header bytes `0x02, 0x01, 0x00` */
+	/* version header bytes `0x02, 0x01, 0x00` for INTEGER, SIZE 1, DATA */
 	u8 version[3];
 	MPI *modulus_n;
 	MPI *exponent_e;
