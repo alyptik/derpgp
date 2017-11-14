@@ -160,19 +160,19 @@ size_t der_encode(PGP_PACKET *restrict packet)
 			packet->seckey.der.version, sizeof packet->seckey.der.version);
 	der_offset += sizeof packet->seckey.der.version;
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.modulus_n.mdata, MPIBYTES(packet->seckey.der.modulus_n->length));
+			packet->seckey.der.modulus_n->mdata, MPIBYTES(packet->seckey.der.modulus_n->length));
 	der_offset += MPIBYTES(packet->seckey.der.modulus_n->length);
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.exponent_e.mdata, MPIBYTES(packet->seckey.der.exponent_e->length));
+			packet->seckey.der.exponent_e->mdata, MPIBYTES(packet->seckey.der.exponent_e->length));
 	der_offset += MPIBYTES(packet->seckey.der.exponent_e->length);
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.exponent_d.mdata, MPIBYTES(packet->seckey.der.exponent_d->length));
+			packet->seckey.der.exponent_d->mdata, MPIBYTES(packet->seckey.der.exponent_d->length));
 	der_offset += MPIBYTES(packet->seckey.der.exponent_d->length);
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.prime_p.mdata, MPIBYTES(packet->seckey.der.prime_p->length));
+			packet->seckey.der.prime_p->mdata, MPIBYTES(packet->seckey.der.prime_p->length));
 	der_offset += MPIBYTES(packet->seckey.der.prime_p->length);
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.prime_q.mdata, MPIBYTES(packet->seckey.der.prime_q->length));
+			packet->seckey.der.prime_q->mdata, MPIBYTES(packet->seckey.der.prime_q->length));
 	der_offset += MPIBYTES(packet->seckey.der.prime_q->length);
 	/*
 	 * TODO: implement dP and dQ calculation
@@ -185,7 +185,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	 * der_offset += MPIBYTES(packet->seckey.der.exponent_dQ->length);
 	 */
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.mult_inverse.mdata, MPIBYTES(packet->seckey.der.mult_inverse->length));
+			packet->seckey.der.mult_inverse->mdata, MPIBYTES(packet->seckey.der.mult_inverse->length));
 	der_offset += MPIBYTES(packet->seckey.der.mult_inverse->length);
 
 	return der_offset;
