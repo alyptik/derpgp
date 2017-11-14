@@ -191,11 +191,14 @@ static inline void subtract_bignum(BIGNUM *a, BIGNUM *b, BIGNUM *c)
 	zero_justify(c);
 }
 
-static inline void digit_shift(BIGNUM *n, int d)		/* multiply n by 10^d */
+/* multiply n by 10^d */
+static inline void digit_shift(BIGNUM *n, int d)
 {
-	int i;				/* counter */
+	/* counter */
+	int i;
 
-	if ((n->last_digit == 0) && (n->digits[0] == 0)) return;
+	if ((n->last_digit == 0) && (n->digits[0] == 0))
+		return;
 
 	for (i=n->last_digit; i>=0; i--)
 		n->digits[i+d] = n->digits[i];
