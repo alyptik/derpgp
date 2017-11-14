@@ -42,8 +42,7 @@ static inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
 		+ !!packet->seckey.prime_p.mdata
 		+ !!packet->seckey.mult_inverse.mdata
 		+ !!packet->seckey.exponent_d.mdata
-		+ !!packet->seckey.der->der_data
-		+ !!packet->seckey.der;
+		+ !!packet->seckey.der.der_data;
 
 	free(packet->seckey.modulus_n.mdata);
 	free(packet->seckey.exponent_e.mdata);
@@ -51,8 +50,7 @@ static inline size_t free_seckey_packet(PGP_PACKET *restrict packet)
 	free(packet->seckey.mult_inverse.mdata);
 	free(packet->seckey.prime_p.mdata);
 	free(packet->seckey.prime_q.mdata);
-	free(packet->seckey.der->der_data);
-	free(packet->seckey.der);
+	free(packet->seckey.der.der_data);
 	return ret;
 }
 

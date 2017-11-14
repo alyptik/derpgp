@@ -267,15 +267,16 @@ typedef struct _s2k {
  *
  */
 typedef struct _der_rsa {
-	u8 version;
-	MPI modulus_n;
-	MPI exponent_e;
-	MPI exponent_d;
-	MPI prime_p;
-	MPI prime_q;
-	MPI exponent_dP;
-	MPI exponent_dQ;
-	MPI mult_inverse;
+	/* version header bytes `0x02, 0x01, 0x00` */
+	u8 version[3];
+	MPI *modulus_n;
+	MPI *exponent_e;
+	MPI *exponent_d;
+	MPI *prime_p;
+	MPI *prime_q;
+	MPI *exponent_dP;
+	MPI *exponent_dQ;
+	MPI *mult_inverse;
 	u16 der_len;
 	u8 *der_data;
 } DER_RSA;
@@ -368,7 +369,7 @@ typedef struct _seckey_packet {
 	MPI mult_inverse;
 	u16 checksum;
 	SECKEY_INFO *seckey_info;
-	DER_RSA *der;
+	DER_RSA der;
 } SECKEY_PACKET;
 
 /* Public-Key Packet
