@@ -34,11 +34,13 @@ $(PARSE): %: %.o $(TAP).o $(OBJ)
 %.d %.o: %.c
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
-test check: $(TOBJ) $(TEST)
+test check: $(TOBJ) $(TEST) $(PARSE)
 	@echo "=========="
 	./t/testparse
 	@echo "=========="
 	./t/testpacket
+	@echo "=========="
+	./t/testpkcs
 	@echo "=========="
 clean:
 	@echo "cleaning"
