@@ -331,7 +331,6 @@ typedef struct _opsig_packet {
 } OPSIG_PACKET;
 
 /* Secret-Key Packet */
-struct _pubkey_packet;
 typedef struct _seckey_packet {
 	/* NOTE: must be always 4 (or 3 in the future) */
 	u8 version;
