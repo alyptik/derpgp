@@ -262,7 +262,7 @@ typedef struct _s2k {
 } S2K;
 
 /*
- * Distinguished Encoding Rules (DER) encoded RSA key
+ * Distinguished Encoding Rules (DER) Encoded RSA Key
  *
  */
 typedef struct _der_rsa {
@@ -275,7 +275,7 @@ typedef struct _der_rsa {
 	MPI exponent_dP;
 	MPI exponent_dQ;
 	MPI mult_inverse;
-	size_t der_len;
+	u16 der_len;
 	u8 *der_data;
 } DER_RSA;
 
