@@ -5,8 +5,6 @@
 ## Dependencies
 
 * none
-> **Optional:**
-> * none
 
 ## Usage
 ```bash
