@@ -48,9 +48,9 @@
 /* A KEYORG on a user id. */
 #define RING_TRUST_UID 2
 /* total MPI length bytes */
-#define DER_TOTAL_LEN 12
+#define DER_TOTAL_LEN 10
 /* including dP and dQ */
-/* #define DER_TOTAL_LEN 16 */
+/* #define DER_TOTAL_LEN 14 */
 
 /* macros */
 
@@ -256,8 +256,14 @@ enum hash_algorithms {
 
 /* Multi Precision Integers */
 typedef struct _mpi {
-	u8 be_len[2];
-	u16 length;
+	union {
+		u8 be_raw[2];
+		u16 be_len;
+	};
+	union {
+		u8 len_raw[2];
+		u16 length;
+	};
 	u8 *mdata;
 } MPI;
 
