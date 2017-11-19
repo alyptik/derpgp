@@ -29,7 +29,6 @@ static inline size_t read_mpi(u8 *restrict mpi_buf, MPI *restrict mpi_ptr)
 	byte_length = MPIBYTES(mpi_ptr->length);
 	mpi_ptr->be_len = BETOH16(TOBYTES(byte_length));
 	mpi_ptr->be_raw[1]++;
-	printf("%zu %#4x\n", byte_length, mpi_ptr->be_len);
 	xcalloc(&mpi_ptr->mdata, 1, sizeof *mpi_ptr->mdata * byte_length + 1, "read_mpi()");
 	memcpy(mpi_ptr->mdata + 1, mpi_buf + 2, byte_length);
 	/*
