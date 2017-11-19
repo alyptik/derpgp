@@ -129,7 +129,6 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	/* SEQUENCE, TWO LENGTH BYTES */
 	u8 asn_seq[2] = {0x30, 0x82};
 	u8 asn_int[2] = {0x02, 0x82};
-	u8 asn_small_int[2] = {0x02, 0x03};
 	union { u8 raw[2]; u16 len; } header;
 	/* version header bytes `0x02, 0x01, 0x00` for INTEGER, SIZE 1, DATA */
 	packet->seckey.der.version[0] = 0x02;
@@ -145,6 +144,72 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	packet->seckey.der.der_len += sizeof packet->seckey.der.version;
 	/* add space for MPI length bytes */
 	packet->seckey.der.der_len += DER_TOTAL_LEN;
+	packet->seckey.der.der_len += sizeof asn_int;
+	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.modulus_n->length) + 1;
+	packet->seckey.der.der_len += sizeof asn_int;
+	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.exponent_d->length);
+	header.len = packet->seckey.der.der_len;
+	header.len = BETOH16(header.raw);
+	header.raw[1] -= 4;
+
+	/* allocate the DER data octet string data */
+	xcalloc(&packet->seckey.der.der_data, 1, packet->seckey.der.der_len, "der_encode() xcalloc()");
+
+	/* header */
+	memcpy(packet->seckey.der.der_data + der_offset, asn_seq, sizeof asn_seq);
+	der_offset += sizeof asn_seq;
+	memcpy(packet->seckey.der.der_data + der_offset, header.raw, sizeof header.raw);
+	der_offset += sizeof header.raw;
+	/* version */
+	memcpy(packet->seckey.der.der_data + der_offset,
+			packet->seckey.der.version, sizeof packet->seckey.der.version);
+	der_offset += sizeof packet->seckey.der.version;
+
+	/* modulus_n */
+	memcpy(packet->seckey.der.der_data + der_offset, asn_int, sizeof asn_int);
+	der_offset += sizeof asn_int;
+	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.modulus_n->be_raw, 2);
+	der_offset += 2;
+	memcpy(packet->seckey.der.der_data + der_offset,
+			packet->seckey.der.modulus_n->mdata, MPIBYTES(packet->seckey.der.modulus_n->length) + 1);
+	der_offset += MPIBYTES(packet->seckey.der.modulus_n->length) + 1;
+
+	/* exponent_d */
+	memcpy(packet->seckey.der.der_data + der_offset, asn_int, sizeof asn_int);
+	der_offset += sizeof asn_int;
+	packet->seckey.der.exponent_d->be_raw[1]--;
+	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.exponent_d->be_raw, 2);
+	der_offset += 2;
+	memcpy(packet->seckey.der.der_data + der_offset,
+			packet->seckey.der.exponent_d->mdata + 1, MPIBYTES(packet->seckey.der.exponent_d->length));
+	der_offset += MPIBYTES(packet->seckey.der.exponent_d->length);
+
+	assert(packet->seckey.der.der_len == der_offset);
+
+	return der_offset;
+}
+
+size_t der_encode_alt(PGP_PACKET *restrict packet)
+{
+	/* SEQUENCE, TWO LENGTH BYTES */
+	u8 asn_seq[2] = {0x30, 0x82};
+	u8 asn_int[2] = {0x02, 0x82};
+	u8 asn_small_int[2] = {0x02, 0x03};
+	union { u8 raw[2]; u16 len; } header;
+	/* version header bytes `0x02, 0x01, 0x00` for INTEGER, SIZE 1, DATA */
+	packet->seckey.der.version[0] = 0x02;
+	packet->seckey.der.version[1] = 0x01;
+	packet->seckey.der.version[2] = 0x00;
+	size_t der_offset = 0;
+
+	/* get total length */
+
+	packet->seckey.der.der_len = 0;
+	packet->seckey.der.der_len += sizeof asn_seq;
+	packet->seckey.der.der_len += sizeof header.raw;
+	packet->seckey.der.der_len += sizeof packet->seckey.der.version;
+	/* add space for MPI length bytes */
+	packet->seckey.der.der_len += DER_TOTAL_LEN_ALT;
 	packet->seckey.der.der_len += sizeof asn_int;
 	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.modulus_n->length) + 1;
 	packet->seckey.der.der_len += sizeof asn_small_int;

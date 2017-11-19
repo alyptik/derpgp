@@ -17,6 +17,7 @@
 size_t parse_pubkey_packet(PGP_PACKET *restrict packet);
 size_t parse_seckey_packet(PGP_PACKET *restrict packet);
 size_t der_encode(PGP_PACKET *restrict packet);
+size_t der_encode_alt(PGP_PACKET *restrict packet);
 
 static inline size_t read_mpi(u8 *restrict mpi_buf, MPI *restrict mpi_ptr)
 {
