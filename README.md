@@ -4,7 +4,10 @@
 
 ## Dependencies
 
-* none
+* None.
+
+> **Optional:**
+> * Python2 (Bignum Unit Tests)
 
 ## Usage
 ```bash
