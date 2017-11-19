@@ -1,4 +1,4 @@
-# derpgp - A simple GnuPG to PKCS#8 conversion tool.
+# derpgp - A simple GnuPG to PKCS#1/PKCS#8 conversion tool.
 
 *WIP*
 
