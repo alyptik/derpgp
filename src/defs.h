@@ -281,7 +281,7 @@ typedef struct _s2k {
  * Distinguished Encoding Rules (DER) Encoded RSA Key
  *
  */
-typedef struct _der_rsa {
+typedef struct _rsa {
 	/* version header bytes `0x02, 0x01, 0x00` for INTEGER, SIZE 1, DATA */
 	u8 version[3];
 	MPI *modulus_n;
@@ -294,7 +294,7 @@ typedef struct _der_rsa {
 	MPI *mult_inverse;
 	u16 der_len;
 	u8 *der_data;
-} DER_RSA;
+} RSA;
 
 /* Secret-Key Info */
 typedef struct _seckey_info {
@@ -384,7 +384,7 @@ typedef struct _seckey_packet {
 	MPI mult_inverse;
 	u16 checksum;
 	SECKEY_INFO *seckey_info;
-	DER_RSA der;
+	RSA rsa;
 } SECKEY_PACKET;
 
 /* Public-Key Packet
