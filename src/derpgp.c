@@ -111,13 +111,8 @@ int main(int argc, char **argv)
 		/* debug output */
 		if (cur_tag == TAG_SECSUBKEY) {
 			/* write to `-o` file if specified */
-			if (out_file) {
-				fwrite(pkts.list[i].seckey.der.der_data, 1, pkts.list[i].seckey.der.der_len, out_file);
-				continue;
-			}
-
-			/* else write to stderr */
-			fwrite(pkts.list[i].seckey.der.der_data, 1, pkts.list[i].seckey.der.der_len, stderr);
+			fwrite(pkts.list[i].seckey.rsa.der_data, 1,
+					pkts.list[i].seckey.rsa.der_len, FALLBACK(out_file, stderr));
 		}
 	}
 
