@@ -47,7 +47,7 @@ before_install:
                 | sudo tee /usr/include/linux/memfd.h
 
 script:
-    - make -B all
+    - make -B
     - make debug
     - make clean
     - make install
