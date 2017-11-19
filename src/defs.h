@@ -51,7 +51,7 @@
 #define DER_TOTAL_LEN 4
 #define DER_TOTAL_LEN_ALT 10
 /* including dP and dQ */
-/* #define DER_TOTAL_LEN_AKT 14 */
+/* #define DER_TOTAL_LEN_ALT 14 */
 
 /* macros */
 
