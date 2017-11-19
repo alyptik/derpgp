@@ -23,7 +23,8 @@ MKALL = $(MKCFG) $(DEP)
 OBJ = $(SRC:.c=.o)
 TOBJ = $(TSRC:.c=.o)
 DEP = $(SRC:.c=.d) $(TSRC:.c=.d)
-TEST = $(filter-out $(PARSE),$(filter-out $(TAP),$(TSRC:.c=)))
+BNOBJ = $(BNTEST:=.o)
+TEST = $(filter-out $(BNTEST),$(filter-out $(PARSE),$(filter-out $(TAP),$(TSRC:.c=))))
 UTEST = $(filter-out src/$(TARGET).o,$(SRC:.c=.o))
 SRC := $(wildcard src/*.c)
 TSRC := $(wildcard t/*.c)
@@ -34,6 +35,7 @@ LIBS :=
 TARGET := derpgp
 TAP := t/tap
 PARSE := t/testparse
+BNTEST := t/factorial t/golden t/load_cmp t/randomized t/rsa t/test_div_algo
 BINDIR := bin
 MANDIR := share/man/man1
 MKALL += Makefile debug.mk

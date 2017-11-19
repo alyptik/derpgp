@@ -93,44 +93,44 @@ enum { SMALLER = -1, EQUAL = 0, LARGER = 1 };
 
 
 /* Initialization functions: */
-void bignum_init(struct bn* n);
-void bignum_from_int(struct bn* n, DTYPE_TMP i);
-int  bignum_to_int(struct bn* n);
-void bignum_from_string(struct bn* n, char* str, int nbytes);
-void bignum_to_string(struct bn* n, char* str, int maxsize);
+static inline void bignum_init(struct bn* n);
+static inline void bignum_from_int(struct bn* n, DTYPE_TMP i);
+static inline int  bignum_to_int(struct bn* n);
+static inline void bignum_from_string(struct bn* n, char* str, int nbytes);
+static inline void bignum_to_string(struct bn* n, char* str, int maxsize);
 
 /* Basic arithmetic operations: */
-void bignum_add(struct bn* a, struct bn* b, struct bn* c); /* c = a + b */
-void bignum_sub(struct bn* a, struct bn* b, struct bn* c); /* c = a - b */
-void bignum_mul(struct bn* a, struct bn* b, struct bn* c); /* c = a * b */
-void bignum_div(struct bn* a, struct bn* b, struct bn* c); /* c = a / b */
-void bignum_mod(struct bn* a, struct bn* b, struct bn* c); /* c = a % b */
+static inline void bignum_add(struct bn* a, struct bn* b, struct bn* c); /* c = a + b */
+static inline void bignum_sub(struct bn* a, struct bn* b, struct bn* c); /* c = a - b */
+static inline void bignum_mul(struct bn* a, struct bn* b, struct bn* c); /* c = a * b */
+static inline void bignum_div(struct bn* a, struct bn* b, struct bn* c); /* c = a / b */
+static inline void bignum_mod(struct bn* a, struct bn* b, struct bn* c); /* c = a % b */
 
 /* Bitwise operations: */
-void bignum_and(struct bn* a, struct bn* b, struct bn* c); /* c = a & b */
-void bignum_or(struct bn* a, struct bn* b, struct bn* c);  /* c = a | b */
-void bignum_xor(struct bn* a, struct bn* b, struct bn* c); /* c = a ^ b */
-void bignum_lshift(struct bn* a, struct bn* b, int nbits); /* b = a << nbits */
-void bignum_rshift(struct bn* a, struct bn* b, int nbits); /* b = a >> nbits */
+static inline void bignum_and(struct bn* a, struct bn* b, struct bn* c); /* c = a & b */
+static inline void bignum_or(struct bn* a, struct bn* b, struct bn* c);  /* c = a | b */
+static inline void bignum_xor(struct bn* a, struct bn* b, struct bn* c); /* c = a ^ b */
+static inline void bignum_lshift(struct bn* a, struct bn* b, int nbits); /* b = a << nbits */
+static inline void bignum_rshift(struct bn* a, struct bn* b, int nbits); /* b = a >> nbits */
 
 /* Special operators and comparison */
-int  bignum_cmp(struct bn* a, struct bn* b);               /* Compare: returns LARGER, EQUAL or SMALLER */
-int  bignum_is_zero(struct bn* n);                         /* For comparison with zero */
-void bignum_inc(struct bn* n);                             /* Increment: add one to n */
-void bignum_dec(struct bn* n);                             /* Decrement: subtract one from n */
-void bignum_pow(struct bn* a, struct bn* b, struct bn* c); /* Calculate a^b -- e.g. 2^10 => 1024 */
-void bignum_assign(struct bn* dst, struct bn* src);        /* Copy src into dst -- dst := src */
+static inline int  bignum_cmp(struct bn* a, struct bn* b);               /* Compare: returns LARGER, EQUAL or SMALLER */
+static inline int  bignum_is_zero(struct bn* n);                         /* For comparison with zero */
+static inline void bignum_inc(struct bn* n);                             /* Increment: add one to n */
+static inline void bignum_dec(struct bn* n);                             /* Decrement: subtract one from n */
+static inline void bignum_pow(struct bn* a, struct bn* b, struct bn* c); /* Calculate a^b -- e.g. 2^10 => 1024 */
+static inline void bignum_assign(struct bn* dst, struct bn* src);        /* Copy src into dst -- dst := src */
 
 
 /* Functions for shifting number in-place. */
-static void _lshift_one_bit(struct bn* a);
-static void _rshift_one_bit(struct bn* a);
-static void _lshift_word(struct bn* a, int nwords);
-static void _rshift_word(struct bn* a, int nwords);
+static inline void _lshift_one_bit(struct bn* a);
+static inline void _rshift_one_bit(struct bn* a);
+static inline void _lshift_word(struct bn* a, int nwords);
+static inline void _rshift_word(struct bn* a, int nwords);
 
 
 /* Public / Exported functions. */
-void bignum_init(struct bn* n)
+static inline void bignum_init(struct bn* n)
 {
   require(n, "n is null");
 
@@ -142,7 +142,7 @@ void bignum_init(struct bn* n)
 }
 
 
-void bignum_from_int(struct bn* n, DTYPE_TMP i)
+static inline void bignum_from_int(struct bn* n, DTYPE_TMP i)
 {
   require(n, "n is null");
 
@@ -168,7 +168,7 @@ void bignum_from_int(struct bn* n, DTYPE_TMP i)
 }
 
 
-int bignum_to_int(struct bn* n)
+static inline int bignum_to_int(struct bn* n)
 {
   require(n, "n is null");
 
@@ -191,7 +191,7 @@ int bignum_to_int(struct bn* n)
 }
 
 
-void bignum_from_string(struct bn* n, char* str, int nbytes)
+static inline void bignum_from_string(struct bn* n, char* str, int nbytes)
 {
   require(n, "n is null");
   require(str, "str is null");
@@ -253,7 +253,7 @@ void bignum_to_string(struct bn* n, char* str, int nbytes)
 }
 
 
-void bignum_dec(struct bn* n)
+static inline void bignum_dec(struct bn* n)
 {
   require(n, "n is null");
 
@@ -297,7 +297,7 @@ void bignum_inc(struct bn* n)
 }
 
 
-void bignum_add(struct bn* a, struct bn* b, struct bn* c)
+static inline void bignum_add(struct bn* a, struct bn* b, struct bn* c)
 {
   require(a, "a is null");
   require(b, "b is null");
@@ -337,7 +337,7 @@ void bignum_sub(struct bn* a, struct bn* b, struct bn* c)
 }
 
 
-void bignum_mul(struct bn* a, struct bn* b, struct bn* c)
+static inline void bignum_mul(struct bn* a, struct bn* b, struct bn* c)
 {
   require(a, "a is null");
   require(b, "b is null");
@@ -405,7 +405,7 @@ void bignum_div(struct bn* a, struct bn* b, struct bn* c)
 }
 
 
-void bignum_lshift(struct bn* a, struct bn* b, int nbits)
+static inline void bignum_lshift(struct bn* a, struct bn* b, int nbits)
 {
   require(a, "a is null");
   require(b, "b is null");
@@ -461,7 +461,7 @@ void bignum_rshift(struct bn* a, struct bn* b, int nbits)
 }
 
 
-void bignum_mod(struct bn* a, struct bn* b, struct bn* c)
+static inline void bignum_mod(struct bn* a, struct bn* b, struct bn* c)
 {
   /*
     mod(a,b) = a - ((a / b) * b)
@@ -500,7 +500,7 @@ void bignum_and(struct bn* a, struct bn* b, struct bn* c)
 }
 
 
-void bignum_or(struct bn* a, struct bn* b, struct bn* c)
+static inline void bignum_or(struct bn* a, struct bn* b, struct bn* c)
 {
   require(a, "a is null");
   require(b, "b is null");
@@ -528,7 +528,7 @@ void bignum_xor(struct bn* a, struct bn* b, struct bn* c)
 }
 
 
-int bignum_cmp(struct bn* a, struct bn* b)
+static inline int bignum_cmp(struct bn* a, struct bn* b)
 {
   require(a, "a is null");
   require(b, "b is null");
@@ -569,7 +569,7 @@ int bignum_is_zero(struct bn* n)
 }
 
 
-void bignum_pow(struct bn* a, struct bn* b, struct bn* c)
+static inline void bignum_pow(struct bn* a, struct bn* b, struct bn* c)
 {
   require(a, "a is null");
   require(b, "b is null");
@@ -609,7 +609,7 @@ void bignum_pow(struct bn* a, struct bn* b, struct bn* c)
 }
 
 
-void bignum_assign(struct bn* dst, struct bn* src)
+static inline void bignum_assign(struct bn* dst, struct bn* src)
 {
   require(dst, "dst is null");
   require(src, "src is null");
@@ -623,7 +623,7 @@ void bignum_assign(struct bn* dst, struct bn* src)
 
 
 /* Private / Static functions. */
-static void _rshift_word(struct bn* a, int nwords)
+static inline void _rshift_word(struct bn* a, int nwords)
 {
   /* Naive method: */
   require(a, "a is null");
@@ -641,7 +641,7 @@ static void _rshift_word(struct bn* a, int nwords)
 }
 
 
-static void _lshift_word(struct bn* a, int nwords)
+static inline void _lshift_word(struct bn* a, int nwords)
 {
   require(a, "a is null");
   require(nwords >= 0, "no negative shifts");
@@ -660,7 +660,7 @@ static void _lshift_word(struct bn* a, int nwords)
 }
 
 
-static void _lshift_one_bit(struct bn* a)
+static inline void _lshift_one_bit(struct bn* a)
 {
   require(a, "a is null");
 
@@ -673,7 +673,7 @@ static void _lshift_one_bit(struct bn* a)
 }
 
 
-static void _rshift_one_bit(struct bn* a)
+static inline void _rshift_one_bit(struct bn* a)
 {
   require(a, "a is null");
 
