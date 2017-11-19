@@ -146,7 +146,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	/* add space for MPI length bytes */
 	packet->seckey.der.der_len += DER_TOTAL_LEN;
 	packet->seckey.der.der_len += sizeof asn_int;
-	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.modulus_n->length);
+	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.modulus_n->length) + 1;
 	packet->seckey.der.der_len += sizeof asn_small_int;
 	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.exponent_e->length);
 	packet->seckey.der.der_len += sizeof asn_int;
@@ -189,8 +189,8 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.modulus_n->be_raw, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.der.modulus_n->mdata, MPIBYTES(packet->seckey.der.modulus_n->length));
-	der_offset += MPIBYTES(packet->seckey.der.modulus_n->length);
+			packet->seckey.der.modulus_n->mdata, MPIBYTES(packet->seckey.der.modulus_n->length) + 1);
+	der_offset += MPIBYTES(packet->seckey.der.modulus_n->length) + 1;
 
 	/* exponent_e */
 	memcpy(packet->seckey.der.der_data + der_offset, asn_small_int, sizeof asn_small_int);
@@ -198,7 +198,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	/* memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.exponent_e->be_raw, 1); */
 	/* der_offset += 1; */
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.der.exponent_e->mdata, MPIBYTES(packet->seckey.der.exponent_e->length));
+			packet->seckey.der.exponent_e->mdata + 1, MPIBYTES(packet->seckey.der.exponent_e->length));
 	der_offset += MPIBYTES(packet->seckey.der.exponent_e->length);
 	/* exponent_d */
 	memcpy(packet->seckey.der.der_data + der_offset, asn_int, sizeof asn_int);
@@ -206,7 +206,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.exponent_d->be_raw, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
-			packet->seckey.der.exponent_d->mdata, MPIBYTES(packet->seckey.der.exponent_d->length));
+			packet->seckey.der.exponent_d->mdata + 1, MPIBYTES(packet->seckey.der.exponent_d->length));
 	der_offset += MPIBYTES(packet->seckey.der.exponent_d->length);
 
 	/* prime_p */
