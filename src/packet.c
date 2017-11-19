@@ -128,7 +128,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 {
 	/* SEQUENCE, TWO LENGTH BYTES */
 	u8 asn_seq[2] = {0x30, 0x82};
-	u8 asn_int[2] = {0x02, 0x82};
+	u8 asn_int[2] = {0x02, 0x81};
 	u8 asn_small_int[2] = {0x02, 0x03};
 	union { u8 raw[2]; u16 len; } header;
 	/* version header bytes `0x02, 0x01, 0x00` for INTEGER, SIZE 1, DATA */
