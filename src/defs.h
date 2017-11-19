@@ -749,7 +749,7 @@ static inline void xfclose(FILE **restrict out_file)
 {
 	if (!out_file || !*out_file)
 		return;
-	if (!fclose(*out_file))
+	if (fclose(*out_file) == EOF)
 		WARN("xfclose()");
 }
 
