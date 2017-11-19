@@ -168,8 +168,6 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	header.len = packet->seckey.der.der_len;
 	header.len = BETOH16(header.raw);
 	header.raw[1] -= 4;
-	/* printf("%#x\n", header.len); */
-	printf("%#x %#x\n", header.len, *(u16 *)header.raw);
 
 	/* allocate the DER data octet string data */
 	xcalloc(&packet->seckey.der.der_data, 1, packet->seckey.der.der_len, "der_encode() xcalloc()");
