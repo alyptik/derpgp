@@ -7,6 +7,7 @@ vgcore*
 # Binaries
 derpgp
 t/*
+!t/*.asc
 !t/*.gpg
 !t/*.key
 !t/*.der
