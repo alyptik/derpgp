@@ -15,6 +15,7 @@ t/*
 !t/*.h
 !t/README.md
 !t/COPYING
+gnupg/
 
 # gpghome
 gpghome/*
