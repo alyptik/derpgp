@@ -68,7 +68,8 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring, FILE **restric
 
 		/* output file flag */
 		case 'o':
-			if (!out_file)
+			/* check for already opened file */
+			if (*out_file)
 				break;
 			*out_file = xfopen(optarg, "wb");
 			break;
@@ -107,6 +108,16 @@ int main(int argc, char **argv)
 		int cur_tag = TAGBITS(pkts.list[i].pheader);
 		HPRINT(pkts.list[i].pheader);
 		printf(YELLOW "%-10s\n" RST, packet_types[cur_tag]);
+		/* debug output */
+		if (cur_tag == TAG_SECSUBKEY) {
+			if (out_file) {
+				printf("%zu\n", fwrite(pkts.list[i].seckey.der.der_data, 1,
+							pkts.list[i].seckey.der.der_len, out_file));
+			} else {
+				printf("%zu\n", fwrite(pkts.list[i].seckey.der.der_data, 1,
+							pkts.list[i].seckey.der.der_len, stderr));
+			}
+		}
 	}
 
 	/* cleanup */
