@@ -153,53 +153,68 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	xcalloc(&packet->seckey.der.der_data, 1, packet->seckey.der.der_len + 16,
 			"der_encode() xcalloc()");
 
-	/* copy the data */
+	/* header */
 	memcpy(packet->seckey.der.der_data + der_offset, header, sizeof header);
 	der_offset += sizeof header;
+	/* version */
 	memcpy(packet->seckey.der.der_data + der_offset,
 			packet->seckey.der.version, sizeof packet->seckey.der.version);
 	der_offset += sizeof packet->seckey.der.version;
+
+	/* modulus_n */
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.modulus_n->be_len, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
 			packet->seckey.der.modulus_n->mdata, MPIBYTES(packet->seckey.der.modulus_n->length));
 	der_offset += MPIBYTES(packet->seckey.der.modulus_n->length);
+
+	/* exponent_e */
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.exponent_e->be_len, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
 			packet->seckey.der.exponent_e->mdata, MPIBYTES(packet->seckey.der.exponent_e->length));
 	der_offset += MPIBYTES(packet->seckey.der.exponent_e->length);
+	/* exponent_d */
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.exponent_d->be_len, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
 			packet->seckey.der.exponent_d->mdata, MPIBYTES(packet->seckey.der.exponent_d->length));
 	der_offset += MPIBYTES(packet->seckey.der.exponent_d->length);
+
+	/* prime_p */
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.prime_p->be_len, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
 			packet->seckey.der.prime_p->mdata, MPIBYTES(packet->seckey.der.prime_p->length));
 	der_offset += MPIBYTES(packet->seckey.der.prime_p->length);
+	/* prime_q */
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.prime_q->be_len, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
 			packet->seckey.der.prime_q->mdata, MPIBYTES(packet->seckey.der.prime_q->length));
 	der_offset += MPIBYTES(packet->seckey.der.prime_q->length);
+
 	/*
 	 * TODO: implement dP and dQ calculation
-	 *
 	 */
+	/* exponent_dP */
 	/*
 	 * memcpy(packet->seckey.der.der_data + der_offset, HTOBE16(packet->seckey.der.exponent_dP->length), 2);
 	 * der_offset += 2;
 	 * memcpy(packet->seckey.der.der_data + der_offset,
 	 *                 packet->seckey.exponent_dP.mdata, MPIBYTES(packet->seckey.der.exponent_dP->length));
 	 * der_offset += MPIBYTES(packet->seckey.der.exponent_dP->length);
+	 */
+	/* exponent_dQ */
+	/*
 	 * memcpy(packet->seckey.der.der_data + der_offset, HTOBE16(packet->seckey.der.exponent_dQ->length), 2);
 	 * der_offset += 2;
 	 * memcpy(packet->seckey.der.der_data + der_offset,
 	 *                 packet->seckey.exponent_dQ.mdata, MPIBYTES(packet->seckey.der.exponent_dQ->length));
 	 * der_offset += MPIBYTES(packet->seckey.der.exponent_dQ->length);
 	 */
+
+	/* mult_inverse */
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.mult_inverse->be_len, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
