@@ -167,6 +167,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.mult_inverse->length);
 	header.len = packet->seckey.der.der_len;
 	header.len = BETOH16(header.raw);
+	header.raw[1] -= 4;
 	/* printf("%#x\n", header.len); */
 	printf("%#x %#x\n", header.len, *(u16 *)header.raw);
 
@@ -203,6 +204,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	/* exponent_d */
 	memcpy(packet->seckey.der.der_data + der_offset, asn_int, sizeof asn_int);
 	der_offset += sizeof asn_int;
+	packet->seckey.der.exponent_d->be_raw[1]--;
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.exponent_d->be_raw, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
@@ -212,6 +214,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	/* prime_p */
 	memcpy(packet->seckey.der.der_data + der_offset, asn_int, sizeof asn_int);
 	der_offset += sizeof asn_int;
+	packet->seckey.der.prime_p->be_raw[1]--;
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.prime_p->be_raw, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
@@ -220,6 +223,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	/* prime_q */
 	memcpy(packet->seckey.der.der_data + der_offset, asn_int, sizeof asn_int);
 	der_offset += sizeof asn_int;
+	packet->seckey.der.prime_q->be_raw[1]--;
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.prime_q->be_raw, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
@@ -253,6 +257,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	/* mult_inverse */
 	memcpy(packet->seckey.der.der_data + der_offset, asn_int, sizeof asn_int);
 	der_offset += sizeof asn_int;
+	packet->seckey.der.mult_inverse->be_raw[1]--;
 	memcpy(packet->seckey.der.der_data + der_offset, packet->seckey.der.mult_inverse->be_raw, 2);
 	der_offset += 2;
 	memcpy(packet->seckey.der.der_data + der_offset,
