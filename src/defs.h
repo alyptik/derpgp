@@ -252,6 +252,7 @@ enum hash_algorithms {
 
 /* Multi Precision Integers */
 typedef struct _mpi {
+	u8 be_len[2];
 	u16 length;
 	u8 *mdata;
 } MPI;
