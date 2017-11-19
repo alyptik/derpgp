@@ -192,7 +192,6 @@ size_t der_encode(PGP_PACKET *restrict packet)
 			packet->seckey.der.modulus_n->mdata, MPIBYTES(packet->seckey.der.modulus_n->length));
 	der_offset += MPIBYTES(packet->seckey.der.modulus_n->length);
 
-
 	printf("%d\n",  MPIBYTES(packet->seckey.der.exponent_e->length));
 	/* exponent_e */
 	memcpy(packet->seckey.der.der_data + der_offset, asn_small_int, sizeof asn_small_int);
