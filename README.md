@@ -1,6 +1,6 @@
 # derpgp - A simple GnuPG to PKCS#8 conversion tool.
 
-**WIP**
+*WIP*
 
 ## Dependencies
 
