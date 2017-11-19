@@ -99,7 +99,7 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 		printf(RED "[MPI length: %#4x]\n" RST, packet->seckey.mult_inverse.length);
 
 		/* encode the DER representation */
-		der_encode(packet);
+		der_encode_alt(packet);
 		break;
 
 	/* s2k specifier */
