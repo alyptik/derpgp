@@ -47,6 +47,10 @@
 #define RING_TRUST_KEY 1
 /* A KEYORG on a user id. */
 #define RING_TRUST_UID 2
+/* total MPI length bytes */
+#define DER_TOTAL_LEN 12
+/* including dP and dQ */
+/* #define DER_TOTAL_LEN 16 */
 
 /* macros */
 

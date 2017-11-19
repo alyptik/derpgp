@@ -134,6 +134,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	size_t der_offset = 0;
 
 	/* get total length */
+
 	packet->seckey.der.der_len = sizeof header;
 	packet->seckey.der.der_len += sizeof packet->seckey.der.version;
 	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.modulus_n->length);
@@ -148,10 +149,11 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	 * packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.exponent_dQ->length);
 	 */
 	packet->seckey.der.der_len += MPIBYTES(packet->seckey.der.mult_inverse->length);
+	/* add space for MPI length bytes */
+	packet->seckey.der.der_len += DER_TOTAL_LEN;
 
-	/* allocate the DER data octet string data + space for MPI lengths */
-	xcalloc(&packet->seckey.der.der_data, 1, packet->seckey.der.der_len + 16,
-			"der_encode() xcalloc()");
+	/* allocate the DER data octet string data */
+	xcalloc(&packet->seckey.der.der_data, 1, packet->seckey.der.der_len, "der_encode() xcalloc()");
 
 	/* header */
 	memcpy(packet->seckey.der.der_data + der_offset, header, sizeof header);
@@ -220,6 +222,8 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	memcpy(packet->seckey.der.der_data + der_offset,
 			packet->seckey.der.mult_inverse->mdata, MPIBYTES(packet->seckey.der.mult_inverse->length));
 	der_offset += MPIBYTES(packet->seckey.der.mult_inverse->length);
+
+	assert(packet->seckey.der.der_len == der_offset);
 
 	return der_offset;
 }
