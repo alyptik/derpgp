@@ -1,12 +1,12 @@
-# derpgp - derpgp
+# derpgp - A simple GnuPG to PKCS#8 conversion tool.
 
-derpgp
+**WIP**
 
 ## Dependencies
 
-* derpgp
+* none
 > **Optional:**
-> * libderpgp
+> * none
 
 ## Usage
 ```bash
