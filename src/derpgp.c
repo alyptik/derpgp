@@ -100,30 +100,38 @@ int main(int argc, char **argv)
 	char const *const optstring = "hvi:o:";
 	PGP_LIST pkts = parse_opts(argc, argv, optstring, &out_file);
 
-	/* Version check should be the very first call because it
-	makes sure that important subsystems are initialized. */
-	if (!gcry_check_version (GCRYPT_VERSION))
-		ERRX("libgcrypt version mismatch");
+	/*
+	 * Version check should be the very first call because it
+	 * makes sure that important subsystems are initialized.
+	 */
+	if (!gcry_check_version(GCRYPT_VERSION))
+		ERRX("`libgcrypt` version mismatch");
 
-	/* We don't want to see any warnings, e.g. because we have not yet
-	parsed program options which might be used to suppress such
-	warnings. */
-	gcry_control (GCRYCTL_SUSPEND_SECMEM_WARN);
+	/*
+	 * We don't want to see any warnings, e.g. because we have not yet
+	 * parsed program options which might be used to suppress such
+	 * warnings.
+	 */
+	gcry_control(GCRYCTL_SUSPEND_SECMEM_WARN);
 
-	/* ... If required, other initialization goes here.  Note that the
-	process might still be running with increased privileges and that
-	the secure memory has not been initialized.  */
+	/*
+	 * ... If required, other initialization goes here.  Note that the
+	 * process might still be running with increased privileges and that
+	 * the secure memory has not been initialized.
+	 *
+	 * Allocate a pool of 16k secure memory.  This makes the secure memory
+	 * available and also drops privileges where needed.  Note that by
+	 * using functions like gcry_xmalloc_secure and gcry_mpi_snew Libgcrypt
+	 * may extend the secure memory pool with memory which lacks the
+	 * property of not being swapped out to disk.
+	 */
+	gcry_control(GCRYCTL_INIT_SECMEM, 0x80000, 0);
 
-	/* Allocate a pool of 16k secure memory.  This makes the secure memory
-	available and also drops privileges where needed.  Note that by
-	using functions like gcry_xmalloc_secure and gcry_mpi_snew Libgcrypt
-	may extend the secure memory pool with memory which lacks the
-	property of not being swapped out to disk.   */
-	gcry_control (GCRYCTL_INIT_SECMEM, 16384, 0);
-
-	/* It is now okay to let Libgcrypt complain when there was/is
-	a problem with the secure memory. */
-	gcry_control (GCRYCTL_RESUME_SECMEM_WARN);
+	/*
+	 * It is now okay to let Libgcrypt complain when there was/is
+	 * a problem with the secure memory.
+	 */
+	gcry_control(GCRYCTL_RESUME_SECMEM_WARN);
 
 	/* ... If required, other initialization goes here.  */
 
