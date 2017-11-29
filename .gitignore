@@ -39,6 +39,8 @@ gpghome/*
 *.a
 *.la
 *.lo
+!lib/libgcrypt.*a
+!lib/libgpg-error.*a
 
 # Shared objects (inc. Windows DLLs)
 *.dll
