@@ -8,9 +8,9 @@
  */
 
 #include "base64.h"
-#include "gcrypt.h"
 #include "packet.h"
 #include "parse.h"
+#include <gcrypt.h>
 #include <getopt.h>
 
 /* static variables */
