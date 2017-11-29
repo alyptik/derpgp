@@ -119,13 +119,13 @@ int main(int argc, char **argv)
 	 * process might still be running with increased privileges and that
 	 * the secure memory has not been initialized.
 	 *
-	 * Allocate a pool of 16k secure memory.  This makes the secure memory
+	 * Allocate a pool of 512k secure memory.  This makes the secure memory
 	 * available and also drops privileges where needed.  Note that by
 	 * using functions like gcry_xmalloc_secure and gcry_mpi_snew Libgcrypt
 	 * may extend the secure memory pool with memory which lacks the
 	 * property of not being swapped out to disk.
 	 */
-	gcry_control(GCRYCTL_INIT_SECMEM, 0x80000, 0);
+	gcry_control(GCRYCTL_INIT_SECMEM, 0x80000, NULL);
 
 	/*
 	 * It is now okay to let Libgcrypt complain when there was/is
