@@ -4,7 +4,8 @@
 
 ## Dependencies
 
-* None.
+* libgcrypt
+* libgpg-error
 
 > **Optional:**
 > * Python2 (Bignum Unit Tests)
