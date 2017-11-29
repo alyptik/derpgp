@@ -30,7 +30,7 @@ TSRC := $(wildcard t/*.c)
 HDR := $(wildcard src/*.h) $(wildcard t/*.h)
 DEBUG := -pg -Og -ggdb3 -no-pie -fno-inline -Wfloat-equal -Wrestrict -Wshadow
 CPPFLAGS := -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -MMD -MP
-LIBS := -Llib -lgcrypt -lgpg-error
+LIBS := -Llib/ -lgcrypt -lgpg-error
 TARGET := derpgp
 TAP := t/tap
 PARSE := t/testparse

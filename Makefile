@@ -31,13 +31,13 @@ debug:
 	$(MAKE) $(TARGET) check
 
 $(TARGET): %: $(OBJ)
-	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $^ -o $@
+	$(LD) $(LDFLAGS) $(OLVL) $^ $(LIBS) -o $@
 $(BNTEST): %: %.c $(TAP).o
-	$(CC) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $< -o $@
+	$(CC) $(LDFLAGS) $(OLVL) $(TAP).o $< $(LIBS) -o $@
 $(TEST): %: %.o $(TAP).o $(OBJ) $(BNTEST)
-	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(<:t/test%=src/%) $< -o $@
+	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(<:t/test%=src/%) $< $(LIBS) -o $@
 $(PARSE): %: %.o $(TAP).o $(OBJ)
-	$(LD) $(LDFLAGS) $(OLVL) $(LIBS) $(TAP).o $(filter-out src/$(TARGET).o,$(OBJ)) $< -o $@
+	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(filter-out src/$(TARGET).o,$(OBJ)) $< $(LIBS) -o $@
 %.d %.o: %.c
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
