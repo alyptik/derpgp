@@ -94,6 +94,12 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring, FILE **restric
 	return pkts;
 }
 
+/* cleanup wrapper for `atexit()/at_quick_exit()` */
+static inline void cleanup(void)
+{
+	gcry_control(GCRYCTL_TERM_SECMEM, NULL);
+}
+
 int main(int argc, char **argv)
 {
 	FILE *out_file = NULL;
@@ -101,39 +107,20 @@ int main(int argc, char **argv)
 	PGP_LIST pkts = parse_opts(argc, argv, optstring, &out_file);
 
 	/*
-	 * Version check should be the very first call because it
-	 * makes sure that important subsystems are initialized.
-	 */
-	if (!gcry_check_version(GCRYPT_VERSION))
-		ERRX("`libgcrypt` version mismatch");
-
-	/*
-	 * We don't want to see any warnings, e.g. because we have not yet
-	 * parsed program options which might be used to suppress such
-	 * warnings.
-	 */
-	gcry_control(GCRYCTL_SUSPEND_SECMEM_WARN);
-
-	/*
-	 * ... If required, other initialization goes here.  Note that the
-	 * process might still be running with increased privileges and that
-	 * the secure memory has not been initialized.
-	 *
 	 * Allocate a pool of 512k secure memory.  This makes the secure memory
 	 * available and also drops privileges where needed.  Note that by
 	 * using functions like gcry_xmalloc_secure and gcry_mpi_snew Libgcrypt
 	 * may extend the secure memory pool with memory which lacks the
 	 * property of not being swapped out to disk.
 	 */
+	if (!gcry_check_version(GCRYPT_VERSION))
+		ERRX("`libgcrypt` version mismatch");
+	gcry_control(GCRYCTL_SUSPEND_SECMEM_WARN);
 	gcry_control(GCRYCTL_INIT_SECMEM, 0x80000, NULL);
-
-	/*
-	 * It is now okay to let Libgcrypt complain when there was/is
-	 * a problem with the secure memory.
-	 */
 	gcry_control(GCRYCTL_RESUME_SECMEM_WARN);
-
-	/* ... If required, other initialization goes here.  */
+	/* register exit handlers */
+	atexit(cleanup);
+	at_quick_exit(cleanup);
 
 	/* handle packets */
 	parse_pgp_packets(&pkts);
@@ -151,6 +138,7 @@ int main(int argc, char **argv)
 					pkts.list[i].seckey.rsa.der_len, FALLBACK(out_file, stderr));
 		}
 	}
+
 
 	/* cleanup */
 	free_pgp_list(&pkts);
