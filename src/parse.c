@@ -12,10 +12,10 @@
 /* dispatch each packet to a parser */
 size_t parse_pgp_packets(PGP_LIST *restrict pkts)
 {
-	size_t i = 0;
+	size_t i;
 
 	/* dispatch each packet to parsers */
-	for (; i < pkts->cnt; i++) {
+	for (i = 0; i < pkts->cnt; i++) {
 		int packet_type = TAGBITS(pkts->list[i].pheader);
 		size_t (*const parse_pkt)(PGP_PACKET *restrict) = dispatch_table[packet_type][0];
 		if (parse_pkt)
