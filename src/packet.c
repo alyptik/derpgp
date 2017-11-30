@@ -69,34 +69,46 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	packet->seckey.string_to_key = packet->pdata[mpi_offset];
 	mpi_offset++;
 
+#ifdef _DEBUG
 	/* debug printing */
 	HPRINT(packet->seckey.string_to_key);
+#endif
 
 	/* string-to-key usage convention */
 	switch (packet->seckey.string_to_key) {
 	/* unencrypted */
 	case STR_RAW:
+#ifdef _DEBUG
 		printf(YELLOW "%s " RST, s2k_types[packet->seckey.string_to_key]);
+#endif
 
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.exponent_d);
 		packet->seckey.rsa.exponent_d = &packet->seckey.exponent_d;
+#ifdef _DEBUG
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.exponent_d.length);
+#endif
 
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_p);
 		packet->seckey.rsa.prime_p = &packet->seckey.prime_p;
+#ifdef _DEBUG
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.prime_p.length);
+#endif
 
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_q);
 		packet->seckey.rsa.prime_q = &packet->seckey.prime_q;
+#ifdef _DEBUG
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.prime_q.length);
+#endif
 
 		/* one mpi struct */
 		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.mult_inverse);
 		packet->seckey.rsa.mult_inverse = &packet->seckey.mult_inverse;
+#ifdef _DEBUG
 		printf(RED "[MPI length: %#4x]\n" RST, packet->seckey.mult_inverse.length);
+#endif
 
 		/* encode the DER representation */
 		der_encode_alt(packet);
@@ -109,13 +121,17 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];
 		mpi_offset++;
 		/* TODO XXX: implement rest of s2k handling */
+#ifdef _DEBUG
 		printf(YELLOW "%s\n" RST, s2k_types[packet->seckey.string_to_key]);
+#endif
 		break;
 
 	/* symmetric-key algorithm */
 	default:
 		/* TODO XXX: implement symmetric-key handling */
+#ifdef _DEBUG
 		printf(YELLOW "%s\n" RST, symkey_types[packet->seckey.string_to_key]);
+#endif
 		break;
 	}
 

@@ -97,7 +97,7 @@ PGP_LIST parse_opts(int argc, char **argv, char const *optstring, FILE **restric
 /* cleanup wrapper for `atexit()/at_quick_exit()` */
 static inline void cleanup(void)
 {
-	gcry_control(GCRYCTL_TERM_SECMEM, NULL);
+	gcry_control(GCRYCTL_TERM_SECMEM, 0);
 }
 
 int main(int argc, char **argv)
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 	if (!gcry_check_version(GCRYPT_VERSION))
 		ERRX("`libgcrypt` version mismatch");
 	gcry_control(GCRYCTL_SUSPEND_SECMEM_WARN);
-	gcry_control(GCRYCTL_INIT_SECMEM, 0x80000, NULL);
+	gcry_control(GCRYCTL_INIT_SECMEM, 0x80000, 0);
 	gcry_control(GCRYCTL_RESUME_SECMEM_WARN);
 	/* register exit handlers */
 	atexit(cleanup);
@@ -124,21 +124,21 @@ int main(int argc, char **argv)
 
 	/* handle packets */
 	parse_pgp_packets(&pkts);
-
-	/* debug packet parsing */
+#ifdef _DEBUG
 	puts(GREEN "PGP packets found:" RST);
+#endif
 	for (size_t i = 0; i < pkts.cnt; i++) {
 		int cur_tag = TAGBITS(pkts.list[i].pheader);
+#ifdef _DEBUG
 		HPRINT(pkts.list[i].pheader);
 		printf(YELLOW "%-10s\n" RST, packet_types[cur_tag]);
-		/* debug output */
+#endif
+		/* write to `-o` file if specified */
 		if (cur_tag == TAG_SECSUBKEY) {
-			/* write to `-o` file if specified */
 			fwrite(pkts.list[i].seckey.rsa.der_data, 1,
 					pkts.list[i].seckey.rsa.der_len, FALLBACK(out_file, stderr));
 		}
 	}
-
 
 	/* cleanup */
 	free_pgp_list(&pkts);
