@@ -55,17 +55,17 @@
 
 /* macros */
 
-#define FALLBACK(ARG, DEF)	((ARG) ? (ARG) : (DEF))
-#define BETOH16(DATA)		(((DATA)[1]) | ((DATA)[0] << 0x08))
-#define HTOBE16(DATA)		(((DATA)[0]) | ((DATA)[1] << 0x08))
-#define BETOH32(DATA)		(((DATA)[3]) | ((DATA)[2] << 0x08) | ((DATA)[1] << 0x10) | ((DATA)[0] << 0x18))
-#define HTOBE32(DATA)		(((DATA)[0]) | ((DATA)[1] << 0x08) | ((DATA)[2] << 0x10) | ((DATA)[3] << 0x18))
-#define TOBYTES(DATA)		((uint8_t *)&DATA)
-#define TAGBITS(DATA)		(((DATA) & 0x3c) >> 2)
-#define FMTBITS(DATA)		(((DATA) & (0x01 << 6)) >> 6)
-#define HPRINT(VAL)		printf(RED "[%#x] " RST, (VAL))
-#define MPIBYTES(BITLEN)	(((BITLEN) + 7) / 8)
-#define ARRLEN(ARRAY)		(sizeof (ARRAY) / sizeof *(ARRAY))
+#define FALLBACK(arg, def)	((arg) ? (arg) : (def))
+#define BETOH16(num)		(((num)[1]) | ((num)[0] << 0x08))
+#define HTOBE16(num)		(((num)[0]) | ((num)[1] << 0x08))
+#define BETOH32(num)		(((num)[3]) | ((num)[2] << 0x08) | ((num)[1] << 0x10) | ((num)[0] << 0x18))
+#define HTOBE32(num)		(((num)[0]) | ((num)[1] << 0x08) | ((num)[2] << 0x10) | ((num)[3] << 0x18))
+#define TOBYTES(num)		((uint8_t *)&num)
+#define TAGBITS(num)		(((num) & 0x3c) >> 2)
+#define FMTBITS(num)		(((num) & (0x01 << 6)) >> 6)
+#define HPRINT(val)		printf(RED "[%#x] " RST, (val))
+#define MPIBYTES(bitlen)	(((bitlen) + 7) / 8)
+#define ARRLEN(arr)		(sizeof (arr) / sizeof *(arr))
 
 /* typedefs */
 
