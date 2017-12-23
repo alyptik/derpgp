@@ -237,18 +237,18 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 	ADD_SIZE_TO_DER_LEN(MPIBYTES(packet->seckey.rsa.prime_p->length));
 	ADD_SIZE_TO_DER_LEN(sizeof asn_int);
 	ADD_SIZE_TO_DER_LEN(MPIBYTES(packet->seckey.rsa.prime_q->length));
-#undef ADD_SIZE_TO_DER_LEN
-
 	/*
 	 * TODO: implement dP and dQ calculation
 	 *
+	 * ADD_DER_LEN(sizeof asn_int);
+	 * ADD_DER_LEN(MPIBYTES(packet->seckey.rsa.exponent_dP->length));
+	 * ADD_DER_LEN(sizeof asn_int);
+	 * ADD_DER_LEN(MPIBYTES(packet->seckey.rsa.exponent_dQ->length));
 	 */
-	/* packet->seckey.rsa.der_len += sizeof asn_int; */
-	/* packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.exponent_dP->length); */
-	/* packet->seckey.rsa.der_len += sizeof asn_int; */
-	/* packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.exponent_dQ->length); */
-	packet->seckey.rsa.der_len += sizeof asn_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.mult_inverse->length);
+	ADD_SIZE_TO_DER_LEN(sizeof asn_int);
+	ADD_SIZE_TO_DER_LEN(MPIBYTES(packet->seckey.rsa.mult_inverse->length));
+#undef ADD_SIZE_TO_DER_LEN
+
 	header.len = packet->seckey.rsa.der_len;
 	header.len = BETOH16(header.raw);
 	header.raw[1] -= 4;
@@ -270,7 +270,7 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 	COPY_TO_DER(packet->seckey.rsa.modulus_n->mdata, MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1);
 	/* exponent_e */
 	COPY_TO_DER(asn_small_int, sizeof asn_small_int);
-	/* COPY_TO_DER((packet->seckey.rsa.exponent_e->be_raw), (1)); */
+	/* COPY_TO_DER(packet->seckey.rsa.exponent_e->be_raw, 1); */
 	COPY_TO_DER(packet->seckey.rsa.exponent_e->mdata + 1, MPIBYTES(packet->seckey.rsa.exponent_e->length));
 	/* exponent_d */
 	COPY_TO_DER(asn_int, sizeof asn_int);
