@@ -153,7 +153,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	size_t der_offset = 0;
 
 #define ADD_SIZE_TO_DER_LEN(value) \
-	(packet->seckey.rsa.der_len += (value))
+		(packet->seckey.rsa.der_len += (value))
 	packet->seckey.rsa.der_len = 0;
 	ADD_SIZE_TO_DER_LEN(sizeof asn_seq);
 	ADD_SIZE_TO_DER_LEN(sizeof header.raw);
@@ -170,10 +170,10 @@ size_t der_encode(PGP_PACKET *restrict packet)
 #undef ADD_SIZE_TO_DER_LEN
 
 #define COPY_TO_DER(value, length) \
-	do { \
-		memcpy(packet->seckey.rsa.der_data + der_offset, (value), (length)); \
-		der_offset += (length); \
-	} while (0)
+		do { \
+			memcpy(packet->seckey.rsa.der_data + der_offset, (value), (length)); \
+			der_offset += (length); \
+		} while (0)
 	xcalloc(&packet->seckey.rsa.der_data, 1, packet->seckey.rsa.der_len, "der_encode() xcalloc()");
 	/* header */
 	COPY_TO_DER(asn_seq, sizeof asn_seq);
@@ -192,7 +192,6 @@ size_t der_encode(PGP_PACKET *restrict packet)
 #undef COPY_TO_DER
 
 	assert(packet->seckey.rsa.der_len == der_offset);
-
 	return der_offset;
 }
 
@@ -210,7 +209,7 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 	size_t der_offset = 0;
 
 #define ADD_SIZE_TO_DER_LEN(value) \
-	(packet->seckey.rsa.der_len += (value))
+		(packet->seckey.rsa.der_len += (value))
 	packet->seckey.rsa.der_len = 0;
 	ADD_SIZE_TO_DER_LEN(sizeof asn_seq);
 	ADD_SIZE_TO_DER_LEN(sizeof header.raw);
@@ -243,10 +242,10 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 #undef ADD_SIZE_TO_DER_LEN
 
 #define COPY_TO_DER(value, length) \
-	do { \
-		memcpy(packet->seckey.rsa.der_data + der_offset, (value), (length)); \
-		der_offset += (length); \
-	} while (0)
+		do { \
+			memcpy(packet->seckey.rsa.der_data + der_offset, (value), (length)); \
+			der_offset += (length); \
+		} while (0)
 	xcalloc(&packet->seckey.rsa.der_data, 1, packet->seckey.rsa.der_len, "der_encode() xcalloc()");
 	/* header */
 	COPY_TO_DER(asn_seq, sizeof asn_seq);
@@ -296,6 +295,5 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 #undef COPY_TO_DER
 
 	assert(packet->seckey.rsa.der_len == der_offset);
-
 	return der_offset;
 }
