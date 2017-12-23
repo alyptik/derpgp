@@ -18,21 +18,16 @@ size_t parse_pubkey_packet(PGP_PACKET *restrict packet)
 	size_t mpi_offset = 0;
 
 #define ADD_TO_MPI_OFFSET(value) \
-			(mpi_offset += value)
-	/* one byte */
+		(mpi_offset += value)
 	packet->pubkey.version = packet->pdata[mpi_offset];
 	assert(packet->pubkey.version == 4);
 	ADD_TO_MPI_OFFSET(1);
-	/* four bytes */
 	packet->pubkey.timestamp = BETOH32(packet->pdata + mpi_offset);
 	ADD_TO_MPI_OFFSET(4);
-	/* one byte */
 	packet->pubkey.algorithm = packet->pdata[mpi_offset];
 	assert(packet->pubkey.algorithm == PUB_RSA);
 	ADD_TO_MPI_OFFSET(1);
-	/* one mpi struct */
 	ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->pubkey.modulus_n));
-	/* one mpi struct */
 	ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->pubkey.exponent_e));
 #undef ADD_TO_MPI_OFFSET
 
@@ -46,34 +41,25 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	 */
 	size_t mpi_offset = 0;
 
-	/* one byte */
+#define ADD_TO_MPI_OFFSET(value) \
+		(mpi_offset += value)
 	packet->seckey.version = packet->pdata[mpi_offset];
+	ADD_TO_MPI_OFFSET(1);
 	assert(packet->seckey.version == 4);
-	mpi_offset++;
-	/* four bytes */
 	packet->seckey.timestamp = BETOH32(packet->pdata + mpi_offset);
-	mpi_offset += 4;
-	/* one byte */
+	ADD_TO_MPI_OFFSET(4);
 	packet->seckey.algorithm = packet->pdata[mpi_offset];
 	assert(packet->seckey.algorithm == PUB_RSA);
-	mpi_offset++;
-	/* one mpi struct */
-	mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.modulus_n);
+	ADD_TO_MPI_OFFSET(1);
 	packet->seckey.rsa.modulus_n = &packet->seckey.modulus_n;
-	/* one mpi struct */
-	mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.exponent_e);
+	ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->seckey.modulus_n));
 	packet->seckey.rsa.exponent_e = &packet->seckey.exponent_e;
-
-	/*
-	 * parse secret key portion of the packet
-	 */
-
-	/* one byte */
+	ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->seckey.exponent_e));
 	packet->seckey.string_to_key = packet->pdata[mpi_offset];
-	mpi_offset++;
+	ADD_TO_MPI_OFFSET(1);
+#undef ADD_TO_MPI_OFFSET
 
 #ifdef _DEBUG
-	/* debug printing */
 	HPRINT(packet->seckey.string_to_key);
 #endif
 
@@ -81,62 +67,38 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	switch (packet->seckey.string_to_key) {
 	/* unencrypted */
 	case STR_RAW:
-#ifdef _DEBUG
+#define ADD_TO_MPI_OFFSET(value) \
+			(mpi_offset += value)
 		printf(YELLOW "%s " RST, s2k_types[packet->seckey.string_to_key]);
-#endif
-
-		/* one mpi struct */
-		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.exponent_d);
 		packet->seckey.rsa.exponent_d = &packet->seckey.exponent_d;
-#ifdef _DEBUG
+		ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->seckey.exponent_d));
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.exponent_d.length);
-#endif
-
-		/* one mpi struct */
-		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_p);
 		packet->seckey.rsa.prime_p = &packet->seckey.prime_p;
-#ifdef _DEBUG
+		ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_p));
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.prime_p.length);
-#endif
-
-		/* one mpi struct */
-		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_q);
 		packet->seckey.rsa.prime_q = &packet->seckey.prime_q;
-#ifdef _DEBUG
+		ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->seckey.prime_q));
 		printf(RED "[MPI length: %#4x] " RST, packet->seckey.prime_q.length);
-#endif
-
-		/* one mpi struct */
-		mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->seckey.mult_inverse);
 		packet->seckey.rsa.mult_inverse = &packet->seckey.mult_inverse;
-#ifdef _DEBUG
+		ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->seckey.mult_inverse));
 		printf(RED "[MPI length: %#4x]\n" RST, packet->seckey.mult_inverse.length);
-#endif
-
-		/* encode the DER representation */
 		der_encode_alt(packet);
 		break;
-
 	/* s2k specifier */
 	case STR_S2K1: /* fallthrough */
 	case STR_S2K2:
-		/* one byte */
-		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];
-		mpi_offset++;
+		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];A
+		ADD_TO_MPI_OFFSET(1);
 		/* TODO XXX: implement rest of s2k handling */
-#ifdef _DEBUG
 		printf(YELLOW "%s\n" RST, s2k_types[packet->seckey.string_to_key]);
-#endif
 		break;
-
 	/* symmetric-key algorithm */
 	default:
 		/* TODO XXX: implement symmetric-key handling */
-#ifdef _DEBUG
 		printf(YELLOW "%s\n" RST, symkey_types[packet->seckey.string_to_key]);
-#endif
 		break;
 	}
+#undef ADD_TO_MPI_OFFSET
 
 	/* TODO XXX: implement mpi secret key parsing */
 
