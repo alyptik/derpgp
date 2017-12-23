@@ -152,53 +152,44 @@ size_t der_encode(PGP_PACKET *restrict packet)
 	packet->seckey.rsa.version[2] = 0x00;
 	size_t der_offset = 0;
 
-	/* get total length */
-
+#define ADD_SIZE_TO_DER_LEN(value) \
+	(packet->seckey.rsa.der_len += (value))
 	packet->seckey.rsa.der_len = 0;
-	packet->seckey.rsa.der_len += sizeof asn_seq;
-	packet->seckey.rsa.der_len += sizeof header.raw;
-	packet->seckey.rsa.der_len += sizeof packet->seckey.rsa.version;
+	ADD_SIZE_TO_DER_LEN(sizeof asn_seq);
+	ADD_SIZE_TO_DER_LEN(sizeof header.raw);
+	ADD_SIZE_TO_DER_LEN(sizeof packet->seckey.rsa.version);
 	/* add space for MPI length bytes */
-	packet->seckey.rsa.der_len += DER_TOTAL_LEN;
-	packet->seckey.rsa.der_len += sizeof asn_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1;
-	packet->seckey.rsa.der_len += sizeof asn_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.exponent_d->length);
+	ADD_SIZE_TO_DER_LEN(DER_TOTAL_LEN);
+	ADD_SIZE_TO_DER_LEN(sizeof asn_int);
+	ADD_SIZE_TO_DER_LEN(MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1);
+	ADD_SIZE_TO_DER_LEN(sizeof asn_int);
+	ADD_SIZE_TO_DER_LEN(MPIBYTES(packet->seckey.rsa.exponent_d->length));
 	header.len = packet->seckey.rsa.der_len;
 	header.len = BETOH16(header.raw);
 	header.raw[1] -= 4;
+#undef ADD_SIZE_TO_DER_LEN
 
-	/* allocate the DER data octet string data */
+#define COPY_TO_DER(value, length) \
+	do { \
+		memcpy(packet->seckey.rsa.der_data + der_offset, (value), (length)); \
+		der_offset += (length); \
+	} while (0)
 	xcalloc(&packet->seckey.rsa.der_data, 1, packet->seckey.rsa.der_len, "der_encode() xcalloc()");
-
 	/* header */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_seq, sizeof asn_seq);
-	der_offset += sizeof asn_seq;
-	memcpy(packet->seckey.rsa.der_data + der_offset, header.raw, sizeof header.raw);
-	der_offset += sizeof header.raw;
+	COPY_TO_DER(asn_seq, sizeof asn_seq);
+	COPY_TO_DER(header.raw, sizeof header.raw);
 	/* version */
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.version, sizeof packet->seckey.rsa.version);
-	der_offset += sizeof packet->seckey.rsa.version;
-
+	COPY_TO_DER(packet->seckey.rsa.version, sizeof packet->seckey.rsa.version);
 	/* modulus_n */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	der_offset += sizeof asn_int;
-	memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.modulus_n->be_raw, 2);
-	der_offset += 2;
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.modulus_n->mdata, MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1);
-	der_offset += MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1;
-
+	COPY_TO_DER(asn_int, sizeof asn_int);
+	COPY_TO_DER(packet->seckey.rsa.modulus_n->be_raw, 2);
+	COPY_TO_DER(packet->seckey.rsa.modulus_n->mdata, MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1);
 	/* exponent_d */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	der_offset += sizeof asn_int;
+	COPY_TO_DER(asn_int, sizeof asn_int);
 	packet->seckey.rsa.exponent_d->be_raw[1]--;
-	memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.exponent_d->be_raw, 2);
-	der_offset += 2;
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.exponent_d->mdata + 1, MPIBYTES(packet->seckey.rsa.exponent_d->length));
-	der_offset += MPIBYTES(packet->seckey.rsa.exponent_d->length);
+	COPY_TO_DER(packet->seckey.rsa.exponent_d->be_raw, 2);
+	COPY_TO_DER(packet->seckey.rsa.exponent_d->mdata + 1, MPIBYTES(packet->seckey.rsa.exponent_d->length));
+#undef COPY_TO_DER
 
 	assert(packet->seckey.rsa.der_len == der_offset);
 
@@ -218,7 +209,6 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 	packet->seckey.rsa.version[2] = 0x00;
 	size_t der_offset = 0;
 
-	/* calculate total length */
 #define ADD_SIZE_TO_DER_LEN(value) \
 	(packet->seckey.rsa.der_len += (value))
 	packet->seckey.rsa.der_len = 0;
@@ -247,11 +237,10 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 	 */
 	ADD_SIZE_TO_DER_LEN(sizeof asn_int);
 	ADD_SIZE_TO_DER_LEN(MPIBYTES(packet->seckey.rsa.mult_inverse->length));
-#undef ADD_SIZE_TO_DER_LEN
-
 	header.len = packet->seckey.rsa.der_len;
 	header.len = BETOH16(header.raw);
 	header.raw[1] -= 4;
+#undef ADD_SIZE_TO_DER_LEN
 
 #define COPY_TO_DER(value, length) \
 	do { \
