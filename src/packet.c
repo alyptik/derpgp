@@ -17,21 +17,24 @@ size_t parse_pubkey_packet(PGP_PACKET *restrict packet)
 	 */
 	size_t mpi_offset = 0;
 
+#define ADD_TO_MPI_OFFSET(value) \
+			(mpi_offset += value)
 	/* one byte */
 	packet->pubkey.version = packet->pdata[mpi_offset];
 	assert(packet->pubkey.version == 4);
-	mpi_offset++;
+	ADD_TO_MPI_OFFSET(1);
 	/* four bytes */
 	packet->pubkey.timestamp = BETOH32(packet->pdata + mpi_offset);
-	mpi_offset += 4;
+	ADD_TO_MPI_OFFSET(4);
 	/* one byte */
 	packet->pubkey.algorithm = packet->pdata[mpi_offset];
 	assert(packet->pubkey.algorithm == PUB_RSA);
-	mpi_offset++;
+	ADD_TO_MPI_OFFSET(1);
 	/* one mpi struct */
-	mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->pubkey.modulus_n);
+	ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->pubkey.modulus_n));
 	/* one mpi struct */
-	mpi_offset += read_mpi(packet->pdata + mpi_offset, &packet->pubkey.exponent_e);
+	ADD_TO_MPI_OFFSET(read_mpi(packet->pdata + mpi_offset, &packet->pubkey.exponent_e));
+#undef ADD_TO_MPI_OFFSET
 
 	return mpi_offset;
 }
@@ -247,7 +250,7 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 			memcpy(packet->seckey.rsa.der_data + der_offset, (value), (length)); \
 			der_offset += (length); \
 		} while (0)
-	xcalloc(&packet->seckey.rsa.der_data, 1, packet->seckey.rsa.der_len, "der_encode() xcalloc()");
+	xcalloc(&packet->seckey.rsa.der_data, 1, packet->seckey.rsa.der_len, "der_encode_alt() xcalloc()");
 	/* header */
 	COPY_TO_DER(asn_seq, sizeof asn_seq);
 	COPY_TO_DER(header.raw, sizeof header.raw);
