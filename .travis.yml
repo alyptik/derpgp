@@ -1,5 +1,6 @@
 language: c
 cache: ccache
+group: deprecated-2017Q4
 
 matrix:
   include:
