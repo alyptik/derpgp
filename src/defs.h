@@ -65,7 +65,7 @@
 #define FMTBITS(num)		(((num) & (0x01 << 6)) >> 6)
 #define HPRINT(val)		printf(RED "[%#x] " RST, (val))
 #define MPIBYTES(bitlen)	(((bitlen) + 7) / 8)
-#define ARRLEN(arr)		(sizeof (arr) / sizeof *(arr))
+#define ARRLEN(arr)		(sizeof (arr) / sizeof (arr)[0])
 
 /* typedefs */
 
