@@ -87,7 +87,7 @@ size_t parse_seckey_packet(PGP_PACKET *restrict packet)
 	/* s2k specifier */
 	case STR_S2K1: /* fallthrough */
 	case STR_S2K2:
-		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];A
+		packet->seckey.sym_encryption_algo = packet->pdata[mpi_offset];
 		ADD_TO_MPI_OFFSET(1);
 		/* TODO XXX: implement rest of s2k handling */
 		printf(YELLOW "%s\n" RST, s2k_types[packet->seckey.string_to_key]);
