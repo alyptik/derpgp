@@ -253,98 +253,58 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 	header.len = BETOH16(header.raw);
 	header.raw[1] -= 4;
 
-	/* allocate the DER data octet string data */
+#define COPY_TO_DER(value, length) \
+	do { \
+		memcpy(packet->seckey.rsa.der_data + der_offset, (value), (length)); \
+		der_offset += (length); \
+	} while (0)
 	xcalloc(&packet->seckey.rsa.der_data, 1, packet->seckey.rsa.der_len, "der_encode() xcalloc()");
-
 	/* header */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_seq, sizeof asn_seq);
-	der_offset += sizeof asn_seq;
-	memcpy(packet->seckey.rsa.der_data + der_offset, header.raw, sizeof header.raw);
-	der_offset += sizeof header.raw;
+	COPY_TO_DER(asn_seq, sizeof asn_seq);
+	COPY_TO_DER(header.raw, sizeof header.raw);
 	/* version */
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.version, sizeof packet->seckey.rsa.version);
-	der_offset += sizeof packet->seckey.rsa.version;
-
+	COPY_TO_DER(packet->seckey.rsa.version, sizeof packet->seckey.rsa.version);
 	/* modulus_n */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	der_offset += sizeof asn_int;
-	memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.modulus_n->be_raw, 2);
-	der_offset += 2;
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.modulus_n->mdata, MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1);
-	der_offset += MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1;
-
+	COPY_TO_DER(asn_int, sizeof asn_int);
+	COPY_TO_DER(packet->seckey.rsa.modulus_n->be_raw, 2);
+	COPY_TO_DER(packet->seckey.rsa.modulus_n->mdata, MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1);
 	/* exponent_e */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_small_int, sizeof asn_small_int);
-	der_offset += sizeof asn_small_int;
-	/* memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.exponent_e->be_raw, 1); */
-	/* der_offset += 1; */
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.exponent_e->mdata + 1, MPIBYTES(packet->seckey.rsa.exponent_e->length));
-	der_offset += MPIBYTES(packet->seckey.rsa.exponent_e->length);
+	COPY_TO_DER(asn_small_int, sizeof asn_small_int);
+	/* COPY_TO_DER((packet->seckey.rsa.exponent_e->be_raw), (1)); */
+	COPY_TO_DER(packet->seckey.rsa.exponent_e->mdata + 1, MPIBYTES(packet->seckey.rsa.exponent_e->length));
 	/* exponent_d */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	der_offset += sizeof asn_int;
+	COPY_TO_DER(asn_int, sizeof asn_int);
 	packet->seckey.rsa.exponent_d->be_raw[1]--;
-	memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.exponent_d->be_raw, 2);
-	der_offset += 2;
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.exponent_d->mdata + 1, MPIBYTES(packet->seckey.rsa.exponent_d->length));
-	der_offset += MPIBYTES(packet->seckey.rsa.exponent_d->length);
-
+	COPY_TO_DER(packet->seckey.rsa.exponent_d->be_raw, 2);
+	COPY_TO_DER(packet->seckey.rsa.exponent_d->mdata + 1, MPIBYTES(packet->seckey.rsa.exponent_d->length));
 	/* prime_p */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	der_offset += sizeof asn_int;
+	COPY_TO_DER(asn_int, sizeof asn_int);
 	packet->seckey.rsa.prime_p->be_raw[1]--;
-	memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.prime_p->be_raw, 2);
-	der_offset += 2;
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.prime_p->mdata, MPIBYTES(packet->seckey.rsa.prime_p->length));
-	der_offset += MPIBYTES(packet->seckey.rsa.prime_p->length);
+	COPY_TO_DER(packet->seckey.rsa.prime_p->be_raw, 2);
+	COPY_TO_DER(packet->seckey.rsa.prime_p->mdata, MPIBYTES(packet->seckey.rsa.prime_p->length));
 	/* prime_q */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	der_offset += sizeof asn_int;
+	COPY_TO_DER(asn_int, sizeof asn_int);
 	packet->seckey.rsa.prime_q->be_raw[1]--;
-	memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.prime_q->be_raw, 2);
-	der_offset += 2;
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.prime_q->mdata, MPIBYTES(packet->seckey.rsa.prime_q->length));
-	der_offset += MPIBYTES(packet->seckey.rsa.prime_q->length);
-
+	COPY_TO_DER(packet->seckey.rsa.prime_q->be_raw, 2);
+	COPY_TO_DER(packet->seckey.rsa.prime_q->mdata, MPIBYTES(packet->seckey.rsa.prime_q->length));
 	/*
 	 * TODO: implement dP and dQ calculation
+	 *
+	 * exponent_dP
+	 * COPY_TO_DER((asn_int), (sizeof asn_int));
+	 * COPY_TO_DER((HTOBE16(packet->seckey.rsa.exponent_dP->length)), 2);
+	 * COPY_TO_DER((packet->seckey.exponent_dP.mdata), MPIBYTES(packet->seckey.rsa.exponent_dP->length));
+	 * exponent_dQ
+	 * COPY_TO_DER((asn_int), (sizeof asn_int));
+	 * COPY_TO_DER((HTOBE16(packet->seckey.rsa.exponent_dQ->length)), 2);
+	 * COPY_TO_DER((packet->seckey.exponent_dQ.mdata), MPIBYTES(packet->seckey.rsa.exponent_dQ->length));
 	 */
-	/* exponent_dP */
-	/*
-	 * memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	 * der_offset += sizeof asn_int;
-	 * memcpy(packet->seckey.rsa.der_data + der_offset, HTOBE16(packet->seckey.rsa.exponent_dP->length), 2);
-	 * der_offset += 2;
-	 * memcpy(packet->seckey.rsa.der_data + der_offset,
-	 *                 packet->seckey.exponent_dP.mdata, MPIBYTES(packet->seckey.rsa.exponent_dP->length));
-	 * der_offset += MPIBYTES(packet->seckey.rsa.exponent_dP->length);
-	 */
-	/* exponent_dQ */
-	/*
-	 * memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	 * der_offset += sizeof asn_int;
-	 * memcpy(packet->seckey.rsa.der_data + der_offset, HTOBE16(packet->seckey.rsa.exponent_dQ->length), 2);
-	 * der_offset += 2;
-	 * memcpy(packet->seckey.rsa.der_data + der_offset,
-	 *                 packet->seckey.exponent_dQ.mdata, MPIBYTES(packet->seckey.rsa.exponent_dQ->length));
-	 * der_offset += MPIBYTES(packet->seckey.rsa.exponent_dQ->length);
-	 */
-
 	/* mult_inverse */
-	memcpy(packet->seckey.rsa.der_data + der_offset, asn_int, sizeof asn_int);
-	der_offset += sizeof asn_int;
+	COPY_TO_DER(asn_int, sizeof asn_int);
 	packet->seckey.rsa.mult_inverse->be_raw[1]--;
-	memcpy(packet->seckey.rsa.der_data + der_offset, packet->seckey.rsa.mult_inverse->be_raw, 2);
-	der_offset += 2;
-	memcpy(packet->seckey.rsa.der_data + der_offset,
-			packet->seckey.rsa.mult_inverse->mdata, MPIBYTES(packet->seckey.rsa.mult_inverse->length));
-	der_offset += MPIBYTES(packet->seckey.rsa.mult_inverse->length);
+	COPY_TO_DER(packet->seckey.rsa.mult_inverse->be_raw, 2);
+	COPY_TO_DER(packet->seckey.rsa.mult_inverse->mdata, MPIBYTES(packet->seckey.rsa.mult_inverse->length));
+#undef COPY_TO_DER
 
 	assert(packet->seckey.rsa.der_len == der_offset);
 
