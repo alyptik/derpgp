@@ -218,24 +218,27 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 	packet->seckey.rsa.version[2] = 0x00;
 	size_t der_offset = 0;
 
-	/* get total length */
-
+	/* calculate total length */
+#define ADD_DER_LEN(val) \
+	(packet->seckey.rsa.der_len += (val))
 	packet->seckey.rsa.der_len = 0;
-	packet->seckey.rsa.der_len += sizeof asn_seq;
-	packet->seckey.rsa.der_len += sizeof header.raw;
-	packet->seckey.rsa.der_len += sizeof packet->seckey.rsa.version;
+	ADD_DER_LEN(sizeof asn_seq);
+	ADD_DER_LEN(sizeof header.raw);
+	ADD_DER_LEN(sizeof packet->seckey.rsa.version);
 	/* add space for MPI length bytes */
-	packet->seckey.rsa.der_len += DER_TOTAL_LEN_ALT;
-	packet->seckey.rsa.der_len += sizeof asn_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1;
-	packet->seckey.rsa.der_len += sizeof asn_small_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.exponent_e->length);
-	packet->seckey.rsa.der_len += sizeof asn_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.exponent_d->length);
-	packet->seckey.rsa.der_len += sizeof asn_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.prime_p->length);
-	packet->seckey.rsa.der_len += sizeof asn_int;
-	packet->seckey.rsa.der_len += MPIBYTES(packet->seckey.rsa.prime_q->length);
+	ADD_DER_LEN(DER_TOTAL_LEN_ALT);
+	ADD_DER_LEN(sizeof asn_int);
+	ADD_DER_LEN(MPIBYTES(packet->seckey.rsa.modulus_n->length) + 1);
+	ADD_DER_LEN(sizeof asn_small_int);
+	ADD_DER_LEN(MPIBYTES(packet->seckey.rsa.exponent_e->length));
+	ADD_DER_LEN(sizeof asn_int);
+	ADD_DER_LEN(MPIBYTES(packet->seckey.rsa.exponent_d->length));
+	ADD_DER_LEN(sizeof asn_int);
+	ADD_DER_LEN(MPIBYTES(packet->seckey.rsa.prime_p->length));
+	ADD_DER_LEN(sizeof asn_int);
+	ADD_DER_LEN(MPIBYTES(packet->seckey.rsa.prime_q->length));
+#undef ADD_DER_LEN
+
 	/*
 	 * TODO: implement dP and dQ calculation
 	 *
