@@ -192,6 +192,7 @@ size_t der_encode(PGP_PACKET *restrict packet)
 #undef COPY_TO_DER
 
 	assert(packet->seckey.rsa.der_len == der_offset);
+
 	return der_offset;
 }
 
@@ -295,5 +296,6 @@ size_t der_encode_alt(PGP_PACKET *restrict packet)
 #undef COPY_TO_DER
 
 	assert(packet->seckey.rsa.der_len == der_offset);
+
 	return der_offset;
 }
