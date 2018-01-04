@@ -11,8 +11,8 @@ DESTDIR ?=
 PREFIX ?= /usr/local
 CC ?= gcc
 OLVL ?= -O2
-CFLAGS ?= -pipe -fstack-protector-strong
-LDFLAGS ?= -pipe -fstack-protector-strong
+CFLAGS ?=
+LDFLAGS ?=
 
 # mandatory
 LD = $(CC)
@@ -28,7 +28,8 @@ UTEST = $(filter-out src/$(TARGET).o,$(SRC:.c=.o))
 SRC := $(wildcard src/*.c)
 TSRC := $(wildcard t/*.c)
 HDR := $(wildcard src/*.h) $(wildcard t/*.h)
-DEBUG := -D_DEBUG -pg -Og -ggdb3 -no-pie -fno-inline -Wfloat-equal -Wrestrict -Wshadow
+ASAN := -fsanitize=address,alignment,leak,undefined
+DEBUG := -D_DEBUG -Og -ggdb3 -no-pie -fno-inline -Wfloat-equal -Wrestrict -Wshadow
 CPPFLAGS := -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE -D_POSIX_C_SOURCE=200809L -D_XOPEN_SOURCE=700 -MMD -MP
 LIBS := -lgcrypt -lgpg-error
 TARGET := derpgp
@@ -37,13 +38,13 @@ PARSE := t/testparse
 BNTEST := t/factorial t/golden t/load_cmp t/randomized t/rsa t/test_div_algo
 BINDIR := bin
 MANDIR := share/man/man1
-MKALL += Makefile debug.mk
-DEBUG += -fno-builtin -fno-common -fprofile-generate=p -fsanitize=address,alignment,leak,undefined -fverbose-asm
+MKALL += Makefile asan.mk
+DEBUG += -fno-builtin -fno-common -fverbose-asm
+CFLAGS += -pedantic-errors -std=c11 -fPIC -fuse-ld=gold -flto -fuse-linker-plugin
+CFLAGS += -Wall -Wextra -Wno-missing-field-initializers -Wstrict-overflow -Wimplicit-fallthrough=0
 CFLAGS += -fno-align-functions -fno-align-jumps -fno-align-labels -fno-align-loops -fno-strict-aliasing
-CFLAGS += -flto -fPIC -fuse-linker-plugin -fuse-ld=gold -pedantic-errors -std=c11
-CFLAGS += -Wall -Wextra -Wno-missing-field-initializers -Wstrict-overflow
-LDFLAGS += -fno-align-functions -fno-align-jumps -fno-align-labels -fno-align-loops -fno-strict-aliasing
-LDFLAGS += -flto -fPIC -fuse-linker-plugin -fuse-ld=gold
 LDFLAGS += -Wl,-O2,-z,relro,-z,now,--sort-common,--as-needed
+LDFLAGS += -fPIC -fuse-ld=gold -flto -fuse-linker-plugin
+LDFLAGS += -fno-align-functions -fno-align-jumps -fno-align-labels -fno-align-loops -fno-strict-aliasing
 
 # vi:ft=make:

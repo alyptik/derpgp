@@ -11,29 +11,32 @@ all:
 
 # user configuration
 MKCFG := config.mk
-# if previously built with `-fsanitize=address` we have to use `DEBUG` flags
-OPT != test -f debug.mk
+# if previously built with `-fsanitize=address` we have to use `ASAN` flags
+OPT != test -f asan.mk
 ifeq ($(.SHELLSTATUS), 0)
 	OLVL = $(DEBUG)
 endif
 -include $(DEP) $(MKCFG)
-.PHONY: all check clean debug dist install test uninstall $(MKALL)
+.PHONY: all asan check clean debug dist install test uninstall $(MKALL)
 
-debug:
-	# debug indicator flag
-	@touch debug.mk
-	@rm -f $(TARGET)
+asan:
+	# asan indicator flag
+	@touch asan.mk
+	$(MAKE) clean
 	$(MAKE) $(TARGET) check
+debug:
+	$(MAKE) clean
+	$(MAKE) $(TARGET) check OLVL="$(DEBUG)"
 
-$(TARGET): %: $(OBJ)
+$(TARGET): %: $(OBJ) $(HDR)
 	$(LD) $(LDFLAGS) $(OLVL) $^ $(LIBS) -o $@
-$(BNTEST): %: %.c $(TAP).o
+$(BNTEST): %: %.o $(TAP).o $(HDR)
 	$(CC) $(LDFLAGS) $(OLVL) $(TAP).o $< $(LIBS) -o $@
-$(TEST): %: %.o $(TAP).o $(OBJ) $(BNTEST)
+$(TEST): %: %.o $(TAP).o $(OBJ) $(BNTEST) $(HDR)
 	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(<:t/test%=src/%) $< $(LIBS) -o $@
-$(PARSE): %: %.o $(TAP).o $(OBJ)
+$(PARSE): %: %.o $(TAP).o $(OBJ) $(HDR)
 	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(filter-out src/$(TARGET).o,$(OBJ)) $< $(LIBS) -o $@
-%.d %.o: %.c
+%.d %.o: %.c $(HDR)
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
 test check: $(TOBJ) $(TEST) $(PARSE) $(BNTEST)
@@ -60,7 +63,7 @@ test check: $(TOBJ) $(TEST) $(PARSE) $(BNTEST)
 
 clean:
 	@echo "cleaning"
-	@rm -fv $(DEP) $(TARGET) $(TEST) $(OBJ) $(TOBJ) $(TARGET).tar.gz debug.mk
+	@rm -fv $(DEP) $(TARGET) $(TEST) $(OBJ) $(TOBJ) $(TARGET).tar.gz asan.mk
 install: $(TARGET)
 	@echo "installing"
 	@mkdir -pv $(DESTDIR)$(PREFIX)/$(BINDIR)
