@@ -35,12 +35,13 @@ int main(void)
 		for (size_t j = 0; j < pkts.cnt; j++) {
 			int cur_tag = TAGBITS(pkts.list[j].pheader);
 			size_t header_len = snprintf(NULL, 0,
-					RED "[%#x]\t" YELLOW "%-10s\t" RST,
-					pkts.list[j].pheader, packet_types[cur_tag]);
+						RED "[%#x]\t" YELLOW "%-10s\t" RST,
+						pkts.list[j].pheader,
+						packet_types[cur_tag]) + 1;
 			char pckt_str[header_len];
 			snprintf(pckt_str, sizeof pckt_str,
-					RED "[%#x]\t" YELLOW "%-10s\t" RST,
-					pkts.list[j].pheader, packet_types[cur_tag]);
+				RED "[%#x]\t" YELLOW "%-10s\t" RST,
+				pkts.list[j].pheader, packet_types[cur_tag]);
 			ok(cur_tag == expected[j], "test header tag %zu %s" RST, j, pckt_str);
 		}
 		ok(parse_pgp_packets(&pkts) > 0, "test successful parser dispatch");
