@@ -28,15 +28,15 @@ debug:
 	$(MAKE) clean
 	$(MAKE) $(TARGET) check OLVL="$(DEBUG)"
 
-$(TARGET): %: $(OBJ) $(HDR)
+$(TARGET): %: $(OBJ)
 	$(LD) $(LDFLAGS) $(OLVL) $^ $(LIBS) -o $@
-$(BNTEST): %: %.o $(TAP).o $(HDR)
+$(BNTEST): %: %.o $(TAP).o
 	$(CC) $(LDFLAGS) $(OLVL) $(TAP).o $< $(LIBS) -o $@
-$(TEST): %: %.o $(TAP).o $(OBJ) $(BNTEST) $(HDR)
+$(TEST): %: %.o $(TAP).o $(OBJ) $(BNTEST)
 	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(<:t/test%=src/%) $< $(LIBS) -o $@
-$(PARSE): %: %.o $(TAP).o $(OBJ) $(HDR)
+$(PARSE): %: %.o $(TAP).o $(OBJ)
 	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(filter-out src/$(TARGET).o,$(OBJ)) $< $(LIBS) -o $@
-%.d %.o: %.c $(HDR)
+%.d %.o: %.c
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
 test check: $(TOBJ) $(TEST) $(PARSE) $(BNTEST)
