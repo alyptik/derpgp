@@ -13,8 +13,8 @@ all:
 MKCFG := config.mk
 # if previously built with `-fsanitize=address` we have to use `ASAN` flags
 OPT != test -f asan.mk
-ifeq ($(.SHELLSTATUS), 0)
-	OLVL = $(DEBUG)
+ifeq ($(.SHELLSTATUS),0)
+	OLVL = $(DEBUG) $(ASAN)
 endif
 -include $(DEP) $(MKCFG)
 .PHONY: all asan check clean debug dist install test uninstall $(MKALL)
@@ -29,13 +29,13 @@ debug:
 	$(MAKE) $(TARGET) check OLVL="$(DEBUG)"
 
 $(TARGET): %: $(OBJ)
-	$(LD) $(LDFLAGS) $(OLVL) $^ $(LIBS) -o $@
+	$(LD) $(LDFLAGS) $^ $(LIBS) -o $@
 $(BNTEST): %: %.o $(TAP).o
-	$(CC) $(LDFLAGS) $(OLVL) $(TAP).o $< $(LIBS) -o $@
+	$(CC) $(LDFLAGS) $(TAP).o $< $(LIBS) -o $@
 $(TEST): %: %.o $(TAP).o $(OBJ) $(BNTEST)
-	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(<:t/test%=src/%) $< $(LIBS) -o $@
+	$(LD) $(LDFLAGS) $(TAP).o $(<:t/test%=src/%) $< $(LIBS) -o $@
 $(PARSE): %: %.o $(TAP).o $(OBJ)
-	$(LD) $(LDFLAGS) $(OLVL) $(TAP).o $(filter-out src/$(TARGET).o,$(OBJ)) $< $(LIBS) -o $@
+	$(LD) $(LDFLAGS) $(TAP).o $(filter-out src/$(TARGET).o,$(OBJ)) $< $(LIBS) -o $@
 %.d %.o: %.c
 	$(CC) $(CFLAGS) $(OLVL) $(CPPFLAGS) -c $< -o $@
 
